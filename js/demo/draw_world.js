@@ -55,19 +55,9 @@ function drawShape(shape, context) {
       var circle = shape;
       var pos = circle.m_position;
       var r = circle.m_radius;
-      var segments = 16.0;
-      var theta = 0.0;
-      var dtheta = 2.0 * Math.PI / segments;
-      // draw circle
-      context.moveTo(pos.x + r, pos.y);
-      for (var i = 0; i < segments; i++) {
-        var d = new b2Vec2(r * Math.cos(theta), r * Math.sin(theta));
-        var v = b2Math.AddVV(pos, d);
-        context.lineTo(v.x, v.y);
-        theta += dtheta;
-      }
-      context.lineTo(pos.x + r, pos.y);
-  
+
+      context.arc(circle.m_position.x, circle.m_position.y, circle.m_radius, 0, 2 * Math.PI, false);
+
       // draw radius
       context.moveTo(pos.x, pos.y);
       var ax = circle.m_R.col1;
