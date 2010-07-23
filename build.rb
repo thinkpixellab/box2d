@@ -2,7 +2,7 @@
 
 def enum_sprocket_file(file_path)
   files = []
-  
+
   dir_path = File.dirname(file_path)
   lines = IO.readlines(file_path)
   lines.each do |line|
@@ -15,7 +15,7 @@ def enum_sprocket_file(file_path)
       break
     end
   end
-  
+
   return files
 end
 
