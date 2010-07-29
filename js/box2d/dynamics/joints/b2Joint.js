@@ -16,9 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Joint');
+
+goog.require('b2JointNode');
+goog.require('b2RevoluteJoint');
+goog.require('b2PrismaticJoint');
+
 /** 
  @const
- @typedef {b2Joint} 
  */
 var b2Joint = Class.create();
 b2Joint.prototype = {
