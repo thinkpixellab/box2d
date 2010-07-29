@@ -1,39 +1,34 @@
 #!/usr/bin/env ruby
 
-def enum_sprocket_file(file_path)
-  files = []
-
-  dir_path = File.dirname(file_path)
-  lines = IO.readlines(file_path)
-  lines.each do |line|
-    result = process_line(line)
-    if(result)
-      result = File.join(dir_path, "#{result}.js")
-      files.concat enum_sprocket_file(result)
-    else
-      files << file_path
-      break
-    end
-  end
-
-  return files
+unless defined?(PROJECT_ROOT)
+   PROJECT_ROOT = File.dirname(__FILE__)
 end
 
-def process_line(line)
-  result = line.match(/\/\/= require <(.*)>/)
-  if(result)
-    return result[1]
-  else
-    return nil
+def calc_deps
+  js_path = File.join(PROJECT_ROOT, 'js')
+  closure_path = File.join('lib', 'closure-library','closure')
+
+  calcdeps_path = File.join(closure_path,'bin','calcdeps.py')
+
+  sys_command = "python #{calcdeps_path}"
+
+  sys_command << " -d #{closure_path} -o deps"
+
+  app_path = File.join(js_path, 'application.js')
+  sys_command << " -i #{app_path}"
+
+  output_path = File.join(js_path, 'deps.js')
+
+  ['box2d','demo'].each do |files_dir|
+    sys_command << " -p #{File.join(js_path, files_dir)}"
   end
+
+  sys_command << " --output_file=#{output_path}"
+
+  #python path-to-closure-library/closure/bin/calcdeps.py -i path-to-your-src/requirements.js -o deps -d path-to-closure-library/closure/ -p path-to-your-src/ --output_file=path-to-your-src/deps.js
+
+  puts sys_command
+  `#{sys_command}`
 end
 
-files = enum_sprocket_file('js/all.files.js')
-
-sys_call = "java -jar vendor/closure_compiler/compiler.jar"
-
-files.each { |file| sys_call << " --js #{file}"}
-
-sys_call << " --js_output_file js/all.compiled.js --compilation_level SIMPLE_OPTIMIZATIONS  --summary_detail_level 3"
-
-`#{sys_call}`
+calc_deps

@@ -1,4 +1,7 @@
-function drawWorld(world, context) {
+goog.provide('demoDraw');
+
+
+demoDraw.drawWorld = function(world, context) {
   for (var j = world.m_jointList; j; j = j.m_next) {
     drawJoint(j, context);
   }
@@ -7,7 +10,8 @@ function drawWorld(world, context) {
       drawShape(s, context);
     }
   }
-}
+};
+
 function drawJoint(joint, context) {
   var b1 = joint.m_body1;
   var b2 = joint.m_body2;
