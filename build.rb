@@ -30,13 +30,20 @@ def calc_deps(compile = false)
       files_dir = File.join(js_path, files_dir)
       files.concat(Dir["#{files_dir}/**/*.js"])
     end
-    
+
     files.each do |js_file|
       sys_command << " --dep #{js_file}"
     end
-    
-    sys_command << " --compiler_flag --manage_closure_dependencies=true"
 
+    {
+      'compilation_level' => 'ADVANCED_OPTIMIZATIONS',
+      'manage_closure_dependencies' => 'true',
+      'summary_detail_level' => '3',
+      'debug' => 'true',
+      'warning_level' => 'VERBOSE'
+    }.each do |key, value|
+      sys_command << " --compiler_flag --#{key}=#{value}"
+    end
   else
     js_dirs.each do |files_dir|
       sys_command << " --path #{File.join(js_path, files_dir)}"
