@@ -25,6 +25,7 @@ goog.require('b2BroadPhose');
 goog.require('b2Body');
 goog.require('b2Island');
 goog.require('b2JointFactory');
+goog.require('b2WorldListener');
 
 /** @typedef {b2World} */
 var b2World = Class.create();
