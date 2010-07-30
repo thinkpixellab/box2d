@@ -1,5 +1,11 @@
-demos.crank = {};
-demos.crank.initWorld = function(world) {
+goog.provide('demos.crank');
+
+goog.require('b2PrismaticJointDef');
+goog.require('b2BoxDef');
+goog.require('b2BodyDef');
+goog.require('b2RevoluteJointDef');
+
+demos.crank = function(world) {
   var ground = world.m_groundBody;
 
   // Define crank.
@@ -65,5 +71,4 @@ demos.crank.initWorld = function(world) {
   sd.density = 2.0;
   bd.position.Set(500/2, 10);
   world.CreateBody(bd);
-}
-demos.InitWorlds.push(demos.crank.initWorld);
+};

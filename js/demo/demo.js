@@ -4,61 +4,90 @@ goog.require('b2AABB');
 goog.require('b2World');
 goog.require('b2BodyDef');
 goog.require('b2BoxDef');
+goog.require('b2CircleDef');
 
 goog.require('demoDraw');
+
+goog.require('demos.stack');
+goog.require('demos.pendulum');
+goog.require('demos.top');
+goog.require('demos.crank');
+goog.require('demos.compound');
 
 /**
  @constructor
  */
-demo = function() {
+demo = function(canvas) {
   this.m_initId = 0;
-  this.m_demos = {};
-  this.m_demos.InitWorlds = [];
+  this.m_demos = [];
+  this.m_demos.push(demos.compound);
+  this.m_demos.push(demos.crank);
+  this.m_demos.push(demos.stack);
+  this.m_demos.push(demos.pendulum);
+  this.m_demos.push(demos.top);
 
-  this.setupWorld();
+  this.ctx = canvas.getContext('2d');
+
+  canvasWidth = canvas.getLayout().get('width');
+  canvasHeight = canvas.getLayout().get('height');
+
+  var _this = this;
+
+  Event.observe(canvas, 'click', function(e) {
+
+    if (Math.random() < 0.5) {
+      createBall(_this.world, e.offsetX, e.offsetY, 10);
+    } else {
+      createBox(_this.world, e.offsetX, e.offsetY, 10, 10, false);
+    }
+  });
+
+  Event.observe(canvas, 'contextmenu', function(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    _this._setupPrevWorld();
+    return false;
+  });
+
+  this._setupWorld();
+  this._step();
 };
 
 var world = null;
-var ctx;
 var canvasWidth;
 var canvasHeight;
 
-demo.prototype.setupWorld = function(demoId) {
+demo.prototype._setupWorld = function(demoId) {
   if (!demoId) {
     demoId = 0;
   }
-  world = createWorld();
+  this.world = demo.createWorld();
   this.m_initId += demoId;
-  this.m_initId %= this.m_demos.InitWorlds.length;
+  this.m_initId %= this.m_demos.length;
   if (!isNaN(this.m_initId)) {
     if (this.m_initId < 0) {
-      this.m_initId = this.m_demos.InitWorlds.length + this.m_initId;
+      this.m_initId = this.m_demos.length + this.m_initId;
     }
-    this.m_demos.InitWorlds[this.m_initId](world);
+    this.m_demos[this.m_initId](this.world);
   }
 };
 
+demo.prototype._setupPrevWorld = function() {
+  this._setupWorld(-1);
+};
 
-
-function setupPrevWorld() {
-  setupWorld(-1);
-}
-
-
-
-function step(cnt) {
+demo.prototype._step = function(cnt) {
   var stepping = false;
   var timeStep = 1.0 / 60;
   var iteration = 1;
-  world.Step(timeStep, iteration);
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  demoDraw.drawWorld(world, ctx);
-  setTimeout('step(' + (cnt || 0) + ')', 10);
-}
+  this.world.Step(timeStep, iteration);
+  this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  demoDraw.drawWorld(this.world, this.ctx);
+  setTimeout('_demo._step(' + (cnt || 0) + ')', 10);
+};
 
-
-
-function createWorld() {
+demo.createWorld = function() {
   var worldAABB = new b2AABB();
   worldAABB.minVertex.Set(-1000, -1000);
   worldAABB.maxVertex.Set(1000, 1000);
@@ -69,7 +98,7 @@ function createWorld() {
   createBox(world, 0, 125, 10, 250);
   createBox(world, 500, 125, 10, 250);
   return world;
-}
+};
 
 
 
@@ -85,10 +114,13 @@ function createGround(world) {
 
 
 
-function createBall(world, x, y) {
+function createBall(world, x, y, radius) {
+  if (!radius) {
+    radius = 20;
+  }
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
-  ballSd.radius = 20;
+  ballSd.radius = radius;
   ballSd.restitution = 1.0;
   ballSd.friction = 0;
   var ballBd = new b2BodyDef();

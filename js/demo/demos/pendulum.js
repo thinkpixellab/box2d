@@ -1,5 +1,8 @@
-demos.pendulum = {};
-demos.pendulum.initWorld = function(world) {
+goog.provide('demos.pendulum');
+
+goog.require('b2RevoluteJointDef');
+
+demos.pendulum = function(world) {
   var i;
   var ground = world.GetGroundBody();
   var jointDef = new b2RevoluteJointDef();
@@ -14,7 +17,4 @@ demos.pendulum.initWorld = function(world) {
   jointDef.body1 = ground;
   jointDef.body2 = createBall(world, 250 - 40 - L, 200 - L);
   world.CreateJoint(jointDef);
-}
-demos.InitWorlds.push(demos.pendulum.initWorld);
-
-
+};

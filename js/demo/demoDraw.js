@@ -1,18 +1,17 @@
 goog.provide('demoDraw');
 
-
 demoDraw.drawWorld = function(world, context) {
   for (var j = world.m_jointList; j; j = j.m_next) {
-    drawJoint(j, context);
+    demoDraw._drawJoint(world, j, context);
   }
   for (var b = world.m_bodyList; b; b = b.m_next) {
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
-      drawShape(s, context);
+      demoDraw._drawShape(s, context);
     }
   }
 };
 
-function drawJoint(joint, context) {
+demoDraw._drawJoint = function(world, joint, context) {
   var b1 = joint.m_body1;
   var b2 = joint.m_body2;
   var x1 = b1.m_position;
@@ -35,12 +34,10 @@ function drawJoint(joint, context) {
     if (b1 == world.m_groundBody) {
       context.moveTo(p1.x, p1.y);
       context.lineTo(x2.x, x2.y);
-    }
-    else if (b2 == world.m_groundBody) {
+    } else if (b2 == world.m_groundBody) {
       context.moveTo(p1.x, p1.y);
       context.lineTo(x1.x, x1.y);
-    }
-    else {
+    } else {
       context.moveTo(x1.x, x1.y);
       context.lineTo(p1.x, p1.y);
       context.lineTo(x2.x, x2.y);
@@ -49,8 +46,9 @@ function drawJoint(joint, context) {
     break;
   }
   context.stroke();
-}
-function drawShape(shape, context) {
+};
+
+demoDraw._drawShape = function(shape, context) {
   context.strokeStyle = '#ffffff';
   context.beginPath();
   switch (shape.m_type) {
@@ -83,5 +81,4 @@ function drawShape(shape, context) {
     break;
   }
   context.stroke();
-}
-
+};

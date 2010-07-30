@@ -1,5 +1,6 @@
-demos.stack = {};
-demos.stack.initWorld = function(world) {
+goog.provide('demos.stack');
+
+demos.stack = function(world) {
   var sd = new b2BoxDef();
   var bd = new b2BodyDef();
   bd.AddShape(sd);
@@ -21,6 +22,3 @@ demos.stack.initWorld = function(world) {
     world.CreateBody(bd);
   }
 }
-demos.InitWorlds.push(demos.stack.initWorld);
-
-

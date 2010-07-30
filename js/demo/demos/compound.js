@@ -1,4 +1,15 @@
-demos.compound = {};
+goog.provide('demos.compound');
+
+demos.compound = function(world) {
+  var i;
+  for (i = 1; i <= 4; i++) {
+    demos.compound.createCompoundPoly(world, 150 + 3 * Math.random(), 40 * i);
+  }
+  for (i = 1; i <= 4; i++) {
+    demos.compound.createCompoundBall(world, 350 + 3 * Math.random(), 45 * i);
+  }
+};
+
 demos.compound.createCompoundBall = function(world, x, y) {
   var ballSd1 = new b2CircleDef();
   ballSd1.density = 1.0;
@@ -15,13 +26,17 @@ demos.compound.createCompoundBall = function(world, x, y) {
   ballBd.AddShape(ballSd2);
   ballBd.position.Set(x, y);
   return world.CreateBody(ballBd);
-}
+};
 
 demos.compound.createCompoundPoly = function(world, x, y) {
-  var points = [[-30, 0], [30, 0], [0, 15]];
+  var points = [
+    [-30, 0],
+    [30, 0],
+    [0, 15]];
   var polySd1 = new b2PolyDef();
   polySd1.vertexCount = points.length;
-  for (var i = 0; i < points.length; i++) {
+  var i;
+  for (i = 0; i < points.length; i++) {
     polySd1.vertices[i].Set(points[i][0], points[i][1]);
   }
   polySd1.localRotation = 0.3524 * Math.PI;
@@ -30,7 +45,7 @@ demos.compound.createCompoundPoly = function(world, x, y) {
   polySd1.density = 1.0;
   var polySd2 = new b2PolyDef();
   polySd2.vertexCount = points.length;
-  for (var i = 0; i < points.length; i++) {
+  for (i = 0; i < points.length; i++) {
     polySd2.vertices[i].Set(points[i][0], points[i][1]);
   }
   polySd2.localRotation = -0.3524 * Math.PI;
@@ -39,19 +54,6 @@ demos.compound.createCompoundPoly = function(world, x, y) {
   var polyBd = new b2BodyDef();
   polyBd.AddShape(polySd1);
   polyBd.AddShape(polySd2);
-  polyBd.position.Set(x,y);
-  return world.CreateBody(polyBd)
-}
-
-demos.compound.initWorld = function(world) {
-  var i;
-  for (i = 1; i <= 4; i++) {
-    demos.compound.createCompoundPoly(world, 150 + 3 * Math.random(), 40 * i);
-  }
-  for (i = 1; i <= 4; i++) {
-    demos.compound.createCompoundBall(world, 350 + 3 * Math.random(), 45 * i);
-  }
-}
-demos.InitWorlds.push(demos.compound.initWorld);
-
-
+  polyBd.position.Set(x, y);
+  return world.CreateBody(polyBd);
+};
