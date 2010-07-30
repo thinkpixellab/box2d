@@ -2,6 +2,10 @@ goog.provide('b2JointFactory');
 
 goog.require('b2RevoluteJoint');
 goog.require('b2PrismaticJoint');
+goog.require('b2MouseJoint');
+goog.require('b2DistanceJoint');
+goog.require('b2PulleyJoint');
+goog.require('b2GearJoint');
 
 b2JointFactory.Create = function(def, allocator) {
   var joint = null;
