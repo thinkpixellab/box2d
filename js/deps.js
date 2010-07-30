@@ -64,10 +64,10 @@ goog.addDependency("../../../../js/box2d/dynamics/joints/b2PulleyJoint.js", [], 
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2PulleyJointDef.js", [], []);
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2RevoluteJoint.js", [], []);
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2RevoluteJointDef.js", [], []);
-goog.addDependency("../../../../js/demo/compound.js", [], []);
-goog.addDependency("../../../../js/demo/crank.js", [], []);
 goog.addDependency("../../../../js/demo/demo.js", ['demo'], ['b2AABB', 'b2World', 'b2BodyDef', 'b2BoxDef', 'demoDraw']);
 goog.addDependency("../../../../js/demo/demoDraw.js", ['demoDraw'], []);
-goog.addDependency("../../../../js/demo/pendulum.js", [], []);
-goog.addDependency("../../../../js/demo/stack.js", [], []);
-goog.addDependency("../../../../js/demo/top.js", [], []);
+goog.addDependency("../../../../js/demo/demos/compound.js", [], []);
+goog.addDependency("../../../../js/demo/demos/crank.js", [], []);
+goog.addDependency("../../../../js/demo/demos/pendulum.js", [], []);
+goog.addDependency("../../../../js/demo/demos/stack.js", [], []);
+goog.addDependency("../../../../js/demo/demos/top.js", [], []);
