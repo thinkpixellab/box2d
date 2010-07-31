@@ -70,7 +70,7 @@ def show_help
   return "java -jar #{JAR_PATH} --help"
 end
 
-command = compile
+command = make_deps
 
 puts command.inspect
 exec command
