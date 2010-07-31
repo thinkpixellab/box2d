@@ -4,30 +4,31 @@ unless defined?(PROJECT_ROOT)
    PROJECT_ROOT = File.dirname(__FILE__)
 end
 
-def calc_deps(compile = false)
-  js_path = File.join(PROJECT_ROOT, 'js')
-  closure_path = File.join('lib', 'closure-library', 'closure')
+JS_PATH = File.join(PROJECT_ROOT, 'js')
+CLOSURE_PATH = File.join('lib', 'closure-library', 'closure')
+JAR_PATH = File.join(PROJECT_ROOT, 'vendor', 'closure_compiler', 'compiler.jar')
+JS_DIRS = ['box2d', 'demo']
 
-  calcdeps_path = File.join(closure_path, 'bin', 'calcdeps.py')
+def calc_deps(compile = false)
+
+  calcdeps_path = File.join(CLOSURE_PATH, 'bin', 'calcdeps.py')
 
   sys_command = "python #{calcdeps_path}"
 
-  js_dirs = ['box2d', 'demo']
 
   if(compile)
     # only relavant for list and script output
-    app_path = File.join(js_path, 'application.js')
+    app_path = File.join(JS_PATH, 'application.js')
     sys_command << " -i #{app_path}"
 
-    output_path = File.join(js_path, 'compiled.js');
+    output_path = File.join(JS_PATH, 'compiled.js');
     sys_command << " --output_mode compiled"
 
-    jar_path = File.join(PROJECT_ROOT, 'vendor', 'closure_compiler', 'compiler.jar')
-    sys_command << " --compiler_jar #{jar_path}"
+    sys_command << " --compiler_jar #{JAR_PATH}"
 
     files = []
-    js_dirs.each do |files_dir|
-      files_dir = File.join(js_path, files_dir)
+    JS_DIRS.each do |files_dir|
+      files_dir = File.join(JS_PATH, files_dir)
       files.concat(Dir["#{files_dir}/**/*.js"])
     end
 
@@ -45,13 +46,13 @@ def calc_deps(compile = false)
       sys_command << " --compiler_flag --#{key}=#{value}"
     end
   else
-    js_dirs.each do |files_dir|
-      sys_command << " --path #{File.join(js_path, files_dir)}"
+    JS_DIRS.each do |files_dir|
+      sys_command << " --path #{File.join(JS_PATH, files_dir)}"
     end
 
-    sys_command << " --dep #{closure_path}"
+    sys_command << " --dep #{CLOSURE_PATH}"
 
-    output_path = File.join(js_path, 'deps.js')
+    output_path = File.join(JS_PATH, 'deps.js')
 
     sys_command << " --output_mode deps"
 
