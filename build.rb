@@ -19,6 +19,8 @@ def make_deps
     sys_command << " --path #{File.join(JS_PATH, files_dir)}"
   end
 
+  sys_command << " --path #{File.join(JS_PATH, 'application.js')}"
+
   sys_command << " --dep #{CLOSURE_PATH}"
 
   output_path = File.join(JS_PATH, 'deps.js')
@@ -33,8 +35,8 @@ def compile
   output_path = File.join(JS_PATH, 'compiled.js')
 
   files = []
-  files << "lib/closure-library/closure/goog/deps.js"
   files << "lib/closure-library/closure/goog/base.js"
+  files << "lib/closure-library/closure/goog/deps.js"
   JS_FILE_DIRS.each do |js_dir|
     js_dir = File.join(JS_PATH, js_dir)
     files.concat(Dir["#{js_dir}/**/*.js"])

@@ -6,8 +6,18 @@
     <script src="lib/closure-library/closure/goog/base.js"></script>
     <script src="js/deps.js"></script>
     <script src='js/application.js'></script>
+    <script>
+    goog.require('goog.events');
+    goog.require('goog.events.EventType');
+    </script>
   </head>
   <body>
     <canvas id="canvas" width='500' height='300' style="background: #333388;"></canvas>
+    <script>
+    var _demo;
+    goog.events.listen(window, goog.events.EventType.LOAD, function() {
+      _demo = loadDemo();
+    });
+    </script>
   </body>
 </html>

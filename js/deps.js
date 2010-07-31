@@ -73,3 +73,4 @@ goog.addDependency("../../../../js/demo/demos/crank.js", ['demos.crank'], ['b2Pr
 goog.addDependency("../../../../js/demo/demos/pendulum.js", ['demos.pendulum'], ['b2RevoluteJointDef']);
 goog.addDependency("../../../../js/demo/demos/stack.js", ['demos.stack'], []);
 goog.addDependency("../../../../js/demo/demos/top.js", ['demos.top'], ['b2RevoluteJointDef', 'b2CircleDef', 'b2PolyDef', 'b2BodyDef']);
+goog.addDependency("../../../../js/application.js", [], ['demo']);
