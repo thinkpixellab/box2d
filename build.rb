@@ -26,11 +26,10 @@ def make_deps
   sys_command << " --output_mode deps"
   sys_command << " --output_file=#{output_path}"
 
-  puts sys_command
-  `#{sys_command}`
+  return sys_command
 end
 
-def init_compile
+def compile
   output_path = File.join(JS_PATH, 'compiled.js')
 
   files = []
@@ -42,28 +41,36 @@ def init_compile
 
   files << "lib/closure-library/closure/goog/base.js"
 
-  compile(output_path, files)
+  return create_compile(output_path, files)
 end
 
-def compile(output_file, js_file_paths)
+def create_compile(output_file, js_file_paths)
   sys_command = "java -jar #{JAR_PATH}"
 
   js_file_paths.each do |file|
     sys_command << " --js #{file}"
   end
 
-  sys_command << " --js_output_file #{output_file} --compilation_level ADVANCED_OPTIMIZATIONS --summary_detail_level 3 --debug true --warning_level VERBOSE --manage_closure_dependencies true"
-  #sys_command << " --js_output_file #{output_file}"
+  sys_command << " --js_output_file #{output_file}"
+  sys_command << " --compilation_level ADVANCED_OPTIMIZATIONS"
+  sys_command << " --summary_detail_level 3"
+  sys_command << " --debug true"
+  sys_command << " --warning_level VERBOSE"
+  sys_command << " --manage_closure_dependencies true"
+  sys_command << " --jscomp_dev_mode EVERY_PASS"
 
-  # look at tree
-  # sys_command << "  --js_output_file #{compiled_output_path}.tree --compilation_level ADVANCED_OPTIMIZATIONS --print_tree true"
+  sys_command << " --formatting PRETTY_PRINT"
+  sys_command << " --formatting PRINT_INPUT_DELIMITER"
 
-  # easy way to see help
-  # sys_command = "java -jar #{JAR_PATH} --help"
-
-  puts sys_command.inspect
-  `#{sys_command}`
+  return sys_command
 end
 
+def show_help
+  # easy way to see help
+  return "java -jar #{JAR_PATH} --help"
+end
 
-make_deps
+command = compile
+
+puts command.inspect
+exec command
