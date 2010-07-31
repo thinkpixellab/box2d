@@ -31,6 +31,9 @@ demos.top = function(world) {
   world.CreateJoint(jointDef);
 };
 
+/**
+ @param {boolean=} fixed
+ */
 demos.top.createBall = function(world, x, y, rad, fixed) {
   var ballSd = new b2CircleDef();
   if (!fixed) ballSd.density = 1.0;
@@ -42,6 +45,9 @@ demos.top.createBall = function(world, x, y, rad, fixed) {
   return world.CreateBody(ballBd);
 };
 
+/**
+ @param {boolean=} fixed
+ */
 demos.top.createPoly = function(world, x, y, points, fixed) {
   var polySd = new b2PolyDef();
   if (!fixed) polySd.density = 1.0;

@@ -58,6 +58,10 @@ var world = null;
 var canvasWidth;
 var canvasHeight;
 
+/**
+ @private
+ @param {number=} demoId
+ */
 demo.prototype._setupWorld = function(demoId) {
   if (!demoId) {
     demoId = 0;
@@ -77,6 +81,10 @@ demo.prototype._setupPrevWorld = function() {
   this._setupWorld(-1);
 };
 
+/**
+ @private
+ @param {number=} cnt
+ */
 demo.prototype._step = function(cnt) {
   var stepping = false;
   var timeStep = 1.0 / 60;
@@ -112,8 +120,9 @@ function createGround(world) {
   return world.CreateBody(groundBd);
 }
 
-
-
+/**
+ @param {number=} radius
+ */
 function createBall(world, x, y, radius) {
   if (!radius) {
     radius = 20;
@@ -129,8 +138,9 @@ function createBall(world, x, y, radius) {
   return world.CreateBody(ballBd);
 }
 
-
-
+/**
+ @param {boolean=} fixed
+ */
 function createBox(world, x, y, width, height, fixed) {
   if (typeof(fixed) == 'undefined') fixed = true;
   var boxSd = new b2BoxDef();

@@ -33,13 +33,14 @@ def compile
   output_path = File.join(JS_PATH, 'compiled.js')
 
   files = []
-  files << 'js/application.js'
+  files << "lib/closure-library/closure/goog/deps.js"
+  files << "lib/closure-library/closure/goog/base.js"
   JS_FILE_DIRS.each do |js_dir|
     js_dir = File.join(JS_PATH, js_dir)
     files.concat(Dir["#{js_dir}/**/*.js"])
   end
 
-  files << "lib/closure-library/closure/goog/base.js"
+  files << 'js/application.js'
 
   return create_compile(output_path, files)
 end
@@ -70,7 +71,7 @@ def show_help
   return "java -jar #{JAR_PATH} --help"
 end
 
-command = make_deps
+command = compile
 
 puts command.inspect
 exec command
