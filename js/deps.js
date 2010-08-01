@@ -66,7 +66,7 @@ goog.addDependency("../../../../js/box2d/dynamics/joints/b2PulleyJoint.js", ['b2
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2PulleyJointDef.js", ['b2PulleyJointDef'], []);
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2RevoluteJoint.js", ['b2RevoluteJoint'], ['b2Joint']);
 goog.addDependency("../../../../js/box2d/dynamics/joints/b2RevoluteJointDef.js", ['b2RevoluteJointDef'], ['b2Vec2', 'b2JointDef', 'b2Joint']);
-goog.addDependency("../../../../js/demo/demo.js", ['demo'], ['b2AABB', 'b2World', 'b2BodyDef', 'b2BoxDef', 'b2CircleDef', 'demoDraw', 'demos.stack', 'demos.pendulum', 'demos.top', 'demos.crank', 'demos.compound']);
+goog.addDependency("../../../../js/demo/demo.js", ['demo'], ['goog.events', 'goog.events.EventType', 'b2AABB', 'b2World', 'b2BodyDef', 'b2BoxDef', 'b2CircleDef', 'demoDraw', 'demos.stack', 'demos.pendulum', 'demos.top', 'demos.crank', 'demos.compound']);
 goog.addDependency("../../../../js/demo/demoDraw.js", ['demoDraw'], []);
 goog.addDependency("../../../../js/demo/demos/compound.js", ['demos.compound'], []);
 goog.addDependency("../../../../js/demo/demos/crank.js", ['demos.crank'], ['b2PrismaticJointDef', 'b2BoxDef', 'b2BodyDef', 'b2RevoluteJointDef']);

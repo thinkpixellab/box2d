@@ -1,4 +1,8 @@
+
 goog.provide('demo');
+
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 
 goog.require('b2AABB');
 goog.require('b2World');
@@ -28,13 +32,12 @@ demo = function(canvas) {
 
   this.ctx = canvas.getContext('2d');
 
-  canvasWidth = canvas.getLayout().get('width');
-  canvasHeight = canvas.getLayout().get('height');
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
 
   var _this = this;
 
-  Event.observe(canvas, 'click', function(e) {
-
+  goog.events.listen(window, goog.events.EventType.CLICK, function(e) {
     if (Math.random() < 0.5) {
       createBall(_this.world, e.offsetX, e.offsetY, 10);
     } else {
@@ -42,7 +45,7 @@ demo = function(canvas) {
     }
   });
 
-  Event.observe(canvas, 'contextmenu', function(e) {
+  goog.events.listen(window, goog.events.EventType.CONTEXTMENU, function(e) {
     if (e.preventDefault) {
       e.preventDefault();
     }
