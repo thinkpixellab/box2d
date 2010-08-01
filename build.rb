@@ -7,7 +7,7 @@ end
 JS_PATH = File.join(PROJECT_ROOT, 'js')
 CLOSURE_PATH = File.join('lib', 'closure-library', 'closure')
 JAR_PATH = File.join(PROJECT_ROOT, 'vendor', 'closure_compiler', 'compiler.jar')
-JS_FILE_DIRS = ['box2d', 'demo']
+JS_FILE_DIRS = ['box2d', 'demo'].collect{ |dir| File.join(JS_PATH, dir)}
 
 def make_deps
 
@@ -16,7 +16,7 @@ def make_deps
   sys_command = "python #{calcdeps_path}"
 
   JS_FILE_DIRS.each do |files_dir|
-    sys_command << " --path #{File.join(JS_PATH, files_dir)}"
+    sys_command << " --path #{files_dir}"
   end
 
   sys_command << " --path #{File.join(JS_PATH, 'application.js')}"
@@ -35,10 +35,10 @@ def compile
   output_path = File.join(JS_PATH, 'compiled.js')
 
   files = []
-  files << "lib/closure-library/closure/goog/base.js"
-  files << "lib/closure-library/closure/goog/deps.js"
+  goog_js_dir = File.join(CLOSURE_PATH, 'goog')
+  files.concat Dir["#{goog_js_dir}/**/*.js"].select{ |file| !file.include? 'demos' }
+
   JS_FILE_DIRS.each do |js_dir|
-    js_dir = File.join(JS_PATH, js_dir)
     files.concat(Dir["#{js_dir}/**/*.js"])
   end
 
