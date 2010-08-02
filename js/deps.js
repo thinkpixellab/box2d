@@ -7,7 +7,7 @@ goog.addDependency("../../../../js/box2d/collision/b2BufferedPair.js", ['b2Buffe
 goog.addDependency("../../../../js/box2d/collision/b2Collision.js", ['b2Collision'], ['ClipVertex']);
 goog.addDependency("../../../../js/box2d/collision/b2ContactID.js", ['b2ContactID'], ['Features']);
 goog.addDependency("../../../../js/box2d/collision/b2ContactPoint.js", ['b2ContactPoint'], ['b2Vec2', 'b2ContactID']);
-goog.addDependency("../../../../js/box2d/collision/b2Distance.js", [], []);
+goog.addDependency("../../../../js/box2d/collision/b2Distance.js", ['b2Distance'], ['b2Math']);
 goog.addDependency("../../../../js/box2d/collision/b2Manifold.js", ['b2Manifold'], ['b2Settings', 'b2Vec2', 'b2ContactPoint']);
 goog.addDependency("../../../../js/box2d/collision/b2OBB.js", ['b2OBB'], ['b2Vec2', 'b2Mat22']);
 goog.addDependency("../../../../js/box2d/collision/b2Pair.js", ['b2Pair'], ['b2Settings']);
@@ -23,12 +23,12 @@ goog.addDependency("../../../../js/box2d/collision/shapes/b2MassData.js", ['b2Ma
 goog.addDependency("../../../../js/box2d/collision/shapes/b2PolyDef.js", ['b2PolyDef'], ['b2ShapeDef', 'b2Shape', 'b2Vec2']);
 goog.addDependency("../../../../js/box2d/collision/shapes/b2PolyShape.js", ['b2PolyShape'], ['b2Mat22', 'b2Vec2', 'b2Settings', 'b2Shape', 'b2OBB']);
 goog.addDependency("../../../../js/box2d/collision/shapes/b2Shape.js", ['b2Shape'], ['b2Mat22', 'b2Vec2']);
-goog.addDependency("../../../../js/box2d/collision/shapes/b2ShapeDef.js", ['b2ShapeDef'], []);
+goog.addDependency("../../../../js/box2d/collision/shapes/b2ShapeDef.js", ['b2ShapeDef'], ['b2Vec2']);
 goog.addDependency("../../../../js/box2d/collision/shapes/b2ShapeFactory.js", ['b2ShapeFactory'], ['b2CircleShape', 'b2PolyShape', 'b2Shape']);
 goog.addDependency("../../../../js/box2d/common/b2Settings.js", ['b2Settings'], []);
 goog.addDependency("../../../../js/box2d/common/math/b2Mat22.js", ['b2Mat22'], []);
 goog.addDependency("../../../../js/box2d/common/math/b2Math.js", ['b2Math'], []);
-goog.addDependency("../../../../js/box2d/common/math/b2Vec2.js", ['b2Vec2'], []);
+goog.addDependency("../../../../js/box2d/common/math/b2Vec2.js", ['b2Vec2'], ['b2Math']);
 goog.addDependency("../../../../js/box2d/dynamics/b2Body.js", ['b2Body'], ['b2Mat22', 'b2Vec2', 'b2Math', 'b2MassData', 'b2ShapeFactory']);
 goog.addDependency("../../../../js/box2d/dynamics/b2BodyDef.js", ['b2BodyDef'], ['b2Settings']);
 goog.addDependency("../../../../js/box2d/dynamics/b2CollisionFilter.js", ['b2CollisionFilter'], []);
@@ -73,4 +73,4 @@ goog.addDependency("../../../../js/demo/demos/crank.js", ['demos.crank'], ['b2Pr
 goog.addDependency("../../../../js/demo/demos/pendulum.js", ['demos.pendulum'], ['b2RevoluteJointDef']);
 goog.addDependency("../../../../js/demo/demos/stack.js", ['demos.stack'], []);
 goog.addDependency("../../../../js/demo/demos/top.js", ['demos.top'], ['b2RevoluteJointDef', 'b2CircleDef', 'b2PolyDef', 'b2BodyDef']);
-goog.addDependency("../../../../js/application.js", [], ['demo']);
+goog.addDependency("../../../../js/application.js", [], ['demo', 'goog.events', 'goog.events.EventType']);
