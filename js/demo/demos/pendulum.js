@@ -10,11 +10,11 @@ demos.pendulum = function(world) {
   for (i = 0; i < 4; i++) {
     jointDef.anchorPoint.Set(250 + 40 * i, 200 - L);
     jointDef.body1 = ground;
-    jointDef.body2 = createBall(world, 250 + 40 * i, 200);
+    jointDef.body2 = demo.createBall(world, 250 + 40 * i, 200);
     world.CreateJoint(jointDef);
   }
   jointDef.anchorPoint.Set(250 - 40, 200 - L);
   jointDef.body1 = ground;
-  jointDef.body2 = createBall(world, 250 - 40 - L, 200 - L);
+  jointDef.body2 = demo.createBall(world, 250 - 40 - L, 200 - L);
   world.CreateJoint(jointDef);
 };

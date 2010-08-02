@@ -15,7 +15,7 @@ demos.top = function(world) {
     [0, 0],
     [10, 30],
     [-10, 30]], true);
-  var pendulum = createBox(world, 150, 100, 20, 20, false);
+  var pendulum = demo.createBox(world, 150, 100, 20, 20, false);
   var jointDef = new b2RevoluteJointDef();
   jointDef.body1 = pendulum;
   jointDef.body2 = world.GetGroundBody();
