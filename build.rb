@@ -62,8 +62,8 @@ def create_compile(output_file, js_file_paths)
   sys_command << " --manage_closure_dependencies true"
   sys_command << " --jscomp_dev_mode EVERY_PASS"
 
-  sys_command << " --formatting PRETTY_PRINT"
-  sys_command << " --formatting PRINT_INPUT_DELIMITER"
+  # sys_command << " --formatting PRETTY_PRINT"
+  # sys_command << " --formatting PRINT_INPUT_DELIMITER"
 
   return sys_command
 end
