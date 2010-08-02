@@ -95,7 +95,7 @@ demo.prototype._step = function(cnt) {
   this.world.Step(timeStep, iteration);
   this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   demoDraw.drawWorld(this.world, this.ctx);
-  setTimeout('_demo._step(' + (cnt || 0) + ')', 10);
+  goog.global.setTimeout(goog.bind(this._step,  this), 10);
 };
 
 demo.createWorld = function() {
