@@ -2,3 +2,4 @@
 .svn
 *test*.html
 lib/goog/demos/*
+*.pyc
