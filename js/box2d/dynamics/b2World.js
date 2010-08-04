@@ -33,12 +33,21 @@ goog.require('b2WorldListener');
 b2World = function(worldAABB, gravity, doSleep) {
   // initialize instance variables for references
   this.m_step = new b2TimeStep();
-  this.m_contactManager = new b2ContactManager();
+
+  /**
+   @private
+   @type {!b2ContactManager}
+   */
+  this.m_contactManager = new b2ContactManager(this);
 
   this.m_listener = null;
-  this.m_filter = b2CollisionFilter.b2_defaultFilter;
+  /**
+   @type {!b2CollisionFilter}
+   */
+  this.collisionFilter = b2CollisionFilter.b2_defaultFilter;
 
   this.m_bodyList = null;
+
   this.m_contactList = null;
   this.m_jointList = null;
 
@@ -69,15 +78,22 @@ b2World.prototype.SetListener = function(listener) {
   this.m_listener = listener;
 };
 
-// Register a collision filter to provide specific control over collision.
-// Otherwise the default filter is used (b2CollisionFilter).
+/**
+ Register a collision filter to provide specific control over collision.
+ Otherwise the default filter is used (b2CollisionFilter).
+ @param {!b2CollisionFilter} filter
+ */
 b2World.prototype.SetFilter = function(filter) {
-  this.m_filter = filter;
+  this.collisionFilter = filter;
 };
 
 // Create and destroy rigid bodies. Destruction is deferred until the
 // the next call to this.Step. This is done so that bodies may be destroyed
 // while you iterate through the contact list.
+/**
+ @param {!b2BodyDef} def
+ @returns {!b2Body}
+ */
 b2World.prototype.CreateBody = function(def) {
   //void* mem = this.m_blockAllocator.Allocate(sizeof(b2Body));
   var b = new b2Body(def, this);
@@ -93,6 +109,9 @@ b2World.prototype.CreateBody = function(def) {
   return b;
 };
 // Body destruction is deferred to make contact processing more robust.
+/**
+ @param {!b2Body} b
+ */
 b2World.prototype.DestroyBody = function(b) {
 
   if (b.m_flags & b2Body.e_destroyFlag) {
@@ -271,6 +290,9 @@ b2World.prototype.GetGroundBody = function() {
   return this.m_groundBody;
 };
 
+/**
+ @returns {!Array.<b2Pair>}
+ */
 b2World.prototype.Step = function(dt, iterations) {
 
   var b;
@@ -409,7 +431,7 @@ b2World.prototype.Step = function(dt, iterations) {
     }
   }
 
-  this.m_broadPhase.Commit();
+  return this.m_broadPhase.Commit();
 
   //this.m_stackAllocator.Free(stack);
 };
@@ -446,10 +468,8 @@ b2World.prototype.GetContactList = function() {
 b2World.prototype.m_blockAllocator = null;
 b2World.prototype.m_stackAllocator = null;
 b2World.prototype.m_broadPhase = null;
-b2World.prototype.m_contactManager = new b2ContactManager();
 
 b2World.prototype.m_bodyList = null;
-b2World.prototype.m_contactList = null;
 b2World.prototype.m_jointList = null;
 
 b2World.prototype.m_bodyCount = 0;
@@ -465,7 +485,6 @@ b2World.prototype.m_allowSleep = null;
 b2World.prototype.m_groundBody = null;
 
 b2World.prototype.m_listener = null;
-b2World.prototype.m_filter = null;
 
 b2World.prototype.m_positionIterationCount = 0;
 
