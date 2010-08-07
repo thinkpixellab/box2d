@@ -29,6 +29,9 @@ goog.require('b2WorldListener');
 
 /**
  @constructor
+ @param {!b2AABB} worldAABB
+ @param {!b2Vec2} gravity
+ @param {boolean} doSleep
  */
 b2World = function(worldAABB, gravity, doSleep) {
   // initialize instance variables for references
@@ -92,7 +95,7 @@ b2World.prototype.SetFilter = function(filter) {
 // while you iterate through the contact list.
 /**
  @param {!b2BodyDef} def
- @returns {!b2Body}
+ @return {!b2Body}
  */
 b2World.prototype.CreateBody = function(def) {
   //void* mem = this.m_blockAllocator.Allocate(sizeof(b2Body));
@@ -291,7 +294,7 @@ b2World.prototype.GetGroundBody = function() {
 };
 
 /**
- @returns {!Array.<b2Pair>}
+ @return {!Array.<b2Pair>}
  */
 b2World.prototype.Step = function(dt, iterations) {
 
@@ -479,7 +482,6 @@ b2World.prototype.m_jointCount = 0;
 // These bodies will be destroyed at the next time this.m_step.
 b2World.prototype.m_bodyDestroyList = null;
 
-b2World.prototype.m_gravity = null;
 b2World.prototype.m_allowSleep = null;
 
 b2World.prototype.m_groundBody = null;
