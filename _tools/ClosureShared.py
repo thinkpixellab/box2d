@@ -138,6 +138,12 @@ def print_help(jar_path):
   command.append("--help")
   return command
 
+def print_tree(jar_path, closure_path, js_files, extern_files):
+  command = get_command_with_inputs(jar_path, closure_path, js_files, extern_files)
+  command.append("--print_tree")
+  command.append("true")
+  return command
+
 def run_command(command):
   logging.basicConfig(format='%(message)s', level=logging.INFO)
   args = command
