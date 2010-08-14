@@ -30,11 +30,12 @@ def get_compile_files():
   extern_files = []
   for file in ClosureShared.find_files(extern_dir, '*.js'):
     extern_files.append(file)
-
-  return js_files, extern_files
   
-def compile(debug=False):
+  return js_files, extern_files
+
+def compile():
   js_files, extern_files = get_compile_files()
+  debug = False
   return ClosureShared.compile(jar_path, closure_path, js_files, extern_files, compiled_js_path, debug)
 
 def print_tree():
@@ -45,5 +46,5 @@ def print_help():
   return ClosureShared.print_help(jar_path)
 
 if __name__ == '__main__':
-  ClosureShared.run_command(make_deps())
-  ClosureShared.run_command(compile())
+  ClosureShared.run_command(make_deps)
+  ClosureShared.run_command(compile)
