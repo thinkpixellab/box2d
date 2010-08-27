@@ -3,5 +3,5 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 
 $(window).load(function() {
-  new demo(document.getElementsByTagName('canvas')[0]);
+  new demo($('canvas')[0]);
 });

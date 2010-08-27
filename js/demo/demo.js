@@ -2,6 +2,7 @@ goog.provide('demo');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.math.Vec2');
 
 goog.require('b2AABB');
 goog.require('b2World');
@@ -29,18 +30,23 @@ demo = function(canvas) {
   this.m_demos.push(demos.pendulum);
   this.m_demos.push(demos.top);
 
-  this.ctx = canvas.getContext('2d');
-
   this.m_canvasWidth = canvas.width;
   this.m_canvasHeight = canvas.height;
+  
+  this.m_translate = new goog.math.Vec2(this.m_canvasWidth / 2 - 250, this.m_canvasHeight / 2 - 185)
+
+  this.m_canvasContext = canvas.getContext('2d');
+  this.m_canvasContext.translate(this.m_translate.x, this.m_translate.y);
 
   var _this = this;
 
   goog.events.listen(window, goog.events.EventType.CLICK, function(e) {
+    var offset = new goog.math.Vec2(e.offsetX, e.offsetY);
+    offset.subtract(_this.m_translate);
     if (Math.random() < 0.5) {
-      demo.createBall(_this.m_world, e.offsetX, e.offsetY, 10);
+      demo.createBall(_this.m_world, offset.x, offset.y, 10);
     } else {
-      demo.createBox(_this.m_world, e.offsetX, e.offsetY, 10, 10, false);
+      demo.createBox(_this.m_world, offset.x, offset.y, 10, 10, false);
     }
   });
 
@@ -84,8 +90,8 @@ demo.prototype._setupPrevWorld = function() {
  */
 demo.prototype._step = function() {
   this.m_world.Step(demo._secondsPerFrame, 1);
-  this.ctx.clearRect(0, 0, this.m_canvasWidth, this.m_canvasHeight);
-  demoDraw.drawWorld(this.m_world, this.ctx);
+  this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
+  demoDraw.drawWorld(this.m_world, this.m_canvasContext);
   goog.global.setTimeout(goog.bind(this._step, this), demo._millisecondsPerFrame);
 };
 
@@ -96,24 +102,16 @@ demo.createWorld = function() {
   var gravity = new b2Vec2(0, 300);
   var doSleep = true;
   var world = new b2World(worldAABB, gravity, doSleep);
-  demo.createGround(world);
-  demo.createBox(world, 0, 125, 10, 250);
-  demo.createBox(world, 500, 125, 10, 250);
+  demo.createBox(world, 250, 300, 250, 10);
+  demo.createBox(world, 5, 185, 5, 125);
+  demo.createBox(world, 495, 185, 5, 125);
   return world;
 };
 
-demo.createGround = function(world) {
-  var groundSd = new b2BoxDef();
-  groundSd.extents.Set(1000, 50);
-  groundSd.restitution = 0.2;
-  var groundBd = new b2BodyDef();
-  groundBd.AddShape(groundSd);
-  groundBd.position.Set(-500, 340);
-  return world.CreateBody(groundBd);
-};
-
 /**
+ @param {!b2World} world
  @param {number=} radius
+ @return {!b2Body}
  */
 demo.createBall = function(world, x, y, radius) {
   if (!radius) {
@@ -122,8 +120,8 @@ demo.createBall = function(world, x, y, radius) {
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
-  ballSd.restitution = 1.0;
-  ballSd.friction = 0;
+  ballSd.restitution = 0.9;
+  ballSd.friction = 0.9;
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
@@ -131,12 +129,18 @@ demo.createBall = function(world, x, y, radius) {
 };
 
 /**
+ @param {!b2World} world
  @param {boolean=} fixed
+ @return {!b2Body}
  */
 demo.createBox = function(world, x, y, width, height, fixed) {
-  if (typeof(fixed) == 'undefined') fixed = true;
+  if (typeof(fixed) == 'undefined') {
+    fixed = true;
+  }
   var boxSd = new b2BoxDef();
-  if (!fixed) boxSd.density = 1.0;
+  if (!fixed) {
+    boxSd.density = 1.0;
+  }
   boxSd.extents.Set(width, height);
   var boxBd = new b2BodyDef();
   boxBd.AddShape(boxSd);
@@ -145,15 +149,15 @@ demo.createBox = function(world, x, y, width, height, fixed) {
 };
 
 /**
-  @private
-  @const
-  @type {number}
-*/
-demo._secondsPerFrame = 1.0/60;
+ @private
+ @const
+ @type {number}
+ */
+demo._secondsPerFrame = 1.0 / 60;
 
 /**
-  @private
-  @const
-  @type {number}
-*/
+ @private
+ @const
+ @type {number}
+ */
 demo._millisecondsPerFrame = demo._secondsPerFrame * 1000;
