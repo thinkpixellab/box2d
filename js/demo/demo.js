@@ -33,9 +33,10 @@ demo = function(canvas) {
   this.m_canvasWidth = canvas.width;
   this.m_canvasHeight = canvas.height;
   
-  this.m_translate = new goog.math.Vec2(this.m_canvasWidth / 2 - 250, this.m_canvasHeight / 2 - 185)
+  this.m_translate = new goog.math.Vec2(this.m_canvasWidth / 2 - 250, this.m_canvasHeight / 2 - 185);
 
   this.m_canvasContext = canvas.getContext('2d');
+  this.m_canvasContext.fillStyle = '#ffffff';
   this.m_canvasContext.translate(this.m_translate.x, this.m_translate.y);
 
   var _this = this;
@@ -102,9 +103,9 @@ demo.createWorld = function() {
   var gravity = new b2Vec2(0, 300);
   var doSleep = true;
   var world = new b2World(worldAABB, gravity, doSleep);
-  demo.createBox(world, 250, 300, 250, 10);
-  demo.createBox(world, 5, 185, 5, 125);
-  demo.createBox(world, 495, 185, 5, 125);
+  demo.createBox(world, 250, 305, 250, 5, true, true);
+  demo.createBox(world, 5, 185, 5, 125, true, true);
+  demo.createBox(world, 495, 185, 5, 125, true, true);
   return world;
 };
 
@@ -131,15 +132,22 @@ demo.createBall = function(world, x, y, radius) {
 /**
  @param {!b2World} world
  @param {boolean=} fixed
+ @param {boolean=} filled
  @return {!b2Body}
  */
-demo.createBox = function(world, x, y, width, height, fixed) {
+demo.createBox = function(world, x, y, width, height, fixed, filled) {
   if (typeof(fixed) == 'undefined') {
     fixed = true;
+  }
+  if (typeof(filled) == 'undefined') {
+    filled = false;
   }
   var boxSd = new b2BoxDef();
   if (!fixed) {
     boxSd.density = 1.0;
+  }
+  if(filled){
+    boxSd.userData = 'filled';
   }
   boxSd.extents.Set(width, height);
   var boxBd = new b2BodyDef();
