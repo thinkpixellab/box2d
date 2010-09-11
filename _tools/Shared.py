@@ -5,11 +5,23 @@ import subprocess
 import datetime
 import fnmatch
 
+def writeXmlSansInstructions(dom, file):
+  with open(file, "w") as fp:
+    for node in dom.childNodes:
+      node.writexml(fp)
+  
+def remove_if_exists(path):
+  if os.path.exists(path):
+    os.remove(path)
+
 def get_tmp_file_name(source_file_name):
-  name = source_file_name
-  name += "_tmp_"
-  name += datetime.datetime.utcnow().isoformat().replace(':','_')
-  return name
+  name = os.path.basename(source_file_name)
+  safe_now = datetime.datetime.utcnow().isoformat().replace(':','_')
+  name = "{0}_{1}".format(safe_now, name)
+  tmp_dir = 'tmp'
+  if os.path.exists(tmp_dir) != True:
+    os.mkdir(tmp_dir)
+  return os.path.join(tmp_dir, name)
 
 def run_command(command_func):
   logging.basicConfig(format='%(message)s', level=logging.INFO)
@@ -24,6 +36,7 @@ def run_command(command_func):
     sys.stdout.write(stdoutdata)
     logging.info('Command succeeded')
     logging.info("Moving temp file to '%s'", out_file)
+    remove_if_exists(out_file)
     os.rename(tmp_file, out_file)
 
 def find_files(directory, pattern):

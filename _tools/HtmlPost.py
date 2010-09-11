@@ -6,14 +6,26 @@ import logging
 import subprocess
 import datetime
 from xml.dom import minidom
+from Shared import *
 
-def getScriptElementsFromDom(dom):
+def fixSlashes(path):
+  return string.replace(path,"\\","/")
+
+def getScriptElementsFromDom(dom, exclude_http = True):
   # TODO: should really use xpath here, eh?
   html = dom.getElementsByTagName('html')[0]
   head = html.getElementsByTagName('head')[0]
-  return head.getElementsByTagName('script')
+  elements = head.getElementsByTagName('script')
+  if(exclude_http):
+    return filter(lambda e: e.hasAttribute('src') and not(e.getAttribute('src').startswith("http://")) , elements)
+  else:
+    return elements
 
 def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_js_files = None):
+  compiled_js_file = fixSlashes(compiled_js_file)
+  if source_js_files != None:
+    source_js_files = map(fixSlashes, source_js_files)
+  
   dom = minidom.parse(source_html_file)
   script_elements = getScriptElementsFromDom(dom)
   
@@ -28,16 +40,34 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   
   head = dom.getElementsByTagName('head')[0]
   head.appendChild(compiledElement)
-  fp = open(target_html_file, "w")
-  dom.writexml(fp)
+  
+  ensureHtmlElementsFromDom(dom)
+  
+  writeXmlSansInstructions(dom,target_html_file)
 
 def process_script_element(element, source_js_files = None):
   if(element.hasAttribute('src')):
     src_attribute = element.getAttribute('src')
     if(source_js_files == None or source_js_files.count(src_attribute) > 0):
-      element.parentNode.removeChild(element)
-    else:
-      # needed to ensure xml output writes both open/close tags
-      blankElement = element.ownerDocument.createTextNode('')
-      element.appendChild(blankElement)
+      toRemove = [element]
+      
+      # loop through following elements, removing whitespace
+      element = element.nextSibling
+      while element and element.nodeType == element.TEXT_NODE and len(string.strip(element.data)) == 0:
+        toRemove.append(element)
+        element = element.nextSibling
+      for element in toRemove:
+        element.parentNode.removeChild(element)
+
+def ensureHtmlElementsFromFile(path):
+  dom = minidom.parse(path)
+  ensureHtmlElementsFromDom(dom)
+  writeXmlSansInstructions(dom, path)
+
+def ensureHtmlElementsFromDom(dom):
+  # now go through all 'important' tags and ensure they are not empty
+  for element_name in ['canvas', 'script', 'div', 'a']:
+    for element in dom.getElementsByTagName(element_name):
+      element.appendChild(dom.createTextNode(''))
+  
   

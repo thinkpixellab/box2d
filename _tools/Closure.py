@@ -24,21 +24,23 @@ def make_deps_core(deps_js_path, js_dirs):
   return command, tmp_file_path, deps_js_path
 
 class Closure:
-  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_dir, debug = False):
+  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_files):
     self.deps_js_path = deps_js_path
     self.closure_dependencies = closure_dependencies
     self.application_js_path = application_js_path
-    self.extern_dir = extern_dir
+    self.extern_files = extern_files
     self.compiled_js_path = compiled_js_path
-    self.debug = debug
+    self.debug = False
   
   def build(self):
     run_command(self.make_deps)
     run_command(self.compile)
   
-  def build_and_process(self, source_html, target_html):
-    self.build()
+  def build_and_process(self, source_html, target_html, debug = False, skip_build = False):
+    if(not skip_build):
+      self.build()
     
+    self.debug = debug
     source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
     source_js_files += [self.application_js_path, self.deps_js_path]
     HtmlPost.replaceJsFiles(source_html, target_html, self.compiled_js_path, source_js_files)
@@ -49,15 +51,11 @@ class Closure:
   def get_compile_files(self):
     js_files = get_js_files_for_compile(self.application_js_path, self.deps_js_path)
     
-    extern_files = []
-    for file in find_files(self.extern_dir, '*.js'):
-      extern_files.append(file)
-    
-    return js_files, extern_files
+    return js_files
   
   def compile(self):
-    js_files, extern_files = self.get_compile_files()
-    return compile_core(js_files, extern_files, self.compiled_js_path, self.debug)
+    js_files = self.get_compile_files()
+    return compile_core(js_files, self.extern_files, self.compiled_js_path, self.debug)
   
   # def print_tree(self):
   #   js_files, extern_files = self.get_compile_files()
