@@ -11,6 +11,25 @@ from Shared import *
 def fixSlashes(path):
   return string.replace(path,"\\","/")
 
+def append_analytics_files(source_html, target_html, analytics_files):
+  with open(source_html,'r') as input:
+    content = input.read()
+
+  partitions = content.partition('</body>')
+  
+  new_content = [partitions[0]]
+
+  for af in analytics_files:
+    with open(af,'r') as file:
+      new_content.append(file.read())
+
+  new_content += [partitions[1],partitions[2]]
+  
+  with open(target_html, 'w') as file:
+    file.writelines(new_content)
+  
+  ensureHtmlElementsFromFile(target_html)
+
 def getScriptElementsFromDom(dom, exclude_http = True):
   # TODO: should really use xpath here, eh?
   html = dom.getElementsByTagName('html')[0]
@@ -18,6 +37,17 @@ def getScriptElementsFromDom(dom, exclude_http = True):
   elements = head.getElementsByTagName('script')
   if(exclude_http):
     return filter(lambda e: e.hasAttribute('src') and not(e.getAttribute('src').startswith("http://")) , elements)
+  else:
+    return elements
+
+def getCSSElementsFromDom(dom, exclude_http = True):
+  # TODO: should really use xpath here, eh?
+  html = dom.getElementsByTagName('html')[0]
+  head = html.getElementsByTagName('head')[0]
+  elements = head.getElementsByTagName('link')
+  elements = filter(lambda e: e.hasAttribute('rel') and e.getAttribute('rel') == 'stylesheet', elements)
+  if(exclude_http):
+    return filter(lambda e: e.hasAttribute('href') and not(e.getAttribute('href').startswith("http://")) , elements)
   else:
     return elements
 
@@ -69,5 +99,4 @@ def ensureHtmlElementsFromDom(dom):
   for element_name in ['canvas', 'script', 'div', 'a']:
     for element in dom.getElementsByTagName(element_name):
       element.appendChild(dom.createTextNode(''))
-  
   
