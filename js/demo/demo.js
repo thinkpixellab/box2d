@@ -91,6 +91,7 @@ demo.prototype._setupPrevWorld = function() {
  */
 demo.prototype._step = function() {
   this.m_world.Step(demo._secondsPerFrame, 1);
+  // TODO: add code to not draw world of we're asleep
   this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
   demoDraw.drawWorld(this.m_world, this.m_canvasContext);
   goog.global.setTimeout(goog.bind(this._step, this), demo._millisecondsPerFrame);
