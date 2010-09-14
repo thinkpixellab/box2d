@@ -19,6 +19,6 @@ Closure(
   deps_js_path = deps_js_path,
   compiled_js_path = compiled_js_path,
   extern_files = [jquery_extern]
-).build_and_process('index.html', 'index_compiled.html')
+).build_and_process('index_source.html', 'index_compiled.html', debug = False, skip_build = True)
 
-HtmlCompressor('index_compiled.html', 'index_compressed.html', 'js/compressed.js').compress()
+HtmlCompressor('index_compiled.html', 'index.html', 'js/compressed.js').compress()
