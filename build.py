@@ -13,15 +13,12 @@ compiled_js_path = os.path.join(js_path, "compiled.js")
 
 jquery_extern = os.path.join(js_path, 'externs', 'jquery.js')
 
-closure = Closure(
+Closure(
   application_js_path = application_js_path,
   closure_dependencies = js_dirs + [application_js_path],
   deps_js_path = deps_js_path,
   compiled_js_path = compiled_js_path,
   extern_files = [jquery_extern]
-)
+).build_and_process('index.html', 'index_compiled.html')
 
-closure.build_and_process('index.html', 'index_compiled.html')
-
-compressor = HtmlCompressor('index_compiled.html', 'js/compressed.js', 'index_compressed.html')
-compressor.compress()
+HtmlCompressor('index_compiled.html', 'index_compressed.html', 'js/compressed.js').compress()
