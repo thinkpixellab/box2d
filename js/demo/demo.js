@@ -32,32 +32,32 @@ demo = function(canvas) {
 
   this.m_canvasWidth = canvas.width;
   this.m_canvasHeight = canvas.height;
-  
+
   this.m_translate = new goog.math.Vec2(this.m_canvasWidth / 2 - 250, this.m_canvasHeight / 2 - 185);
 
   this.m_canvasContext = canvas.getContext('2d');
   this.m_canvasContext.fillStyle = '#ffffff';
   this.m_canvasContext.translate(this.m_translate.x, this.m_translate.y);
 
-  var _this = this;
-
   goog.events.listen(window, goog.events.EventType.CLICK, function(e) {
     var offset = new goog.math.Vec2(e.offsetX, e.offsetY);
-    offset.subtract(_this.m_translate);
+    offset.subtract(this.m_translate);
     if (Math.random() < 0.5) {
-      demo.createBall(_this.m_world, offset.x, offset.y, 10);
+      demo.createBall(this.m_world, offset.x, offset.y, 10);
     } else {
-      demo.createBox(_this.m_world, offset.x, offset.y, 10, 10, false);
+      demo.createBox(this.m_world, offset.x, offset.y, 10, 10, false);
     }
-  });
+  },
+  false, this);
 
   goog.events.listen(window, goog.events.EventType.CONTEXTMENU, function(e) {
     if (e.preventDefault) {
       e.preventDefault();
     }
-    _this._setupPrevWorld();
+    this._setupPrevWorld();
     return false;
-  });
+  },
+  false, this);
 
   this._setupWorld();
   this._step();
@@ -147,7 +147,7 @@ demo.createBox = function(world, x, y, width, height, fixed, filled) {
   if (!fixed) {
     boxSd.density = 1.0;
   }
-  if(filled){
+  if (filled) {
     boxSd.userData = 'filled';
   }
   boxSd.extents.Set(width, height);
