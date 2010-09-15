@@ -8,3 +8,14 @@ canvas {
   margin: 20px auto;
   display: block;
 }
+
+#info{
+  text-align: justify;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  width: 600px;
+}
+
+#info p{
+  margin-bottom: 10px;
+}
