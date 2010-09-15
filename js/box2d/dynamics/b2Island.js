@@ -144,11 +144,11 @@ b2Island.prototype.Solve = function(step, gravity) {
 
     if (b.m_invMass == 0.0) continue;
 
-    b.m_linearVelocity.Add(b2Math.MulFV(step.dt, b2Math.AddVV(gravity, b2Math.MulFV(b.m_invMass, b.m_force))));
+    b.m_linearVelocity.add(b2Math.MulFV(step.dt, b2Math.AddVV(gravity, b2Math.MulFV(b.m_invMass, b.m_force))));
     b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
 
     //b.m_linearVelocity *= b.m_linearDamping;
-    b.m_linearVelocity.Multiply(b.m_linearDamping);
+    b.m_linearVelocity.scale(b.m_linearDamping);
     b.m_angularVelocity *= b.m_angularDamping;
 
     // Store positions for conservative advancement.

@@ -119,7 +119,7 @@ b2RevoluteJoint.prototype.SetMotorTorque = function(torque) {
 };
 b2RevoluteJoint.prototype.GetReactionForce = function(invTimeStep) {
   var tVec = this.m_ptpImpulse.Copy();
-  tVec.Multiply(invTimeStep);
+  tVec.scale(invTimeStep);
   //return invTimeStep * this.m_ptpImpulse;
   return tVec;
 };
@@ -213,7 +213,7 @@ b2RevoluteJoint.prototype.PrepareVelocitySolver = function() {
 
   // Warm starting.
   if (b2World.s_enableWarmStarting) {
-    //b1.m_linearVelocity.Subtract( b2Math.MulFV( invMass1, this.m_ptpImpulse) );
+    //b1.m_linearVelocity.subtract( b2Math.MulFV( invMass1, this.m_ptpImpulse) );
     b1.m_linearVelocity.x -= invMass1 * this.m_ptpImpulse.x;
     b1.m_linearVelocity.y -= invMass1 * this.m_ptpImpulse.y;
     //b1.m_angularVelocity -= invI1 * (b2Math.b2CrossVV(r1, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);

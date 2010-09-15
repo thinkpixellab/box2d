@@ -111,8 +111,8 @@ b2Body = function(bd, world) {
 
   // Compute center of mass, and shift the origin to the COM.
   if (this.m_mass > 0.0) {
-    this.m_center.Multiply(1.0 / this.m_mass);
-    this.m_position.Add(b2Math.b2MulMV(this.m_R, this.m_center));
+    this.m_center.scale(1.0 / this.m_mass);
+    this.m_position.add(b2Math.b2MulMV(this.m_R, this.m_center));
   } else {
     this.m_flags |= b2Body.e_staticFlag;
   }
@@ -254,7 +254,7 @@ b2Body.prototype.GetAngularVelocity = function() {
 // Apply a force at a world point. Additive.
 b2Body.prototype.ApplyForce = function(force, point) {
   if (this.IsSleeping() == false) {
-    this.m_force.Add(force);
+    this.m_force.add(force);
     this.m_torque += b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), force);
   }
 };
@@ -269,7 +269,7 @@ b2Body.prototype.ApplyTorque = function(torque) {
 // Apply an impulse at a point. This immediately modifies the velocity.
 b2Body.prototype.ApplyImpulse = function(impulse, point) {
   if (this.IsSleeping() == false) {
-    this.m_linearVelocity.Add(b2Math.MulFV(this.m_invMass, impulse));
+    this.m_linearVelocity.add(b2Math.MulFV(this.m_invMass, impulse));
     this.m_angularVelocity += (this.m_invI * b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), impulse));
   }
 };

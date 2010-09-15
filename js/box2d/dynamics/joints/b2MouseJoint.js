@@ -86,7 +86,7 @@ b2MouseJoint.prototype.GetAnchor1 = function() {
 };
 b2MouseJoint.prototype.GetAnchor2 = function() {
   var tVec = b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
-  tVec.Add(this.m_body2.m_position);
+  tVec.add(this.m_body2.m_position);
   return tVec;
 };
 b2MouseJoint.prototype.GetReactionForce = function(invTimeStep) {

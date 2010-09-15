@@ -71,15 +71,23 @@ var b2PolyShape = function(def, body, newOrigin) {
   var aabb = new b2AABB();
 
   // Vertices
+  /**
+   @private
+   @type {!Array.<b2Vec2>}
+  */
   this.m_vertices = new Array(b2Settings.b2_maxPolyVertices);
+  /**
+   @private
+   @type {!Array.<b2Vec2>}
+  */
   this.m_coreVertices = new Array(b2Settings.b2_maxPolyVertices);
-  //for (i = 0; i < b2Settings.b2_maxPolyVertices; i++)
-  //  this.m_vertices[i] = new b2Vec2();
   // Normals
+  /**
+   @private
+   @type {!Array.<b2Vec2>}
+  */
   this.m_normals = new Array(b2Settings.b2_maxPolyVertices);
-  //for (i = 0; i < b2Settings.b2_maxPolyVertices; i++)
-  //  this.m_normals[i] = new b2Vec2();
-  //b2Settings.b2Assert(def.type == b2Shape.e_boxShape || def.type == b2Shape.e_polyShape);
+
   this.m_type = b2Shape.e_polyShape;
 
   var localR = new b2Mat22(def.localRotation);
@@ -189,7 +197,7 @@ var b2PolyShape = function(def, body, newOrigin) {
     maxVertexX = Math.max(maxVertexX, v.x);
     maxVertexY = Math.max(maxVertexY, v.y);
     //this.m_maxRadius = b2Max(this.m_maxRadius, v.Length());
-    this.m_maxRadius = Math.max(this.m_maxRadius, v.Length());
+    this.m_maxRadius = Math.max(this.m_maxRadius, v.magnitude());
   }
 
   this.m_localOBB.R.SetIdentity();
@@ -271,14 +279,14 @@ b2PolyShape.prototype.TestPoint = function(p) {
   //var pLocal = b2Math.b2MulTMV(this.m_R, b2Math.SubtractVV(p, this.m_position));
   var pLocal = new b2Vec2();
   pLocal.SetV(p);
-  pLocal.Subtract(this.m_position);
+  pLocal.subtract(this.m_position);
   pLocal.MulTM(this.m_R);
 
   for (var i = 0; i < this.m_vertexCount; ++i) {
     //var dot = b2Math.b2Dot(this.m_normals[i], b2Math.SubtractVV(pLocal, this.m_vertices[i]));
     var tVec = new b2Vec2();
     tVec.SetV(pLocal);
-    tVec.Subtract(this.m_vertices[i]);
+    tVec.subtract(this.m_vertices[i]);
 
     var dot = b2Math.b2Dot(this.m_normals[i], tVec);
     if (dot > 0.0) {
@@ -399,15 +407,15 @@ b2PolyShape.prototype.ResetProxy = function(broadPhase) {
   var h = b2Math.b2MulMV(absR, this.m_localOBB.extents);
   //var position = this.m_position + b2Mul(this.m_R, this.m_localOBB.center);
   var position = b2Math.b2MulMV(this.m_R, this.m_localOBB.center);
-  position.Add(this.m_position);
+  position.add(this.m_position);
 
   var aabb = new b2AABB();
   //aabb.minVertex = position - h;
   aabb.minVertex.SetV(position);
-  aabb.minVertex.Subtract(h);
+  aabb.minVertex.subtract(h);
   //aabb.maxVertex = position + h;
   aabb.maxVertex.SetV(position);
-  aabb.maxVertex.Add(h);
+  aabb.maxVertex.add(h);
 
   if (broadPhase.InRange(aabb)) {
     this.m_proxyId = broadPhase.CreateProxy(aabb, this);

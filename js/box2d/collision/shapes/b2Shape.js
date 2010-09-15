@@ -172,10 +172,10 @@ b2Shape.PolyMass = function(massData, vs, count, rho) {
     // center += triangleArea * inv3 * (p1 + p2 + p3);
     var tVec = new b2Vec2();
     tVec.SetV(p1);
-    tVec.Add(p2);
-    tVec.Add(p3);
-    tVec.Multiply(inv3 * triangleArea);
-    center.Add(tVec);
+    tVec.add(p2);
+    tVec.add(p3);
+    tVec.scale(inv3 * triangleArea);
+    center.add(tVec);
 
     var px = p1.x;
     var py = p1.y;
@@ -195,7 +195,7 @@ b2Shape.PolyMass = function(massData, vs, count, rho) {
 
   // Center of mass
   //b2Settings.b2Assert(area > Number.MIN_VALUE);
-  center.Multiply(1.0 / area);
+  center.scale(1.0 / area);
   massData.center = center;
 
   // Inertia tensor relative to the center.

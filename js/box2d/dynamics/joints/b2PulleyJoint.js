@@ -184,19 +184,19 @@ b2PulleyJoint.prototype.PrepareVelocitySolver = function() {
   //this.m_u2 = p2 - s2;
   this.m_u2.Set(p2X - s2X, p2Y - s2Y);
 
-  var length1 = this.m_u1.Length();
-  var length2 = this.m_u2.Length();
+  var length1 = this.m_u1.magnitude();
+  var length2 = this.m_u2.magnitude();
 
   if (length1 > b2Settings.b2_linearSlop) {
     //this.m_u1 *= 1.0f / length1;
-    this.m_u1.Multiply(1.0 / length1);
+    this.m_u1.scale(1.0 / length1);
   } else {
     this.m_u1.SetZero();
   }
 
   if (length2 > b2Settings.b2_linearSlop) {
     //this.m_u2 *= 1.0f / length2;
-    this.m_u2.Multiply(1.0 / length2);
+    this.m_u2.scale(1.0 / length2);
   } else {
     this.m_u2.SetZero();
   }
@@ -403,19 +403,19 @@ b2PulleyJoint.prototype.SolvePositionConstraints = function() {
   //this.m_u2 = p2 - s2;
   this.m_u2.Set(p2X - s2X, p2Y - s2Y);
 
-  length1 = this.m_u1.Length();
-  length2 = this.m_u2.Length();
+  length1 = this.m_u1.magnitude();
+  length2 = this.m_u2.magnitude();
 
   if (length1 > b2Settings.b2_linearSlop) {
     //this.m_u1 *= 1.0f / length1;
-    this.m_u1.Multiply(1.0 / length1);
+    this.m_u1.scale(1.0 / length1);
   } else {
     this.m_u1.SetZero();
   }
 
   if (length2 > b2Settings.b2_linearSlop) {
     //this.m_u2 *= 1.0f / length2;
-    this.m_u2.Multiply(1.0 / length2);
+    this.m_u2.scale(1.0 / length2);
   } else {
     this.m_u2.SetZero();
   }
@@ -452,7 +452,7 @@ b2PulleyJoint.prototype.SolvePositionConstraints = function() {
     //this.m_u1 = p1 - s1;
     this.m_u1.Set(p1X - s1X, p1Y - s1Y);
 
-    length1 = this.m_u1.Length();
+    length1 = this.m_u1.magnitude();
 
     if (length1 > b2Settings.b2_linearSlop) {
       //this.m_u1 *= 1.0 / length1;
@@ -493,7 +493,7 @@ b2PulleyJoint.prototype.SolvePositionConstraints = function() {
     //this.m_u2 = p2 - s2;
     this.m_u2.Set(p2X - s2X, p2Y - s2Y);
 
-    length2 = this.m_u2.Length();
+    length2 = this.m_u2.magnitude();
 
     if (length2 > b2Settings.b2_linearSlop) {
       //this.m_u2 *= 1.0 / length2;

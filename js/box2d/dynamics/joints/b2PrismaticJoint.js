@@ -120,7 +120,7 @@ b2PrismaticJoint.prototype.GetAnchor1 = function() {
   var tVec = new b2Vec2();
   tVec.SetV(this.m_localAnchor1);
   tVec.MulM(b1.m_R);
-  tVec.Add(b1.m_position);
+  tVec.add(b1.m_position);
   return tVec;
 };
 b2PrismaticJoint.prototype.GetAnchor2 = function() {
@@ -129,7 +129,7 @@ b2PrismaticJoint.prototype.GetAnchor2 = function() {
   var tVec = new b2Vec2();
   tVec.SetV(this.m_localAnchor2);
   tVec.MulM(b2.m_R);
-  tVec.Add(b2.m_position);
+  tVec.add(b2.m_position);
   return tVec;
 };
 b2PrismaticJoint.prototype.GetJointTranslation = function() {

@@ -273,7 +273,7 @@ b2Collision.FindIncidentEdge = function(c, poly1, edge1, poly2) {
   tVec = tClip.v;
   tVec.SetV(vert2s[vertex21]);
   tVec.MulM(poly2.m_R);
-  tVec.Add(poly2.m_position);
+  tVec.add(poly2.m_position);
 
   tClip.id.features.referenceFace = edge1;
   tClip.id.features.incidentEdge = vertex21;
@@ -284,7 +284,7 @@ b2Collision.FindIncidentEdge = function(c, poly1, edge1, poly2) {
   tVec = tClip.v;
   tVec.SetV(vert2s[vertex22]);
   tVec.MulM(poly2.m_R);
-  tVec.Add(poly2.m_position);
+  tVec.add(poly2.m_position);
   tClip.id.features.referenceFace = edge1;
   tClip.id.features.incidentEdge = vertex21;
   tClip.id.features.incidentVertex = vertex22;

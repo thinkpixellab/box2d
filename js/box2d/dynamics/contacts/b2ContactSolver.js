@@ -204,7 +204,7 @@ b2ContactSolver.prototype = {
 
           //b1.m_angularVelocity -= invI1 * b2Math.b2CrossVV(r1, P);
           b1.m_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
-          //b1.m_linearVelocity.Subtract( b2Math.MulFV(invMass1, P) );
+          //b1.m_linearVelocity.subtract( b2Math.MulFV(invMass1, P) );
           b1.m_linearVelocity.x -= invMass1 * PX;
           b1.m_linearVelocity.y -= invMass1 * PY;
           //b2.m_angularVelocity += invI2 * b2Math.b2CrossVV(r2, P);
@@ -300,7 +300,7 @@ b2ContactSolver.prototype = {
         PX = lambda * normalX;
         PY = lambda * normalY;
 
-        //b1.m_linearVelocity.Subtract( b2Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( b2Math.MulFV( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
@@ -333,7 +333,7 @@ b2ContactSolver.prototype = {
         PX = lambda * tangentX;
         PY = lambda * tangentY;
 
-        //b1.m_linearVelocity.Subtract( b2Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( b2Math.MulFV( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
@@ -383,7 +383,7 @@ b2ContactSolver.prototype = {
         PX = lambda * tangentX;
         PY = lambda * tangentY;
 
-        //b1.m_linearVelocity.Subtract( b2Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( b2Math.MulFV( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
@@ -477,7 +477,7 @@ b2ContactSolver.prototype = {
         var impulseX = dImpulse * normalX;
         var impulseY = dImpulse * normalY;
 
-        //b1.m_position.Subtract( b2Math.MulFV( invMass1, impulse ) );
+        //b1.m_position.subtract( b2Math.MulFV( invMass1, impulse ) );
         b1_position.x -= invMass1 * impulseX;
         b1_position.y -= invMass1 * impulseY;
         b1_rotation -= invI1 * (r1X * impulseY - r1Y * impulseX);

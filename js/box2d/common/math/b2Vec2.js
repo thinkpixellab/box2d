@@ -24,6 +24,7 @@ goog.require('b2Math');
 // can be placed in a union.
 /**
  @constructor
+ @extends {goog.math.Vec2}
  @param {number=} x_
  @param {number=} y_
 */
@@ -41,6 +42,7 @@ var b2Vec2 = function(x_, y_) {
   /** @type {number} */
   this.y = y_;
 };
+goog.inherits(b2Vec2, goog.math.Vec2);
 
 b2Vec2.prototype.SetZero = function() {
   this.x = 0.0;
@@ -68,24 +70,6 @@ b2Vec2.prototype.Negative = function() {
 /** @return {b2Vec2} */
 b2Vec2.prototype.Copy = function() {
   return new b2Vec2(this.x, this.y);
-};
-
-/** @param {b2Vec2} v */
-b2Vec2.prototype.Add = function(v) {
-  this.x += v.x;
-  this.y += v.y;
-};
-
-/** @param {b2Vec2} v */
-b2Vec2.prototype.Subtract = function(v) {
-  this.x -= v.x;
-  this.y -= v.y;
-};
-
-/** @param {number} a */
-b2Vec2.prototype.Multiply = function(a) {
-  this.x *= a;
-  this.y *= a;
 };
 
 /** @param {b2Mat22} A */
@@ -134,13 +118,8 @@ b2Vec2.prototype.Abs = function() {
 };
 
 /** @return {number} */
-b2Vec2.prototype.Length = function() {
-  return Math.sqrt(this.x * this.x + this.y * this.y);
-};
-
-/** @return {number} */
 b2Vec2.prototype.Normalize = function() {
-  var length = this.Length();
+  var length = this.magnitude();
   if (length < Number.MIN_VALUE) {
     return 0.0;
   }

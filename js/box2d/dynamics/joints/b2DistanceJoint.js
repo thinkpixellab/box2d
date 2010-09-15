@@ -98,7 +98,7 @@ b2DistanceJoint.prototype.PrepareVelocitySolver = function() {
   var length = Math.sqrt(this.m_u.x * this.m_u.x + this.m_u.y * this.m_u.y);
   if (length > b2Settings.b2_linearSlop) {
     //this.m_u *= 1.0 / length;
-    this.m_u.Multiply(1.0 / length);
+    this.m_u.scale(1.0 / length);
   } else {
     this.m_u.SetZero();
   }
@@ -232,7 +232,7 @@ b2DistanceJoint.prototype.GetReactionForce = function(invTimeStep) {
   //var F = (this.m_impulse * invTimeStep) * this.m_u;
   var F = new b2Vec2();
   F.SetV(this.m_u);
-  F.Multiply(this.m_impulse * invTimeStep);
+  F.scale(this.m_impulse * invTimeStep);
   return F;
 };
 

@@ -94,7 +94,7 @@ b2CircleShape.prototype.TestPoint = function(p) {
   //var d = b2Math.SubtractVV(p, this.m_position);
   var d = new b2Vec2();
   d.SetV(p);
-  d.Subtract(this.m_position);
+  d.subtract(this.m_position);
   return b2Math.b2Dot(d, d) <= this.m_radius * this.m_radius;
 };
 
