@@ -21,7 +21,7 @@ goog.require('demos.compound');
 /**
  @constructor
  */
-demo = function(canvas) {
+Demo = function(canvas) {
   this.m_initId = 0;
   this.m_demos = [];
   this.m_demos.push(demos.compound);
@@ -39,74 +39,57 @@ demo = function(canvas) {
   this.m_canvasContext.fillStyle = '#ffffff';
   this.m_canvasContext.translate(this.m_translate.x, this.m_translate.y);
 
-  goog.events.listen(window, goog.events.EventType.CLICK, function(e) {
+  goog.events.listen(canvas, goog.events.EventType.CLICK, function(e) {
     var offset = new goog.math.Vec2(e.offsetX, e.offsetY);
     offset.subtract(this.m_translate);
     if (Math.random() < 0.5) {
-      demo.createBall(this.m_world, offset.x, offset.y, 10);
+      Demo.createBall(this.m_world, offset.x, offset.y, 10);
     } else {
-      demo.createBox(this.m_world, offset.x, offset.y, 10, 10, false);
+      Demo.createBox(this.m_world, offset.x, offset.y, 10, 10, false);
     }
   },
   false, this);
 
-  goog.events.listen(window, goog.events.EventType.CONTEXTMENU, function(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    this._setupPrevWorld();
-    return false;
-  },
-  false, this);
-
+  this.m_initId = 0;
   this._setupWorld();
   this._step();
 };
 
-/**
- @private
- @param {number=} demoId
- */
-demo.prototype._setupWorld = function(demoId) {
-  if (!demoId) {
-    demoId = 0;
-  }
-  this.m_world = demo.createWorld();
-  this.m_initId += demoId;
+Demo.prototype.nextDemo = function(){
+  this.m_initId++;
   this.m_initId %= this.m_demos.length;
-  if (!isNaN(this.m_initId)) {
-    if (this.m_initId < 0) {
-      this.m_initId = this.m_demos.length + this.m_initId;
-    }
-    this.m_demos[this.m_initId](this.m_world);
-  }
-};
-
-demo.prototype._setupPrevWorld = function() {
-  this._setupWorld(-1);
+  this._setupWorld(this.m_initId);
 };
 
 /**
  @private
  */
-demo.prototype._step = function() {
-  this.m_world.Step(demo._secondsPerFrame, 1);
+Demo.prototype._setupWorld = function() {
+  this.m_world = Demo.createWorld();
+  this.m_demos[this.m_initId](this.m_world);
+};
+
+/**
+ @private
+ */
+Demo.prototype._step = function() {
+  this.m_world.Step(Demo._secondsPerFrame, 1);
   // TODO: add code to not draw world of we're asleep
   this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
   demoDraw.drawWorld(this.m_world, this.m_canvasContext);
-  goog.global.setTimeout(goog.bind(this._step, this), demo._millisecondsPerFrame);
+  goog.global.setTimeout(goog.bind(this._step, this), Demo._millisecondsPerFrame);
 };
 
-demo.createWorld = function() {
+Demo.createWorld = function() {
   var worldAABB = new b2AABB();
   worldAABB.minVertex.Set(-1000, -1000);
   worldAABB.maxVertex.Set(1000, 1000);
   var gravity = new b2Vec2(0, 300);
   var doSleep = true;
   var world = new b2World(worldAABB, gravity, doSleep);
-  demo.createBox(world, 250, 305, 250, 5, true, true);
-  demo.createBox(world, 5, 185, 5, 125, true, true);
-  demo.createBox(world, 495, 185, 5, 125, true, true);
+  Demo.createBox(world, 250, 305, 250, 5, true, true);
+  Demo.createBox(world, 5, 185, 5, 125, true, true);
+  Demo.createBox(world, 495, 185, 5, 125, true, true);
   return world;
 };
 
@@ -115,7 +98,7 @@ demo.createWorld = function() {
  @param {number=} radius
  @return {!b2Body}
  */
-demo.createBall = function(world, x, y, radius) {
+Demo.createBall = function(world, x, y, radius) {
   if (!radius) {
     radius = 20;
   }
@@ -136,7 +119,7 @@ demo.createBall = function(world, x, y, radius) {
  @param {boolean=} filled
  @return {!b2Body}
  */
-demo.createBox = function(world, x, y, width, height, fixed, filled) {
+Demo.createBox = function(world, x, y, width, height, fixed, filled) {
   if (typeof(fixed) == 'undefined') {
     fixed = true;
   }
@@ -162,11 +145,11 @@ demo.createBox = function(world, x, y, width, height, fixed, filled) {
  @const
  @type {number}
  */
-demo._secondsPerFrame = 1.0 / 60;
+Demo._secondsPerFrame = 1.0 / 60;
 
 /**
  @private
  @const
  @type {number}
  */
-demo._millisecondsPerFrame = demo._secondsPerFrame * 1000;
+Demo._millisecondsPerFrame = Demo._secondsPerFrame * 1000;

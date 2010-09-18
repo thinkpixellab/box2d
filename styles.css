@@ -3,17 +3,27 @@
     padding: 0px;
 }
 
+#container {
+  margin: 20px auto;
+  width: 600px;
+  text-align: center;
+}
+
 canvas {
   background: #333388;
-  margin: 20px auto;
   display: block;
+}
+
+button{
+  margin: 10px;
+  padding: 5px;
+  font-size: 15px;
+  font-family: Helvetica, sans-serif;
 }
 
 #info{
   text-align: justify;
   font-family: Helvetica, Arial, sans-serif;
-  margin: 0 auto;
-  width: 600px;
 }
 
 #info p{
