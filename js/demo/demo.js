@@ -1,4 +1,4 @@
-goog.provide('demo');
+goog.provide('Demo');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -64,7 +64,7 @@ Demo.prototype.nextDemo = function(delta) {
     this.m_initId += this.m_demos.length;
   }
   this.m_initId %= this.m_demos.length;
-  this._setupWorld(this.m_initId);
+  this._setupWorld();
 };
 
 /**

@@ -1,6 +1,4 @@
-goog.require('demo');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
+goog.require('Demo');
 
 $(window).load(function() {
   var demo = new Demo($('canvas')[0]);
@@ -22,7 +20,7 @@ $(window).load(function() {
       return false;
     };
     this.unselectable = "on";
-    jQuery(this).css('-moz-user-select', 'none');
-    jQuery(this).css('-webkit-user-select', 'none');
+    $(this).css('-moz-user-select', 'none');
+    $(this).css('-webkit-user-select', 'none');
   });
 });

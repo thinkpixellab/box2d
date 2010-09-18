@@ -6,6 +6,12 @@
  */
 var $ = function(arg) {};
 
+/**
+ * @param {Object|string} arg
+ * @return {jQueryObject}
+ */
+var jQuery = function(arg) {};
+
 /** @constructor */
 function jQueryObject() {};
 
@@ -77,3 +83,27 @@ jQueryObject.prototype.hide = function(opt_speed, opt_fn) {};
  * @return {string|jQueryObject}
  */
 jQueryObject.prototype.html = function(opt_val) {};
+
+/**
+ * @param {Function} fn
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.ready = function(fn) {};
+/**
+ * @param {Object} settings
+ * @return {Object}
+ */
+jQueryObject.prototype.ajax = function(settings) {};
+
+/**
+ * @param {string|Object} nameOrProperties
+ * @param {(string|number|Function)=} opt_value
+ * @return {Object|jQueryObject|string}
+ */
+jQueryObject.prototype.css = function(nameOrProperties, opt_value) {};
+
+/**
+ * @param {Function} callback
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.each = function(callback) {};

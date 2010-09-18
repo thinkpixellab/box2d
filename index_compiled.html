@@ -6,12 +6,19 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="js/compiled.js"></script></head>
   <body>
-    <canvas height="380px" width="600px"></canvas>
-    <div id="info">
-      <p>This is a clone of a <a href="http://box2d-js.sourceforge.net/">box2d javascript engine</a> which is a clone of the <a href="http://www.box2d.org/">box2d C++ library</a>.</p>
-      <p><a href="http://thinkpixellab.com">PixelLab</a> modified the library to use Google's <a href="http://code.google.com/closure/compiler/">Closure Javascript Compiler</a> for great compression--with the added benefit of compile-time checking. (We found a lot of bugs in the original javascript).</p>
-      <p>It's being used in <a href="http://www.agent8ball.com">Agent 8 Ball</a>, an HTML5 showcase pool game.</p>
-      <p>Check out the source, fork, patch, etc on <a href="http://github.com/thinkpixellab/box2d">Github</a>.</p>
+    <div id="container">
+      <canvas height="380px" width="600px"></canvas>
+      <div>
+        <button id="previous">Previous</button>
+        <button id="reload">Reload</button>
+        <button id="next">Next</button>
+      </div>
+      <div id="info">
+        <p>This is a clone of a <a href="http://box2d-js.sourceforge.net/">box2d javascript engine</a> which is a clone of the <a href="http://www.box2d.org/">box2d C++ library</a>.</p>
+        <p><a href="http://thinkpixellab.com">PixelLab</a> modified the library to use Google's <a href="http://code.google.com/closure/compiler/">Closure Javascript Compiler</a> for great compression--with the added benefit of compile-time checking. (We found a lot of bugs in the original javascript).</p>
+        <p>It's being used in <a href="http://www.agent8ball.com">Agent 8 Ball</a>, an HTML5 showcase pool game.</p>
+        <p>Check out the source, fork, patch, etc on <a href="http://github.com/thinkpixellab/box2d">Github</a>.</p>
+      </div>
     </div>
   </body>
 </html>
