@@ -106,7 +106,7 @@ Demo.createBall = function(world, x, y, radius) {
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
-  ballSd.restitution = 0.9;
+  ballSd.restitution = 0.8;
   ballSd.friction = 0.9;
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
