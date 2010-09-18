@@ -4,7 +4,13 @@ goog.require('goog.events.EventType');
 
 $(window).load(function() {
   var demo = new Demo($('canvas')[0]);
-  $('button').click(function(){
-    demo.nextDemo();
+  $('#previous').click(function(){
+    demo.nextDemo(-1);
+  });
+  $('#reload').click(function(){
+    demo.nextDemo(0);
+  });
+  $('#next').click(function(){
+    demo.nextDemo(1);
   });
 });

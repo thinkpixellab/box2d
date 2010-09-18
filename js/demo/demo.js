@@ -50,13 +50,19 @@ Demo = function(canvas) {
   },
   false, this);
 
-  this.m_initId = 0;
+  this.m_initId = Math.floor(Math.random() * this.m_demos.length);
   this._setupWorld();
   this._step();
 };
 
-Demo.prototype.nextDemo = function(){
-  this.m_initId++;
+Demo.prototype.nextDemo = function(delta) {
+  if(this.m_demos.length == 0){
+    throw "No demos to load";
+  }
+  this.m_initId += delta;
+  while(this.m_initId < 0){
+    this.m_initId += this.m_demos.length;
+  }
   this.m_initId %= this.m_demos.length;
   this._setupWorld(this.m_initId);
 };
@@ -74,7 +80,7 @@ Demo.prototype._setupWorld = function() {
  */
 Demo.prototype._step = function() {
   this.m_world.Step(Demo._secondsPerFrame, 1);
-  if(!this.m_world.sleeping){
+  if (!this.m_world.sleeping) {
     this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
     demoDraw.drawWorld(this.m_world, this.m_canvasContext);
   }
