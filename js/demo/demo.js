@@ -100,9 +100,7 @@ Demo.createWorld = function() {
  @return {!b2Body}
  */
 Demo.createBall = function(world, x, y, radius) {
-  if (!radius) {
-    radius = 20;
-  }
+  radius = radius || 20;
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
