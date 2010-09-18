@@ -13,4 +13,16 @@ $(window).load(function() {
   $('#next').click(function(){
     demo.nextDemo(1);
   });
+
+
+  // ensure the canvas isn't selectable
+  // minimizes some weird focus flashing in chrome
+  $('canvas').each(function () {
+    this['onselectstart'] = function () {
+      return false;
+    };
+    this.unselectable = "on";
+    jQuery(this).css('-moz-user-select', 'none');
+    jQuery(this).css('-webkit-user-select', 'none');
+  });
 });
