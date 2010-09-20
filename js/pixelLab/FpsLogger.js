@@ -43,4 +43,4 @@ pixelLab.FpsLogger.prototype.m_lastTick = 0;
  @const
  @type {number}
  */
-pixelLab.FpsLogger.s_size = 10;
+pixelLab.FpsLogger.s_size = 100;

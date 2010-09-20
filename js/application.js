@@ -1,22 +1,31 @@
 goog.require('Demo');
+goog.require('Demo.FrameEvent');
 
 $(window).load(function() {
   var demo = new Demo($('canvas')[0]);
-  $('#previous').click(function(){
+  $('#previous').click(function() {
     demo.nextDemo(-1);
   });
-  $('#reload').click(function(){
+  $('#reload').click(function() {
     demo.nextDemo(0);
   });
-  $('#next').click(function(){
+  $('#next').click(function() {
     demo.nextDemo(1);
   });
 
+  var frameCount = 0;
+  goog.events.listen(demo, Demo.FrameEvent.Type, function(e) {
+    if (frameCount == 0) {
+      $('#fps').html(e.fps + ' fps');
+    }
+    frameCount++;
+    frameCount %= 30;
+  });
 
   // ensure the canvas isn't selectable
   // minimizes some weird focus flashing in chrome
-  $('canvas').each(function () {
-    this['onselectstart'] = function () {
+  $('canvas').each(function() {
+    this['onselectstart'] = function() {
       return false;
     };
     this.unselectable = "on";

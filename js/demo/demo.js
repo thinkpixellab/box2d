@@ -1,8 +1,10 @@
 goog.provide('Demo');
+goog.provide('Demo.FrameEvent');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Vec2');
+goog.require('goog.events.EventTarget');
 
 goog.require('b2AABB');
 goog.require('b2World');
@@ -22,6 +24,7 @@ goog.require('demos.compound');
 
 /**
  @constructor
+ @extends {goog.events.EventTarget}
  */
 Demo = function(canvas) {
   this.m_initId = 0;
@@ -59,6 +62,7 @@ Demo = function(canvas) {
   this._setupWorld();
   this._step();
 };
+goog.inherits(Demo, goog.events.EventTarget);
 
 Demo.prototype.nextDemo = function(delta) {
   if (this.m_demos.length == 0) {
@@ -84,8 +88,9 @@ Demo.prototype._setupWorld = function() {
  @private
  */
 Demo.prototype._step = function() {
-  goog.global.setTimeout(goog.bind(this._step, this), Demo._millisecondsPerFrame);
-  this.m_fps = this.m_fpsLogger.AddInterval();
+  goog.global.setTimeout(goog.bind(this._step, this));
+  this.m_fps = Math.round(this.m_fpsLogger.AddInterval());
+  this.dispatchEvent(new Demo.FrameEvent(this.m_fps));
   this.m_world.Step(Demo._secondsPerFrame, 1);
   if (!this.m_world.sleeping) {
     this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
@@ -164,3 +169,24 @@ Demo._secondsPerFrame = 1.0 / 60;
  @type {number}
  */
 Demo._millisecondsPerFrame = Demo._secondsPerFrame * 1000;
+
+//
+// Events
+//
+
+/**
+ * @param {number} fps
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+Demo.FrameEvent = function(fps) {
+  goog.base(this, Demo.FrameEvent.Type);
+  this.fps = fps;
+};
+goog.inherits(Demo.FrameEvent, goog.events.Event);
+
+/**
+ @const
+ @type {string}
+*/
+Demo.FrameEvent.Type = "Demo.FrameEventType";
