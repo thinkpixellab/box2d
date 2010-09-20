@@ -16,21 +16,21 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2CollisionFilter');
+goog.provide('box2d.CollisionFilter');
 
 /**
  @constructor
  */
-b2CollisionFilter = function() {};
+box2d.CollisionFilter = function() {};
 
 
 /**
   Return true if contact calculations should be performed between these two shapes.
-  @param {!b2Shape} shape1
-  @param {!b2Shape} shape2
+  @param {!box2d.Shape} shape1
+  @param {!box2d.Shape} shape2
   @return {boolean}
 */
-b2CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {
+box2d.CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {
   if (shape1.m_groupIndex == shape2.m_groupIndex && shape1.m_groupIndex != 0) {
     return shape1.m_groupIndex > 0;
   }
@@ -40,7 +40,7 @@ b2CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {
 };
 
 /**
-  @type {!b2CollisionFilter}
+  @type {!box2d.CollisionFilter}
   @const
 */
-b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter();
+box2d.CollisionFilter.b2_defaultFilter = new box2d.CollisionFilter();

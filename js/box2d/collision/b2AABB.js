@@ -16,26 +16,26 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2AABB');
+goog.provide('box2d.AABB');
 
-goog.require('b2Vec2');
+goog.require('box2d.Vec2');
 
 // A manifold for two touching convex shapes.
 /** 
  @constructor 
  */
-b2AABB = function() {
+box2d.AABB = function() {
 
-  /** @type {b2Vec2} */
-  this.minVertex = new b2Vec2();
+  /** @type {box2d.Vec2} */
+  this.minVertex = new box2d.Vec2();
 
-  /** @type {b2Vec2} */
-  this.maxVertex = new b2Vec2();
+  /** @type {box2d.Vec2} */
+  this.maxVertex = new box2d.Vec2();
 };
 
 /** @return {boolean} */
-b2AABB.prototype.IsValid = function() {
-  //var d = b2Math.SubtractVV(this.maxVertex, this.minVertex);
+box2d.AABB.prototype.IsValid = function() {
+  //var d = box2d.Math.SubtractVV(this.maxVertex, this.minVertex);
   var dX = this.maxVertex.x;
   var dY = this.maxVertex.y;
   dX = this.maxVertex.x;

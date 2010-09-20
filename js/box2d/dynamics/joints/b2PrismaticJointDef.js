@@ -16,25 +16,25 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PrismaticJointDef');
+goog.provide('box2d.PrismaticJointDef');
 
-goog.require('b2JointDef');
-goog.require('b2Vec2');
+goog.require('box2d.JointDef');
+goog.require('box2d.Vec2');
 
 /** 
  @constructor 
  */
-b2PrismaticJointDef = function() {
+box2d.PrismaticJointDef = function() {
   // The constructor for b2JointDef
-  this.type = b2Joint.e_unknownJoint;
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
   //
-  this.type = b2Joint.e_prismaticJoint;
-  this.anchorPoint = new b2Vec2(0.0, 0.0);
-  this.axis = new b2Vec2(0.0, 0.0);
+  this.type = box2d.Joint.e_prismaticJoint;
+  this.anchorPoint = new box2d.Vec2(0.0, 0.0);
+  this.axis = new box2d.Vec2(0.0, 0.0);
   this.lowerTranslation = 0.0;
   this.upperTranslation = 0.0;
   this.motorForce = 0.0;
@@ -43,8 +43,8 @@ b2PrismaticJointDef = function() {
   this.enableMotor = false;
 };
 
-goog.object.extend(b2PrismaticJointDef.prototype, b2JointDef.prototype);
-goog.object.extend(b2PrismaticJointDef.prototype, {
+goog.object.extend(box2d.PrismaticJointDef.prototype, box2d.JointDef.prototype);
+goog.object.extend(box2d.PrismaticJointDef.prototype, {
 
   anchorPoint: null,
   axis: null,

@@ -16,21 +16,21 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PolyDef');
+goog.provide('box2d.PolyDef');
 
-goog.require('b2ShapeDef');
-goog.require('b2Shape');
-goog.require('b2Vec2');
+goog.require('box2d.ShapeDef');
+goog.require('box2d.Shape');
+goog.require('box2d.Vec2');
 
 /**
  @constructor
- @extends {b2ShapeDef}
+ @extends {box2d.ShapeDef}
  */
-b2PolyDef = function() {
-  // The constructor for b2ShapeDef
-  this.type = b2Shape.e_unknownShape;
+box2d.PolyDef = function() {
+  // The constructor for box2d.ShapeDef
+  this.type = box2d.Shape.e_unknownShape;
   this.userData = null;
-  this.localPosition = new b2Vec2(0.0, 0.0);
+  this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
   this.friction = 0.2;
   this.restitution = 0.0;
@@ -40,19 +40,19 @@ b2PolyDef = function() {
   this.groupIndex = 0;
   //
   // initialize instance variables for references
-  this.vertices = new Array(b2Settings.b2_maxPolyVertices);
+  this.vertices = new Array(box2d.Settings.b2_maxPolyVertices);
   //
-  this.type = b2Shape.e_polyShape;
+  this.type = box2d.Shape.e_polyShape;
   this.vertexCount = 0;
 
-  for (var i = 0; i < b2Settings.b2_maxPolyVertices; i++) {
-    this.vertices[i] = new b2Vec2();
+  for (var i = 0; i < box2d.Settings.b2_maxPolyVertices; i++) {
+    this.vertices[i] = new box2d.Vec2();
   }
 };
 
-goog.inherits(b2PolyDef, b2ShapeDef);
+goog.inherits(box2d.PolyDef, box2d.ShapeDef);
 
-b2PolyDef.prototype.SetVertices = function(vertexArray) {
+box2d.PolyDef.prototype.SetVertices = function(vertexArray) {
   this.vertexCount = vertexArray.length;
   for (var i = 0; i < vertexArray.length; i++) {
     this.vertices[i].Set(vertexArray[i][0], vertexArray[i][1]);

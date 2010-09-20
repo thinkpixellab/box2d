@@ -16,14 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BufferedPair');
+goog.provide('box2d.BufferedPair');
 
 /**
  @constructor
  */
-var b2BufferedPair = function() {};
+box2d.BufferedPair = function() {};
 
-b2BufferedPair.prototype = {
+box2d.BufferedPair.prototype = {
   proxyId1: 0,
   proxyId2: 0
 };

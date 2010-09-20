@@ -16,37 +16,37 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BodyDef');
+goog.provide('box2d.BodyDef');
 
-goog.require('b2Settings');
+goog.require('box2d.Settings');
 
 /**
  @constructor
  */
-var b2BodyDef = function() {
+box2d.BodyDef = function() {
   /**
-   @type {!Array.<b2ShapeDef>}
+   @type {!Array.<box2d.ShapeDef>}
    */
   this.shapes = new Array();
   /**
    @type {Object}
    */
   this.userData = null;
-  for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
+  for (var i = 0; i < box2d.Settings.b2_maxShapesPerBody; i++) {
     this.shapes[i] = null;
   }
   /**
-   @type {!b2Vec2}
+   @type {!box2d.Vec2}
    */
-  this.position = new b2Vec2(0.0, 0.0);
+  this.position = new box2d.Vec2(0.0, 0.0);
   /**
    @type {number}
    */
   this.rotation = 0.0;
   /**
-   @type {!b2Vec2}
+   @type {!box2d.Vec2}
    */
-  this.linearVelocity = new b2Vec2(0.0, 0.0);
+  this.linearVelocity = new box2d.Vec2(0.0, 0.0);
   /**
    @type {number}
    */
@@ -74,10 +74,10 @@ var b2BodyDef = function() {
 };
 
 /**
- @param {!b2ShapeDef} shape
+ @param {!box2d.ShapeDef} shape
  */
-b2BodyDef.prototype.AddShape = function(shape) {
-  for (var i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
+box2d.BodyDef.prototype.AddShape = function(shape) {
+  for (var i = 0; i < box2d.Settings.b2_maxShapesPerBody; ++i) {
     if (this.shapes[i] == null) {
       this.shapes[i] = shape;
       break;

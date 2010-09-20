@@ -16,13 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2TimeStep');
+goog.provide('box2d.TimeStep');
 
 /**
   @constructor
  */
-b2TimeStep = function() {};
-b2TimeStep.prototype = {
+box2d.TimeStep = function() {};
+box2d.TimeStep.prototype = {
   dt: null,
   inv_dt: null,
   iterations: 0

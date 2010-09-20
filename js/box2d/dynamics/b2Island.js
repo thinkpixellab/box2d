@@ -44,7 +44,7 @@ after the constraint is solved. The radius vectors (aka Jacobians) are
 re-computed too (otherwise the algorithm has horrible instability). The pseudo
 velocity states are not needed because they are effectively zero at the beginning
 of each iteration. Since we have the current position error, we allow the
-iterations to terminate early if the error becomes smaller than b2_linearSlop.
+iterations to terminate early if the error becomes smaller than box2d._linearSlop.
 
 Full NGS or just NGS - Like Modified NGS except the effective mass are re-computed
 each time a constraint is solved.
@@ -95,14 +95,14 @@ probably default to the slower Full NGS and let the user select the faster
 Baumgarte method in performance critical scenarios.
 */
 
-goog.provide('b2Island');
+goog.provide('box2d.Island');
 
-goog.require('b2ContactSolver');
+goog.require('box2d.ContactSolver');
 
 /**
  @constructor
  */
-b2Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
+box2d.Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
   var i = 0;
 
   this.m_bodyCapacity = bodyCapacity;
@@ -112,12 +112,12 @@ b2Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
   this.m_contactCount = 0;
   this.m_jointCount = 0;
 
-  //this.m_bodies = (b2Body**)allocator->Allocate(bodyCapacity * sizeof(b2Body*));
+  //this.m_bodies = (box2d.Body**)allocator->Allocate(bodyCapacity * sizeof(box2d.Body*));
   this.m_bodies = new Array(bodyCapacity);
   for (i = 0; i < bodyCapacity; i++)
   this.m_bodies[i] = null;
 
-  //this.m_contacts = (b2Contact**)allocator->Allocate(contactCapacity   * sizeof(b2Contact*));
+  //this.m_contacts = (box2d.Contact**)allocator->Allocate(contactCapacity   * sizeof(box2d.Contact*));
   this.m_contacts = new Array(contactCapacity);
   for (i = 0; i < contactCapacity; i++)
   this.m_contacts[i] = null;
@@ -130,12 +130,12 @@ b2Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
   this.m_allocator = allocator;
 };
 
-b2Island.prototype.Clear = function() {
+box2d.Island.prototype.Clear = function() {
   this.m_bodyCount = 0;
   this.m_contactCount = 0;
   this.m_jointCount = 0;
 };
-b2Island.prototype.Solve = function(step, gravity) {
+box2d.Island.prototype.Solve = function(step, gravity) {
   var i = 0;
   var b;
 
@@ -144,7 +144,7 @@ b2Island.prototype.Solve = function(step, gravity) {
 
     if (b.m_invMass == 0.0) continue;
 
-    b.m_linearVelocity.add(b2Math.MulFV(step.dt, b2Math.AddVV(gravity, b2Math.MulFV(b.m_invMass, b.m_force))));
+    b.m_linearVelocity.add(box2d.Math.MulFV(step.dt, box2d.Math.AddVV(gravity, box2d.Math.MulFV(b.m_invMass, b.m_force))));
     b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
 
     //b.m_linearVelocity *= b.m_linearDamping;
@@ -156,7 +156,7 @@ b2Island.prototype.Solve = function(step, gravity) {
     b.m_rotation0 = b.m_rotation;
   }
 
-  var contactSolver = new b2ContactSolver(this.m_contacts, this.m_contactCount, this.m_allocator);
+  var contactSolver = new box2d.ContactSolver(this.m_contacts, this.m_contactCount, this.m_allocator);
 
   // Pre-solve
   contactSolver.PreSolve();
@@ -180,7 +180,7 @@ b2Island.prototype.Solve = function(step, gravity) {
 
     if (b.m_invMass == 0.0) continue;
 
-    //b.m_position.Add( b2Math.MulFV (step.dt, b.m_linearVelocity) );
+    //b.m_position.Add( box2d.Math.MulFV (step.dt, b.m_linearVelocity) );
     b.m_position.x += step.dt * b.m_linearVelocity.x;
     b.m_position.y += step.dt * b.m_linearVelocity.y;
     b.m_rotation += step.dt * b.m_angularVelocity;
@@ -193,9 +193,9 @@ b2Island.prototype.Solve = function(step, gravity) {
   }
 
   // this.Solve position constraints.
-  if (b2World.s_enablePositionCorrection) {
-    for (b2Island.m_positionIterationCount = 0; b2Island.m_positionIterationCount < step.iterations; ++b2Island.m_positionIterationCount) {
-      var contactsOkay = contactSolver.SolvePositionConstraints(b2Settings.b2_contactBaumgarte);
+  if (box2d.World.s_enablePositionCorrection) {
+    for (box2d.Island.m_positionIterationCount = 0; box2d.Island.m_positionIterationCount < step.iterations; ++box2d.Island.m_positionIterationCount) {
+      var contactsOkay = contactSolver.SolvePositionConstraints(box2d.Settings.b2_contactBaumgarte);
 
       var jointsOkay = true;
       for (i = 0; i < this.m_jointCount; ++i) {
@@ -230,14 +230,14 @@ b2Island.prototype.Solve = function(step, gravity) {
  @param {number} dt
  @return {boolean}
 */
-b2Island.prototype.UpdateSleep = function(dt) {
+box2d.Island.prototype.UpdateSleep = function(dt) {
   var i = 0;
   var b;
 
   var minSleepTime = Number.MAX_VALUE;
 
-  var linTolSqr = b2Settings.b2_linearSleepTolerance * b2Settings.b2_linearSleepTolerance;
-  var angTolSqr = b2Settings.b2_angularSleepTolerance * b2Settings.b2_angularSleepTolerance;
+  var linTolSqr = box2d.Settings.b2_linearSleepTolerance * box2d.Settings.b2_linearSleepTolerance;
+  var angTolSqr = box2d.Settings.b2_angularSleepTolerance * box2d.Settings.b2_angularSleepTolerance;
 
   for (i = 0; i < this.m_bodyCount; ++i) {
     b = this.m_bodies[i];
@@ -245,40 +245,40 @@ b2Island.prototype.UpdateSleep = function(dt) {
       continue;
     }
 
-    if ((b.m_flags & b2Body.e_allowSleepFlag) == 0) {
+    if ((b.m_flags & box2d.Body.e_allowSleepFlag) == 0) {
       b.m_sleepTime = 0.0;
       minSleepTime = 0.0;
     }
 
-    if ((b.m_flags & b2Body.e_allowSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || b2Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
+    if ((b.m_flags & box2d.Body.e_allowSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || box2d.Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
       b.m_sleepTime = 0.0;
       minSleepTime = 0.0;
     } else {
       b.m_sleepTime += dt;
-      minSleepTime = b2Math.b2Min(minSleepTime, b.m_sleepTime);
+      minSleepTime = box2d.Math.b2Min(minSleepTime, b.m_sleepTime);
     }
   }
 
-  if (minSleepTime >= b2Settings.b2_timeToSleep) {
+  if (minSleepTime >= box2d.Settings.b2_timeToSleep) {
     for (i = 0; i < this.m_bodyCount; ++i) {
       b = this.m_bodies[i];
-      b.m_flags |= b2Body.e_sleepFlag;
+      b.m_flags |= box2d.Body.e_sleepFlag;
     }
     return true;
   } else {
     return false;
   }
 };
-b2Island.prototype.AddBody = function(body) {
-  //b2Settings.b2Assert(this.m_bodyCount < this.m_bodyCapacity);
+box2d.Island.prototype.AddBody = function(body) {
+  //box2d.Settings.b2Assert(this.m_bodyCount < this.m_bodyCapacity);
   this.m_bodies[this.m_bodyCount++] = body;
 };
-b2Island.prototype.AddContact = function(contact) {
-  //b2Settings.b2Assert(this.m_contactCount < this.m_contactCapacity);
+box2d.Island.prototype.AddContact = function(contact) {
+  //box2d.Settings.b2Assert(this.m_contactCount < this.m_contactCapacity);
   this.m_contacts[this.m_contactCount++] = contact;
 };
-b2Island.prototype.AddJoint = function(joint) {
-  //b2Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
+box2d.Island.prototype.AddJoint = function(joint) {
+  //box2d.Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
   this.m_joints[this.m_jointCount++] = joint;
 };
-b2Island.m_positionIterationCount = 0;
+box2d.Island.m_positionIterationCount = 0;

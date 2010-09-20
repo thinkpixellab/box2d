@@ -1,8 +1,8 @@
 goog.provide('demos.stack');
 
 demos.stack = function(world) {
-  var sd = new b2BoxDef();
-  var bd = new b2BodyDef();
+  var sd = new box2d.BoxDef();
+  var bd = new box2d.BodyDef();
   bd.AddShape(sd);
   sd.density = 1.0;
   sd.friction = 0.5;

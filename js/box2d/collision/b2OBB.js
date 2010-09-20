@@ -16,18 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2OBB');
-goog.require('b2Vec2');
-goog.require('b2Mat22');
+goog.provide('box2d.OBB');
+goog.require('box2d.Vec2');
+goog.require('box2d.Mat22');
 
 // A manifold for two touching convex shapes.
 /**
  @constructor
  */
-b2OBB = function() {
+box2d.OBB = function() {
   // initialize instance variables for references
-  this.R = new b2Mat22();
-  this.center = new b2Vec2();
-  this.extents = new b2Vec2();
+  this.R = new box2d.Mat22();
+  this.center = new box2d.Vec2();
+  this.extents = new box2d.Vec2();
   //
 };

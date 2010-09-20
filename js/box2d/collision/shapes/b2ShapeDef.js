@@ -16,15 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ShapeDef');
+goog.provide('box2d.ShapeDef');
 
-goog.require('b2Vec2');
+goog.require('box2d.Vec2');
 
 /** @constructor */
-b2ShapeDef = function() {
-  this.type = b2Shape.e_unknownShape;
+box2d.ShapeDef = function() {
+  this.type = box2d.Shape.e_unknownShape;
   this.userData = null;
-  this.localPosition = new b2Vec2(0.0, 0.0);
+  this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
   this.friction = 0.2;
   this.restitution = 0.0;
@@ -34,9 +34,9 @@ b2ShapeDef = function() {
   this.groupIndex = 0;
 };
 
-b2ShapeDef.prototype.ComputeMass = function(massData) {
+box2d.ShapeDef.prototype.ComputeMass = function(massData) {
 
-  massData.center = new b2Vec2(0.0, 0.0);
+  massData.center = new box2d.Vec2(0.0, 0.0);
 
   if (this.density == 0.0) {
     massData.mass = 0.0;
@@ -45,28 +45,28 @@ b2ShapeDef.prototype.ComputeMass = function(massData) {
   };
 
   switch (this.type) {
-  case b2Shape.e_circleShape:
+  case box2d.Shape.e_circleShape:
     {
       var circle = this;
-      massData.mass = this.density * b2Settings.b2_pi * circle.radius * circle.radius;
+      massData.mass = this.density * box2d.Settings.b2_pi * circle.radius * circle.radius;
       massData.center.Set(0.0, 0.0);
       massData.I = 0.5 * (massData.mass) * circle.radius * circle.radius;
     }
     break;
 
-  case b2Shape.e_boxShape:
+  case box2d.Shape.e_boxShape:
     {
       var box = this;
       massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
       massData.center.Set(0.0, 0.0);
-      massData.I = massData.mass / 3.0 * b2Math.b2Dot(box.extents, box.extents);
+      massData.I = massData.mass / 3.0 * box2d.Math.b2Dot(box.extents, box.extents);
     }
     break;
 
-  case b2Shape.e_polyShape:
+  case box2d.Shape.e_polyShape:
     {
       var poly = this;
-      b2Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
+      box2d.Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
     }
     break;
 
@@ -79,13 +79,13 @@ b2ShapeDef.prototype.ComputeMass = function(massData) {
 };
 
 // The collision category bits. Normally you would just set one bit.
-b2ShapeDef.prototype.categoryBits = 0;
+box2d.ShapeDef.prototype.categoryBits = 0;
 
 // The collision mask bits. This states the categories that this
 // shape would accept for collision.
-b2ShapeDef.prototype.maskBits = 0;
+box2d.ShapeDef.prototype.maskBits = 0;
 
 // Collision groups allow a certain group of objects to never collide (negative)
 // or always collide (positive). Zero means no collision group. Non-zero group
 // filtering always wins against the mask bits.
-b2ShapeDef.prototype.groupIndex = 0;
+box2d.ShapeDef.prototype.groupIndex = 0;

@@ -16,25 +16,25 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2RevoluteJointDef');
+goog.provide('box2d.RevoluteJointDef');
 
-goog.require('b2Vec2');
-goog.require('b2JointDef');
-goog.require('b2Joint');
+goog.require('box2d.Vec2');
+goog.require('box2d.JointDef');
+goog.require('box2d.Joint');
 
 /** 
  @constructor 
  */
-b2RevoluteJointDef = function() {
+box2d.RevoluteJointDef = function() {
   // The constructor for b2JointDef
-  this.type = b2Joint.e_unknownJoint;
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
   //
-  this.type = b2Joint.e_revoluteJoint;
-  this.anchorPoint = new b2Vec2(0.0, 0.0);
+  this.type = box2d.Joint.e_revoluteJoint;
+  this.anchorPoint = new box2d.Vec2(0.0, 0.0);
   this.lowerAngle = 0.0;
   this.upperAngle = 0.0;
   this.motorTorque = 0.0;
@@ -43,8 +43,8 @@ b2RevoluteJointDef = function() {
   this.enableMotor = false;
 };
 
-goog.object.extend(b2RevoluteJointDef.prototype, b2JointDef.prototype);
-goog.object.extend(b2RevoluteJointDef.prototype, {
+goog.object.extend(box2d.RevoluteJointDef.prototype, box2d.JointDef.prototype);
+goog.object.extend(box2d.RevoluteJointDef.prototype, {
 
   anchorPoint: null,
   lowerAngle: null,

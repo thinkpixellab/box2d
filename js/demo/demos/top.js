@@ -1,9 +1,9 @@
 goog.provide('demos.top');
 
-goog.require('b2RevoluteJointDef');
-goog.require('b2CircleDef');
-goog.require('b2PolyDef');
-goog.require('b2BodyDef');
+goog.require('box2d.RevoluteJointDef');
+goog.require('box2d.CircleDef');
+goog.require('box2d.PolyDef');
+goog.require('box2d.BodyDef');
 
 demos.top = function(world) {
   demos.top.createBall(world, 350, 100, 50, true);
@@ -16,7 +16,7 @@ demos.top = function(world) {
     [10, 30],
     [-10, 30]], true);
   var pendulum = Demo.createBox(world, 150, 100, 20, 20, false);
-  var jointDef = new b2RevoluteJointDef();
+  var jointDef = new box2d.RevoluteJointDef();
   jointDef.body1 = pendulum;
   jointDef.body2 = world.GetGroundBody();
   jointDef.anchorPoint = pendulum.GetCenterPosition();
@@ -35,11 +35,11 @@ demos.top = function(world) {
  @param {boolean=} fixed
  */
 demos.top.createBall = function(world, x, y, rad, fixed) {
-  var ballSd = new b2CircleDef();
+  var ballSd = new box2d.CircleDef();
   if (!fixed) ballSd.density = 1.0;
   ballSd.radius = rad || 10;
   ballSd.restitution = 0.2;
-  var ballBd = new b2BodyDef();
+  var ballBd = new box2d.BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
   return world.CreateBody(ballBd);
@@ -49,13 +49,13 @@ demos.top.createBall = function(world, x, y, rad, fixed) {
  @param {boolean=} fixed
  */
 demos.top.createPoly = function(world, x, y, points, fixed) {
-  var polySd = new b2PolyDef();
+  var polySd = new box2d.PolyDef();
   if (!fixed) polySd.density = 1.0;
   polySd.vertexCount = points.length;
   for (var i = 0; i < points.length; i++) {
     polySd.vertices[i].Set(points[i][0], points[i][1]);
   }
-  var polyBd = new b2BodyDef();
+  var polyBd = new box2d.BodyDef();
   polyBd.AddShape(polySd);
   polyBd.position.Set(x, y);
   return world.CreateBody(polyBd);

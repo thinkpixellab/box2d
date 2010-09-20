@@ -6,11 +6,11 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Vec2');
 goog.require('goog.events.EventTarget');
 
-goog.require('b2AABB');
-goog.require('b2World');
-goog.require('b2BodyDef');
-goog.require('b2BoxDef');
-goog.require('b2CircleDef');
+goog.require('box2d.AABB');
+goog.require('box2d.World');
+goog.require('box2d.BodyDef');
+goog.require('box2d.BoxDef');
+goog.require('box2d.CircleDef');
 
 goog.require('pixelLab.FpsLogger');
 
@@ -99,12 +99,12 @@ Demo.prototype._step = function() {
 };
 
 Demo.createWorld = function() {
-  var worldAABB = new b2AABB();
+  var worldAABB = new box2d.AABB();
   worldAABB.minVertex.Set(-1000, -1000);
   worldAABB.maxVertex.Set(1000, 1000);
-  var gravity = new b2Vec2(0, 300);
+  var gravity = new box2d.Vec2(0, 300);
   var doSleep = true;
-  var world = new b2World(worldAABB, gravity, doSleep);
+  var world = new box2d.World(worldAABB, gravity, doSleep);
   Demo.createBox(world, 250, 305, 250, 5, true, true);
   Demo.createBox(world, 5, 185, 5, 125, true, true);
   Demo.createBox(world, 495, 185, 5, 125, true, true);
@@ -112,28 +112,28 @@ Demo.createWorld = function() {
 };
 
 /**
- @param {!b2World} world
+ @param {!box2d.World} world
  @param {number=} radius
- @return {!b2Body}
+ @return {!box2d.Body}
  */
 Demo.createBall = function(world, x, y, radius) {
   radius = radius || 20;
-  var ballSd = new b2CircleDef();
+  var ballSd = new box2d.CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
   ballSd.restitution = 0.8;
   ballSd.friction = 0.9;
-  var ballBd = new b2BodyDef();
+  var ballBd = new box2d.BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
   return world.CreateBody(ballBd);
 };
 
 /**
- @param {!b2World} world
+ @param {!box2d.World} world
  @param {boolean=} fixed
  @param {boolean=} filled
- @return {!b2Body}
+ @return {!box2d.Body}
  */
 Demo.createBox = function(world, x, y, width, height, fixed, filled) {
   if (typeof(fixed) == 'undefined') {
@@ -142,7 +142,7 @@ Demo.createBox = function(world, x, y, width, height, fixed, filled) {
   if (typeof(filled) == 'undefined') {
     filled = false;
   }
-  var boxSd = new b2BoxDef();
+  var boxSd = new box2d.BoxDef();
   if (!fixed) {
     boxSd.density = 1.0;
   }
@@ -150,7 +150,7 @@ Demo.createBox = function(world, x, y, width, height, fixed, filled) {
     boxSd.userData = 'filled';
   }
   boxSd.extents.Set(width, height);
-  var boxBd = new b2BodyDef();
+  var boxBd = new box2d.BodyDef();
   boxBd.AddShape(boxSd);
   boxBd.position.Set(x, y);
   return world.CreateBody(boxBd);

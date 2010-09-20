@@ -16,18 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Contact');
+goog.provide('box2d.Contact');
 
-goog.require('b2ContactNode');
-goog.require('b2ContactRegister');
+goog.require('box2d.ContactNode');
+goog.require('box2d.ContactRegister');
 
 /**
  @constructor
  */
-b2Contact = function(s1, s2) {
+box2d.Contact = function(s1, s2) {
   // initialize instance variables for references
-  this.m_node1 = new b2ContactNode();
-  this.m_node2 = new b2ContactNode();
+  this.m_node1 = new box2d.ContactNode();
+  this.m_node2 = new box2d.ContactNode();
   //
   this.m_flags = 0;
 
@@ -43,7 +43,7 @@ b2Contact = function(s1, s2) {
   this.m_manifoldCount = 0;
 
   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-  this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_restitution = box2d.Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
   this.m_prev = null;
   this.m_next = null;
@@ -59,7 +59,7 @@ b2Contact = function(s1, s2) {
   this.m_node2.other = null;
 };
 
-b2Contact.prototype = {
+box2d.Contact.prototype = {
   GetManifolds: function() {
     return null;
   },
@@ -82,7 +82,7 @@ b2Contact.prototype = {
   //--------------- Internals Below -------------------
   // this.m_flags
   // enum
-  //virtual ~b2Contact() {}
+  //virtual ~box2d.Contact() {}
   Evaluate: function() {},
 
   m_flags: 0,
@@ -92,8 +92,8 @@ b2Contact.prototype = {
   m_next: null,
 
   // Nodes for connecting bodies.
-  m_node1: new b2ContactNode(),
-  m_node2: new b2ContactNode(),
+  m_node1: new box2d.ContactNode(),
+  m_node2: new box2d.ContactNode(),
 
   m_shape1: null,
   m_shape2: null,
@@ -108,9 +108,9 @@ b2Contact.prototype = {
   @const
   @type {number}
 */
-b2Contact.e_islandFlag = 0x0001;
+box2d.Contact.e_islandFlag = 0x0001;
 /*
   @const
   @type {number}
 */
-b2Contact.e_destroyFlag = 0x0002;
+box2d.Contact.e_destroyFlag = 0x0002;

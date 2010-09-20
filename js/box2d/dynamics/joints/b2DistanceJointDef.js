@@ -16,31 +16,31 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2DistanceJointDef');
+goog.provide('box2d.DistanceJointDef');
 
 /** 
  @constructor 
  */
-b2DistanceJointDef = function() {
+box2d.DistanceJointDef = function() {
   // The constructor for b2JointDef
-  this.type = b2Joint.e_unknownJoint;
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
   //
   // initialize instance variables for references
-  this.anchorPoint1 = new b2Vec2();
-  this.anchorPoint2 = new b2Vec2();
+  this.anchorPoint1 = new box2d.Vec2();
+  this.anchorPoint2 = new box2d.Vec2();
   //
-  this.type = b2Joint.e_distanceJoint;
+  this.type = box2d.Joint.e_distanceJoint;
   //this.anchorPoint1.Set(0.0, 0.0);
   //this.anchorPoint2.Set(0.0, 0.0);
 };
 
-goog.object.extend(b2DistanceJointDef.prototype, b2JointDef.prototype);
-goog.object.extend(b2DistanceJointDef.prototype, {
+goog.object.extend(box2d.DistanceJointDef.prototype, box2d.JointDef.prototype);
+goog.object.extend(box2d.DistanceJointDef.prototype, {
 
-  anchorPoint1: new b2Vec2(),
-  anchorPoint2: new b2Vec2()
+  anchorPoint1: new box2d.Vec2(),
+  anchorPoint2: new box2d.Vec2()
 });

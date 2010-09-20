@@ -1,22 +1,22 @@
 goog.provide('demos.crank');
 
-goog.require('b2PrismaticJointDef');
-goog.require('b2BoxDef');
-goog.require('b2BodyDef');
-goog.require('b2RevoluteJointDef');
+goog.require('box2d.PrismaticJointDef');
+goog.require('box2d.BoxDef');
+goog.require('box2d.BodyDef');
+goog.require('box2d.RevoluteJointDef');
 
 demos.crank = function(world) {
   var ground = world.m_groundBody;
 
   // Define crank.
-  var sd = new b2BoxDef();
+  var sd = new box2d.BoxDef();
   sd.extents.Set(5, 25);
   sd.density = 1.0;
 
-  var bd = new b2BodyDef();
+  var bd = new box2d.BodyDef();
   bd.AddShape(sd);
   
-  var rjd = new b2RevoluteJointDef();
+  var rjd = new box2d.RevoluteJointDef();
 
   var prevBody = ground;
 
@@ -56,7 +56,7 @@ demos.crank = function(world) {
   rjd.body2 = body;
   world.CreateJoint(rjd);
 
-  var pjd = new b2PrismaticJointDef();
+  var pjd = new box2d.PrismaticJointDef();
   pjd.anchorPoint.Set(500/2, 95);
   pjd.body1 = ground;
   pjd.body2 = body;

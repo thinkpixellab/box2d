@@ -16,14 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2JointNode');
+goog.provide('box2d.JointNode');
 
 /** 
  @constructor 
  */
-b2JointNode = function() {};
+box2d.JointNode = function() {};
 
-b2JointNode.prototype = {
+box2d.JointNode.prototype = {
 
   other: null,
   joint: null,

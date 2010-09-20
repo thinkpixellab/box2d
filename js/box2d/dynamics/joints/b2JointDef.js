@@ -16,22 +16,22 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2JointDef');
+goog.provide('box2d.JointDef');
 
-goog.require('b2Joint');
+goog.require('box2d.Joint');
 
 /** 
  @constructor 
  */
-b2JointDef = function() {
-  this.type = b2Joint.e_unknownJoint;
+box2d.JointDef = function() {
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
 };
 
-b2JointDef.prototype = {
+box2d.JointDef.prototype = {
 
   type: 0,
   userData: null,

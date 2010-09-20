@@ -1,31 +1,31 @@
 
-goog.provide('b2ShapeFactory');
+goog.provide('box2d.ShapeFactory');
 
-goog.require('b2CircleShape');
-goog.require('b2PolyShape');
-goog.require('b2Shape');
+goog.require('box2d.CircleShape');
+goog.require('box2d.PolyShape');
+goog.require('box2d.Shape');
 
 /**
- @param {b2ShapeDef} def
- @param {b2Body} body
- @param {b2Vec2} center
+ @param {box2d.ShapeDef} def
+ @param {box2d.Body} body
+ @param {box2d.Vec2} center
  */
-b2ShapeFactory.Create = function(def, body, center) {
+box2d.ShapeFactory.Create = function(def, body, center) {
   switch (def.type) {
-  case b2Shape.e_circleShape:
+  case box2d.Shape.e_circleShape:
     {
       //void* mem = body->m_world->m_blockAllocator.Allocate(sizeof(b2CircleShape));
-      return new b2CircleShape(def, body, center);
+      return new box2d.CircleShape(def, body, center);
     }
 
-  case b2Shape.e_boxShape:
-  case b2Shape.e_polyShape:
+  case box2d.Shape.e_boxShape:
+  case box2d.Shape.e_polyShape:
     {
       //void* mem = body->m_world->m_blockAllocator.Allocate(sizeof(b2PolyShape));
-      return new b2PolyShape(def, body, center);
+      return new box2d.PolyShape(def, body, center);
     }
   }
 
-  //b2Settings.b2Assert(false);
+  //box2d.Settings.b2Assert(false);
   return null;
 };

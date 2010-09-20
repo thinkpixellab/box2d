@@ -16,20 +16,20 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PolyAndCircleContact');
+goog.provide('box2d.PolyAndCircleContact');
 
-goog.require('b2Contact');
-goog.require('b2ContactNode');
-goog.require('b2Manifold');
+goog.require('box2d.Contact');
+goog.require('box2d.ContactNode');
+goog.require('box2d.Manifold');
 
 /** 
  @constructor 
  */
-b2PolyAndCircleContact = function(s1, s2) {
-  // The constructor for b2Contact
+box2d.PolyAndCircleContact = function(s1, s2) {
+  // The constructor for box2d.Contact
   // initialize instance variables for references
-  this.m_node1 = new b2ContactNode();
-  this.m_node2 = new b2ContactNode();
+  this.m_node1 = new box2d.ContactNode();
+  this.m_node2 = new box2d.ContactNode();
   //
   this.m_flags = 0;
 
@@ -45,7 +45,7 @@ b2PolyAndCircleContact = function(s1, s2) {
   this.m_manifoldCount = 0;
 
   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-  this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_restitution = box2d.Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
   this.m_prev = null;
   this.m_next = null;
@@ -61,19 +61,19 @@ b2PolyAndCircleContact = function(s1, s2) {
   this.m_node2.other = null;
   //
   // initialize instance variables for references
-  this.m_manifold = [new b2Manifold()];
+  this.m_manifold = [new box2d.Manifold()];
   //
   //super(shape1, shape2);
-  b2Settings.b2Assert(this.m_shape1.m_type == b2Shape.e_polyShape);
-  b2Settings.b2Assert(this.m_shape2.m_type == b2Shape.e_circleShape);
+  box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.e_polyShape);
+  box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.e_circleShape);
   this.m_manifold[0].pointCount = 0;
   this.m_manifold[0].points[0].normalImpulse = 0.0;
   this.m_manifold[0].points[0].tangentImpulse = 0.0;
 };
 
-goog.object.extend(b2PolyAndCircleContact.prototype, b2Contact.prototype);
-b2PolyAndCircleContact.prototype.Evaluate = function() {
-  b2Collision.b2CollidePolyAndCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
+goog.object.extend(box2d.PolyAndCircleContact.prototype, box2d.Contact.prototype);
+box2d.PolyAndCircleContact.prototype.Evaluate = function() {
+  box2d.Collision.b2CollidePolyAndCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
 
   if (this.m_manifold[0].pointCount > 0) {
     this.m_manifoldCount = 1;
@@ -81,13 +81,13 @@ b2PolyAndCircleContact.prototype.Evaluate = function() {
     this.m_manifoldCount = 0;
   }
 };
-b2PolyAndCircleContact.prototype.GetManifolds = function() {
+box2d.PolyAndCircleContact.prototype.GetManifolds = function() {
   return this.m_manifold;
 };
 
-b2PolyAndCircleContact.Create = function(shape1, shape2, allocator) {
-  return new b2PolyAndCircleContact(shape1, shape2);
+box2d.PolyAndCircleContact.Create = function(shape1, shape2, allocator) {
+  return new box2d.PolyAndCircleContact(shape1, shape2);
 };
-b2PolyAndCircleContact.Destroy = function(contact, allocator) {
+box2d.PolyAndCircleContact.Destroy = function(contact, allocator) {
   //
 };

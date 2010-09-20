@@ -1,11 +1,11 @@
 goog.provide('demos.pendulum');
 
-goog.require('b2RevoluteJointDef');
+goog.require('box2d.RevoluteJointDef');
 
 demos.pendulum = function(world) {
   var i;
   var ground = world.GetGroundBody();
-  var jointDef = new b2RevoluteJointDef();
+  var jointDef = new box2d.RevoluteJointDef();
   var L = 150;
   for (i = 0; i < 4; i++) {
     jointDef.anchorPoint.Set(250 + 40 * i, 200 - L);

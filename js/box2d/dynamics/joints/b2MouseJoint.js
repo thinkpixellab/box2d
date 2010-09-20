@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2MouseJoint');
+goog.provide('box2d.MouseJoint');
 
 // p = attached point, m = mouse point
 // C = p - m
@@ -28,11 +28,11 @@ goog.provide('b2MouseJoint');
 /** 
  @constructor 
  */
-b2MouseJoint = function(def) {
+box2d.MouseJoint = function(def) {
   // The constructor for b2Joint
   // initialize instance variables for references
-  this.m_node1 = new b2JointNode();
-  this.m_node2 = new b2JointNode();
+  this.m_node1 = new box2d.JointNode();
+  this.m_node2 = new box2d.JointNode();
   //
   this.m_type = def.type;
   this.m_prev = null;
@@ -44,18 +44,18 @@ b2MouseJoint = function(def) {
   this.m_userData = def.userData;
   //
   // initialize instance variables for references
-  this.K = new b2Mat22();
-  this.K1 = new b2Mat22();
-  this.K2 = new b2Mat22();
-  this.m_localAnchor = new b2Vec2();
-  this.m_target = new b2Vec2();
-  this.m_impulse = new b2Vec2();
-  this.m_ptpMass = new b2Mat22();
-  this.m_C = new b2Vec2();
+  this.K = new box2d.Mat22();
+  this.K1 = new box2d.Mat22();
+  this.K2 = new box2d.Mat22();
+  this.m_localAnchor = new box2d.Vec2();
+  this.m_target = new box2d.Vec2();
+  this.m_impulse = new box2d.Vec2();
+  this.m_ptpMass = new box2d.Mat22();
+  this.m_C = new box2d.Vec2();
   //
   //super(def);
   this.m_target.SetV(def.target);
-  //this.m_localAnchor = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
+  //this.m_localAnchor = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
   var tX = this.m_target.x - this.m_body2.m_position.x;
   var tY = this.m_target.y - this.m_body2.m_position.y;
   this.m_localAnchor.x = (tX * this.m_body2.m_R.col1.x + tY * this.m_body2.m_R.col1.y);
@@ -67,7 +67,7 @@ b2MouseJoint = function(def) {
   var mass = this.m_body2.m_mass;
 
   // Frequency
-  var omega = 2.0 * b2Settings.b2_pi * def.frequencyHz;
+  var omega = 2.0 * box2d.Settings.b2_pi * def.frequencyHz;
 
   // Damping coefficient
   var d = 2.0 * mass * def.dampingRatio * omega;
@@ -80,31 +80,31 @@ b2MouseJoint = function(def) {
   this.m_beta = def.timeStep * k / (d + def.timeStep * k);
 };
 
-goog.object.extend(b2MouseJoint.prototype, b2Joint.prototype);
-b2MouseJoint.prototype.GetAnchor1 = function() {
+goog.object.extend(box2d.MouseJoint.prototype, box2d.Joint.prototype);
+box2d.MouseJoint.prototype.GetAnchor1 = function() {
   return this.m_target;
 };
-b2MouseJoint.prototype.GetAnchor2 = function() {
-  var tVec = b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
+box2d.MouseJoint.prototype.GetAnchor2 = function() {
+  var tVec = box2d.Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
   tVec.add(this.m_body2.m_position);
   return tVec;
 };
-b2MouseJoint.prototype.GetReactionForce = function(invTimeStep) {
-  //b2Vec2 F = invTimeStep * this.m_impulse;
-  var F = new b2Vec2();
+box2d.MouseJoint.prototype.GetReactionForce = function(invTimeStep) {
+  //box2d.Vec2 F = invTimeStep * this.m_impulse;
+  var F = new box2d.Vec2();
   F.SetV(this.m_impulse);
   F.Multiply(invTimeStep);
   return F;
 };
-b2MouseJoint.prototype.GetReactionTorque = function(invTimeStep) {
+box2d.MouseJoint.prototype.GetReactionTorque = function(invTimeStep) {
   //NOT_USED(invTimeStep);
   return 0.0;
 };
-b2MouseJoint.prototype.SetTarget = function(target) {
+box2d.MouseJoint.prototype.SetTarget = function(target) {
   this.m_body2.WakeUp();
   this.m_target = target;
 };
-b2MouseJoint.prototype. //--------------- Internals Below -------------------
+box2d.MouseJoint.prototype. //--------------- Internals Below -------------------
 // Presolve vars
 PrepareVelocitySolver = function() {
   var b = this.m_body2;
@@ -112,7 +112,7 @@ PrepareVelocitySolver = function() {
   var tMat;
 
   // Compute the effective mass matrix.
-  //b2Vec2 r = b2Mul(b.m_R, this.m_localAnchor);
+  //box2d.Vec2 r = b2Mul(b.m_R, this.m_localAnchor);
   tMat = b.m_R;
   var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
   var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
@@ -152,7 +152,7 @@ PrepareVelocitySolver = function() {
   b.m_angularVelocity *= 0.98;
 
   // Warm starting.
-  //b2Vec2 P = this.m_impulse;
+  //box2d.Vec2 P = this.m_impulse;
   var PX = this.m_impulse.x;
   var PY = this.m_impulse.y;
   //b.m_linearVelocity += invMass * P;
@@ -161,22 +161,22 @@ PrepareVelocitySolver = function() {
   //b.m_angularVelocity += invI * b2Cross(r, P);
   b.m_angularVelocity += invI * (rX * PY - rY * PX);
 };
-b2MouseJoint.prototype.SolveVelocityConstraints = function(step) {
+box2d.MouseJoint.prototype.SolveVelocityConstraints = function(step) {
   var body = this.m_body2;
 
   var tMat;
 
   // Compute the effective mass matrix.
-  //b2Vec2 r = b2Mul(body.m_R, this.m_localAnchor);
+  //box2d.Vec2 r = b2Mul(body.m_R, this.m_localAnchor);
   tMat = body.m_R;
   var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
   var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
 
   // Cdot = v + cross(w, r)
-  //b2Vec2 Cdot = body->m_linearVelocity + b2Cross(body->m_angularVelocity, r);
+  //box2d.Vec2 Cdot = body->m_linearVelocity + b2Cross(body->m_angularVelocity, r);
   var CdotX = body.m_linearVelocity.x + (-body.m_angularVelocity * rY);
   var CdotY = body.m_linearVelocity.y + (body.m_angularVelocity * rX);
-  //b2Vec2 impulse = -b2Mul(this.m_ptpMass, Cdot + (this.m_beta * step->inv_dt) * this.m_C + this.m_gamma * this.m_impulse);
+  //box2d.Vec2 impulse = -b2Mul(this.m_ptpMass, Cdot + (this.m_beta * step->inv_dt) * this.m_C + this.m_gamma * this.m_impulse);
   tMat = this.m_ptpMass;
   var tX = CdotX + (this.m_beta * step.inv_dt) * this.m_C.x + this.m_gamma * this.m_impulse.x;
   var tY = CdotY + (this.m_beta * step.inv_dt) * this.m_C.y + this.m_gamma * this.m_impulse.y;
@@ -203,6 +203,6 @@ b2MouseJoint.prototype.SolveVelocityConstraints = function(step) {
   //body.m_angularVelocity += body->m_invI * b2Cross(r, impulse);
   body.m_angularVelocity += body.m_invI * (rX * impulseY - rY * impulseX);
 };
-b2MouseJoint.prototype.SolvePositionConstraints = function() {
+box2d.MouseJoint.prototype.SolvePositionConstraints = function() {
   return true;
 };

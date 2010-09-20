@@ -16,13 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactNode');
+goog.provide('box2d.ContactNode');
 
 /**
  @constructor
  */
-b2ContactNode = function() {};
-b2ContactNode.prototype = {
+box2d.ContactNode = function() {};
+box2d.ContactNode.prototype = {
   other: null,
   contact: null,
   prev: null,

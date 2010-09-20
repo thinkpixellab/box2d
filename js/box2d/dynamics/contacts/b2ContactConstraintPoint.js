@@ -16,19 +16,19 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactConstraintPoint');
+goog.provide('box2d.ContactConstraintPoint');
 
-goog.require('b2Vec2');
+goog.require('box2d.Vec2');
 
 /**
   @constructor
 */
-b2ContactConstraintPoint = function() {
-  this.localAnchor1 = new b2Vec2();
-  this.localAnchor2 = new b2Vec2();
+box2d.ContactConstraintPoint = function() {
+  this.localAnchor1 = new box2d.Vec2();
+  this.localAnchor2 = new box2d.Vec2();
 };
 
-b2ContactConstraintPoint.prototype = {
+box2d.ContactConstraintPoint.prototype = {
   normalImpulse: null,
   tangentImpulse: null,
   positionImpulse: null,

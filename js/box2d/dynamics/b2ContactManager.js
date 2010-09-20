@@ -16,42 +16,42 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactManager');
+goog.provide('box2d.ContactManager');
 
-goog.require('b2Contact');
-goog.require('b2PairCallback');
-goog.require('b2NullContact');
-goog.require('b2ContactFactory');
+goog.require('box2d.Contact');
+goog.require('box2d.PairCallback');
+goog.require('box2d.NullContact');
+goog.require('box2d.ContactFactory');
 
 /** 
  @constructor
- @extends {b2PairCallback}
- @param {!b2World} world
+ @extends {box2d.PairCallback}
+ @param {!box2d.World} world
  */
-b2ContactManager = function(world) {
-  // The constructor for b2PairCallback
+box2d.ContactManager = function(world) {
+  // The constructor for box2d.PairCallback
   //
   // initialize instance variables for references
-  this.m_nullContact = new b2NullContact();
+  this.m_nullContact = new box2d.NullContact();
   //
   /**
    @private
-   @type {!b2World}
+   @type {!box2d.World}
    */
   this.m_world = world;
   this.m_destroyImmediate = false;
 };
 
-goog.inherits(b2ContactManager, b2PairCallback);
+goog.inherits(box2d.ContactManager, box2d.PairCallback);
 
 /**
   // This is a callback from the broadphase when two AABB proxies begin
-  // to overlap. We create a b2Contact to manage the narrow phase.
-  @param {!b2Shape} proxyUserData1
-  @param {!b2Shape} proxyUserData2
-  @return {!b2Contact}
+  // to overlap. We create a box2d.Contact to manage the narrow phase.
+  @param {!box2d.Shape} proxyUserData1
+  @param {!box2d.Shape} proxyUserData2
+  @return {!box2d.Contact}
 */
-b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
+box2d.ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
   var shape1 = proxyUserData1;
   var shape2 = proxyUserData2;
 
@@ -79,15 +79,15 @@ b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) 
     var tempShape = shape1;
     shape1 = shape2;
     shape2 = tempShape;
-    //b2Math.b2Swap(shape1, shape2);
+    //box2d.Math.b2Swap(shape1, shape2);
     var tempBody = body1;
     body1 = body2;
     body2 = tempBody;
-    //b2Math.b2Swap(body1, body2);
+    //box2d.Math.b2Swap(body1, body2);
   }
 
   // Call the factory.
-  var contact = b2ContactFactory.Create(shape1, shape2, this.m_world.m_blockAllocator);
+  var contact = box2d.ContactFactory.Create(shape1, shape2, this.m_world.m_blockAllocator);
 
   if (contact == null) {
     return this.m_nullContact;
@@ -106,8 +106,8 @@ b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) 
 };
 
 // This is a callback from the broadphase when two AABB proxies cease
-// to overlap. We destroy the b2Contact.
-b2ContactManager.prototype.PairRemoved = function(proxyUserData1, proxyUserData2, pairUserData) {
+// to overlap. We destroy the box2d.Contact.
+box2d.ContactManager.prototype.PairRemoved = function(proxyUserData1, proxyUserData2, pairUserData) {
 
   if (pairUserData == null) {
     return;
@@ -115,19 +115,19 @@ b2ContactManager.prototype.PairRemoved = function(proxyUserData1, proxyUserData2
 
   var c = pairUserData;
   if (c != this.m_nullContact) {
-    //b2Settings.b2Assert(this.m_world.m_contactCount > 0);
+    //box2d.Settings.b2Assert(this.m_world.m_contactCount > 0);
     if (this.m_destroyImmediate == true) {
       this.DestroyContact(c);
       c = null;
     } else {
-      c.m_flags |= b2Contact.e_destroyFlag;
+      c.m_flags |= box2d.Contact.e_destroyFlag;
     }
   }
 };
 
-b2ContactManager.prototype.DestroyContact = function(c) {
+box2d.ContactManager.prototype.DestroyContact = function(c) {
 
-  //b2Settings.b2Assert(this.m_world.m_contactCount > 0);
+  //box2d.Settings.b2Assert(this.m_world.m_contactCount > 0);
   // Remove from the world.
   if (c.m_prev) {
     c.m_prev.m_next = c.m_next;
@@ -186,18 +186,18 @@ b2ContactManager.prototype.DestroyContact = function(c) {
   }
 
   // Call the factory.
-  b2ContactFactory.Destroy(c, this.m_world.m_blockAllocator);
+  box2d.ContactFactory.Destroy(c, this.m_world.m_blockAllocator);
   --this.m_world.m_contactCount;
 };
 
 // Destroy any contacts marked for deferred destruction.
-b2ContactManager.prototype.CleanContactList = function() {
+box2d.ContactManager.prototype.CleanContactList = function() {
   var c = this.m_world.m_contactList;
   while (c != null) {
     var c0 = c;
     c = c.m_next;
 
-    if (c0.m_flags & b2Contact.e_destroyFlag) {
+    if (c0.m_flags & box2d.Contact.e_destroyFlag) {
       this.DestroyContact(c0);
       c0 = null;
     }
@@ -207,7 +207,7 @@ b2ContactManager.prototype.CleanContactList = function() {
 // This is the top level collision call for the time step. Here
 // all the narrow phase collision is processed for the world
 // contact list.
-b2ContactManager.prototype.Collide = function() {
+box2d.ContactManager.prototype.Collide = function() {
   var body1;
   var body2;
   var node1;
@@ -224,7 +224,7 @@ b2ContactManager.prototype.Collide = function() {
     var newCount = c.GetManifoldCount();
 
     if (oldCount == 0 && newCount > 0) {
-      //b2Settings.b2Assert(c.GetManifolds().pointCount > 0);
+      //box2d.Settings.b2Assert(c.GetManifolds().pointCount > 0);
       // Connect to island graph.
       body1 = c.m_shape1.m_body;
       body2 = c.m_shape2.m_body;

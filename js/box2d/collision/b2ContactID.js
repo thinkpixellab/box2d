@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactID');
+goog.provide('box2d.ContactID');
 
 goog.require('Features');
 
@@ -24,7 +24,7 @@ goog.require('Features');
 /**
  @constructor
  */
-b2ContactID = function() {
+box2d.ContactID = function() {
   // initialize instance variables for references
   this.features = new Features();
   //
@@ -32,12 +32,12 @@ b2ContactID = function() {
 
 };
 
-b2ContactID.prototype = {
+box2d.ContactID.prototype = {
   Set: function(id) {
     this.set_key(id._key);
   },
   Copy: function() {
-    var id = new b2ContactID();
+    var id = new box2d.ContactID();
     id.set_key(this._key);
     return id;
   },

@@ -16,13 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Bound');
+goog.provide('box2d.Bound');
 
 /**
  @constructor
  */
-var b2Bound = function() {};
-b2Bound.prototype = {
+box2d.Bound = function() {};
+box2d.Bound.prototype = {
   IsLower: function() {
     return (this.value & 1) == 0;
   },

@@ -16,22 +16,22 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactPoint');
+goog.provide('box2d.ContactPoint');
 
-goog.require('b2Vec2');
-goog.require('b2ContactID');
+goog.require('box2d.Vec2');
+goog.require('box2d.ContactID');
 
 // We use contact ids to facilitate warm starting.
 /**
  @constructor
  */
-var b2ContactPoint = function() {
+box2d.ContactPoint = function() {
   // initialize instance variables for references
-  this.position = new b2Vec2();
-  this.id = new b2ContactID();
+  this.position = new box2d.Vec2();
+  this.id = new box2d.ContactID();
   //
 };
-b2ContactPoint.prototype = {
+box2d.ContactPoint.prototype = {
   separation: null,
   normalImpulse: null,
   tangentImpulse: null

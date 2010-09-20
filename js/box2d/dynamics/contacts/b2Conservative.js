@@ -17,27 +17,27 @@
 */
 
 // kevmoo 2010-07-30 - Nothing seems to use this...hmmm
-goog.provide('b2Conservative');
+goog.provide('box2d.Conservative');
 
 /**
  @constructor
  */
-b2Conservative = function() {};
+box2d.Conservative = function() {};
 
-b2Conservative.R1 = new b2Mat22();
-b2Conservative.R2 = new b2Mat22();
-b2Conservative.x1 = new b2Vec2();
-b2Conservative.x2 = new b2Vec2();
-b2Conservative.Conservative = function(shape1, shape2) {
+box2d.Conservative.R1 = new box2d.Mat22();
+box2d.Conservative.R2 = new box2d.Mat22();
+box2d.Conservative.x1 = new box2d.Vec2();
+box2d.Conservative.x2 = new box2d.Vec2();
+box2d.Conservative.Conservative = function(shape1, shape2) {
   var body1 = shape1.GetBody();
   var body2 = shape2.GetBody();
 
-  //b2Vec2 v1 = body1->m_position - body1->m_position0;
+  //box2d.Vec2 v1 = body1->m_position - body1->m_position0;
   var v1X = body1.m_position.x - body1.m_position0.x;
   var v1Y = body1.m_position.y - body1.m_position0.y;
   //float32 omega1 = body1->m_rotation - body1->m_rotation0;
   var omega1 = body1.m_rotation - body1.m_rotation0;
-  //b2Vec2 v2 = body2->m_position - body2->m_position0;
+  //box2d.Vec2 v2 = body2->m_position - body2->m_position0;
   var v2X = body2.m_position.x - body2.m_position0.x;
   var v2Y = body2.m_position.y - body2.m_position0.y;
   //float32 omega2 = body2->m_rotation - body2->m_rotation0;
@@ -48,57 +48,57 @@ b2Conservative.Conservative = function(shape1, shape2) {
   //float32 r2 = shape2->GetMaxRadius();
   var r2 = shape2.GetMaxRadius();
 
-  //b2Vec2 p1Start = body1->m_position0;
+  //box2d.Vec2 p1Start = body1->m_position0;
   var p1StartX = body1.m_position0.x;
   var p1StartY = body1.m_position0.y;
   //float32 a1Start = body1->m_rotation0;
   var a1Start = body1.m_rotation0;
 
-  //b2Vec2 p2Start = body2->m_position0;
+  //box2d.Vec2 p2Start = body2->m_position0;
   var p2StartX = body2.m_position0.x;
   var p2StartY = body2.m_position0.y;
   //float32 a2Start = body2->m_rotation0;
   var a2Start = body2.m_rotation0;
 
-  //b2Vec2 p1 = p1Start;
+  //box2d.Vec2 p1 = p1Start;
   var p1X = p1StartX;
   var p1Y = p1StartY;
   //float32 a1 = a1Start;
   var a1 = a1Start;
-  //b2Vec2 p2 = p2Start;
+  //box2d.Vec2 p2 = p2Start;
   var p2X = p2StartX;
   var p2Y = p2StartY;
   //float32 a2 = a2Start;
   var a2 = a2Start;
 
-  //b2Mat22 b2Conservative.R1(a1), b2Conservative.R2(a2);
-  b2Conservative.R1.Set(a1);
-  b2Conservative.R2.Set(a2);
+  //b2Mat22 box2d.Conservative.R1(a1), box2d.Conservative.R2(a2);
+  box2d.Conservative.R1.Set(a1);
+  box2d.Conservative.R2.Set(a2);
 
-  //shape1->QuickSync(p1, b2Conservative.R1);
-  var p1 = new b2Vec2(p1X, p1Y);
-  shape1.QuickSync(p1, b2Conservative.R1);
-  //shape2->QuickSync(p2, b2Conservative.R2);
-  var p2 = new b2Vec2(p2X, p2Y);
-  shape2.QuickSync(p2, b2Conservative.R2);
+  //shape1->QuickSync(p1, box2d.Conservative.R1);
+  var p1 = new box2d.Vec2(p1X, p1Y);
+  shape1.QuickSync(p1, box2d.Conservative.R1);
+  //shape2->QuickSync(p2, box2d.Conservative.R2);
+  var p2 = new box2d.Vec2(p2X, p2Y);
+  shape2.QuickSync(p2, box2d.Conservative.R2);
 
   //float32 s1 = 0.0f;
   var s1 = 0.0;
   //const int32 maxIterations = 10;
   var maxIterations = 10;
-  //b2Vec2 d;
+  //box2d.Vec2 d;
   var dX;
   var dY;
   //float32 invRelativeVelocity = 0.0f;
   var invRelativeVelocity = 0.0;
   //bool hit = true;
   var hit = true;
-  //b2Vec2 b2Conservative.x1, b2Conservative.x2; moved to static var
+  //box2d.Vec2 box2d.Conservative.x1, box2d.Conservative.x2; moved to static var
   for (var iter = 0; iter < maxIterations; ++iter) {
     // Get the accurate distance between shapes.
-    //float32 distance = b2Distance.Distance(&b2Conservative.x1, &b2Conservative.x2, shape1, shape2);
-    var distance = b2Distance.Distance(b2Conservative.x1, b2Conservative.x2, shape1, shape2);
-    if (distance < b2Settings.b2_linearSlop) {
+    //float32 distance = box2d.Distance.Distance(&box2d.Conservative.x1, &box2d.Conservative.x2, shape1, shape2);
+    var distance = box2d.Distance.Distance(box2d.Conservative.x1, box2d.Conservative.x2, shape1, shape2);
+    if (distance < box2d.Settings.b2_linearSlop) {
       if (iter == 0) {
         hit = false;
       } else {
@@ -108,9 +108,9 @@ b2Conservative.Conservative = function(shape1, shape2) {
     }
 
     if (iter == 0) {
-      //b2Vec2 d = b2Conservative.x2 - b2Conservative.x1;
-      dX = b2Conservative.x2.x - b2Conservative.x1.x;
-      dY = b2Conservative.x2.y - b2Conservative.x1.y;
+      //box2d.Vec2 d = box2d.Conservative.x2 - box2d.Conservative.x1;
+      dX = box2d.Conservative.x2.x - box2d.Conservative.x1.x;
+      dY = box2d.Conservative.x2.y - box2d.Conservative.x1.y;
       //d.Normalize();
       var dLen = Math.sqrt(dX * dX + dY * dY);
       //float32 relativeVelocity = b2Dot(d, v1 - v2) + b2Abs(omega1) * r1 + b2Abs(omega2) * r2;
@@ -153,22 +153,22 @@ b2Conservative.Conservative = function(shape1, shape2) {
     //a2 = a2Start + s1 * omega2;
     a2 = a2Start + s1 * omega2;
 
-    b2Conservative.R1.Set(a1);
-    b2Conservative.R2.Set(a2);
-    shape1.QuickSync(p1, b2Conservative.R1);
-    shape2.QuickSync(p2, b2Conservative.R2);
+    box2d.Conservative.R1.Set(a1);
+    box2d.Conservative.R2.Set(a2);
+    shape1.QuickSync(p1, box2d.Conservative.R1);
+    shape2.QuickSync(p2, box2d.Conservative.R2);
   }
 
   if (hit) {
     // Hit, move bodies to safe position and re-sync shapes.
-    //b2Vec2 d = b2Conservative.x2 - b2Conservative.x1;
-    dX = b2Conservative.x2.x - b2Conservative.x1.x;
-    dY = b2Conservative.x2.y - b2Conservative.x1.y;
+    //box2d.Vec2 d = box2d.Conservative.x2 - box2d.Conservative.x1;
+    dX = box2d.Conservative.x2.x - box2d.Conservative.x1.x;
+    dY = box2d.Conservative.x2.y - box2d.Conservative.x1.y;
     //float32 length = d.Length();
     var length = Math.sqrt(dX * dX + dY * dY);
-    if (length > b2Settings.FLT_EPSILON) {
-      dX *= b2Settings.b2_linearSlop / length;
-      dY *= b2Settings.b2_linearSlop / length;
+    if (length > box2d.Settings.FLT_EPSILON) {
+      dX *= box2d.Settings.b2_linearSlop / length;
+      dY *= box2d.Settings.b2_linearSlop / length;
     }
 
     if (body1.IsStatic()) {

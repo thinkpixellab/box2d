@@ -16,24 +16,24 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Jacobian');
+goog.provide('box2d.Jacobian');
 
-goog.require('b2Vec2');
+goog.require('box2d.Vec2');
 
 /** 
  @constructor 
  */
-b2Jacobian = function() {
+box2d.Jacobian = function() {
   // initialize instance variables for references
-  this.linear1 = new b2Vec2();
-  this.linear2 = new b2Vec2();
+  this.linear1 = new box2d.Vec2();
+  this.linear2 = new box2d.Vec2();
   //
 };
 
-b2Jacobian.prototype = {
-  linear1: new b2Vec2(),
+box2d.Jacobian.prototype = {
+  linear1: new box2d.Vec2(),
   angular1: null,
-  linear2: new b2Vec2(),
+  linear2: new box2d.Vec2(),
   angular2: null,
 
   SetZero: function() {
@@ -50,7 +50,7 @@ b2Jacobian.prototype = {
   },
   Compute: function(x1, a1, x2, a2) {
 
-    //return b2Math.b2Dot(this.linear1, x1) + this.angular1 * a1 + b2Math.b2Dot(this.linear2, x2) + this.angular2 * a2;
+    //return box2d.Math.b2Dot(this.linear1, x1) + this.angular1 * a1 + box2d.Math.b2Dot(this.linear2, x2) + this.angular2 * a2;
     return (this.linear1.x * x1.x + this.linear1.y * x1.y) + this.angular1 * a1 + (this.linear2.x * x2.x + this.linear2.y * x2.y) + this.angular2 * a2;
   }
 };

@@ -16,9 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Pair');
+goog.provide('box2d.Pair');
 
-goog.require('b2Settings');
+goog.require('box2d.Settings');
 
 // The pair manager is used by the broad-phase to quickly add/remove/find pairs
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
@@ -26,34 +26,34 @@ goog.require('b2Settings');
 /**
  @constructor
  */
-var b2Pair = function() {};
-b2Pair.prototype = {
+box2d.Pair = function() {};
+box2d.Pair.prototype = {
 
   SetBuffered: function() {
-    this.status |= b2Pair.e_pairBuffered;
+    this.status |= box2d.Pair.e_pairBuffered;
   },
   ClearBuffered: function() {
-    this.status &= ~b2Pair.e_pairBuffered;
+    this.status &= ~box2d.Pair.e_pairBuffered;
   },
   IsBuffered: function() {
-    return (this.status & b2Pair.e_pairBuffered) == b2Pair.e_pairBuffered;
+    return (this.status & box2d.Pair.e_pairBuffered) == box2d.Pair.e_pairBuffered;
   },
 
   SetRemoved: function() {
-    this.status |= b2Pair.e_pairRemoved;
+    this.status |= box2d.Pair.e_pairRemoved;
   },
   ClearRemoved: function() {
-    this.status &= ~b2Pair.e_pairRemoved;
+    this.status &= ~box2d.Pair.e_pairRemoved;
   },
   IsRemoved: function() {
-    return (this.status & b2Pair.e_pairRemoved) == b2Pair.e_pairRemoved;
+    return (this.status & box2d.Pair.e_pairRemoved) == box2d.Pair.e_pairRemoved;
   },
 
   SetFinal: function() {
-    this.status |= b2Pair.e_pairFinal;
+    this.status |= box2d.Pair.e_pairFinal;
   },
   IsFinal: function() {
-    return (this.status & b2Pair.e_pairFinal) == b2Pair.e_pairFinal;
+    return (this.status & box2d.Pair.e_pairFinal) == box2d.Pair.e_pairFinal;
   },
 
   proxyId1: 0,
@@ -63,21 +63,21 @@ b2Pair.prototype = {
 };
 
 /**
-  @type {b2Contact}
+  @type {box2d.Contact}
 */
-b2Pair.prototype.contactData = null;
+box2d.Pair.prototype.contactData = null;
 
 /** @const @type {number} */
-b2Pair.b2_nullPair = b2Settings.USHRT_MAX;
+box2d.Pair.b2_nullPair = box2d.Settings.USHRT_MAX;
 /** @const @type {number} */
-b2Pair.b2_nullProxy = b2Settings.USHRT_MAX;
+box2d.Pair.b2_nullProxy = box2d.Settings.USHRT_MAX;
 /** @const @type {number} */
-b2Pair.b2_tableCapacity = b2Settings.b2_maxPairs;
+box2d.Pair.b2_tableCapacity = box2d.Settings.b2_maxPairs;
 /** @const @type {number} */
-b2Pair.b2_tableMask = b2Pair.b2_tableCapacity - 1;
+box2d.Pair.b2_tableMask = box2d.Pair.b2_tableCapacity - 1;
 /** @const @type {number} */
-b2Pair.e_pairBuffered = 0x0001;
+box2d.Pair.e_pairBuffered = 0x0001;
 /** @const @type {number} */
-b2Pair.e_pairRemoved = 0x0002;
+box2d.Pair.e_pairRemoved = 0x0002;
 /** @const @type {number} */
-b2Pair.e_pairFinal = 0x0004;
+box2d.Pair.e_pairFinal = 0x0004;

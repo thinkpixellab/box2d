@@ -16,33 +16,33 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2CircleShape');
+goog.provide('box2d.CircleShape');
 
-goog.require('b2Mat22');
-goog.require('b2Vec2');
-goog.require('b2AABB');
-goog.require('b2Shape');
+goog.require('box2d.Mat22');
+goog.require('box2d.Vec2');
+goog.require('box2d.AABB');
+goog.require('box2d.Shape');
 
 /**
  @constructor
- @extends {b2Shape}
- @param {b2ShapeDef} def
- @param {b2Body} body
- @param {b2Vec2} localCenter
+ @extends {box2d.Shape}
+ @param {box2d.ShapeDef} def
+ @param {box2d.Body} body
+ @param {box2d.Vec2} localCenter
  */
-b2CircleShape = function(def, body, localCenter) {
+box2d.CircleShape = function(def, body, localCenter) {
   // initialize instance variables for references
-  this.m_R = new b2Mat22();
-  this.m_position = new b2Vec2();
+  this.m_R = new box2d.Mat22();
+  this.m_position = new box2d.Vec2();
   //
-  // The constructor for b2Shape
+  // The constructor for box2d.Shape
   this.m_userData = def.userData;
 
   this.m_friction = def.friction;
   this.m_restitution = def.restitution;
   this.m_body = body;
 
-  this.m_proxyId = b2Pair.b2_nullProxy;
+  this.m_proxyId = box2d.Pair.b2_nullProxy;
 
   this.m_maxRadius = 0.0;
 
@@ -51,19 +51,19 @@ b2CircleShape = function(def, body, localCenter) {
   this.m_groupIndex = def.groupIndex;
   //
   // initialize instance variables for references
-  this.m_localPosition = new b2Vec2();
+  this.m_localPosition = new box2d.Vec2();
   //
   //super(def, body);
-  //b2Settings.b2Assert(def.type == b2Shape.e_circleShape);
+  //box2d.Settings.b2Assert(def.type == box2d.Shape.e_circleShape);
   var circle = def;
 
   //this.m_localPosition = def.localPosition - localCenter;
   this.m_localPosition.Set(def.localPosition.x - localCenter.x, def.localPosition.y - localCenter.y);
-  this.m_type = b2Shape.e_circleShape;
+  this.m_type = box2d.Shape.e_circleShape;
   this.m_radius = circle.radius;
 
   this.m_R.SetM(this.m_body.m_R);
-  //b2Vec2 r = b2Mul(this.m_body->this.m_R, this.m_localPosition);
+  //box2d.Vec2 r = b2Mul(this.m_body->this.m_R, this.m_localPosition);
   var rX = this.m_R.col1.x * this.m_localPosition.x + this.m_R.col2.x * this.m_localPosition.y;
   var rY = this.m_R.col1.y * this.m_localPosition.x + this.m_R.col2.y * this.m_localPosition.y;
   //this.m_position = this.m_body->this.m_position + r;
@@ -72,7 +72,7 @@ b2CircleShape = function(def, body, localCenter) {
   //this.m_maxRadius = r.Length() + this.m_radius;
   this.m_maxRadius = Math.sqrt(rX * rX + rY * rY) + this.m_radius;
 
-  var aabb = new b2AABB();
+  var aabb = new box2d.AABB();
   aabb.minVertex.Set(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
   aabb.maxVertex.Set(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
 
@@ -80,46 +80,46 @@ b2CircleShape = function(def, body, localCenter) {
   if (broadPhase.InRange(aabb)) {
     this.m_proxyId = broadPhase.CreateProxy(aabb, this);
   } else {
-    this.m_proxyId = b2Pair.b2_nullProxy;
+    this.m_proxyId = box2d.Pair.b2_nullProxy;
   }
 
-  if (this.m_proxyId == b2Pair.b2_nullProxy) {
+  if (this.m_proxyId == box2d.Pair.b2_nullProxy) {
     this.m_body.Freeze();
   }
 };
 
-goog.inherits(b2CircleShape, b2Shape);
+goog.inherits(box2d.CircleShape, box2d.Shape);
 
-b2CircleShape.prototype.TestPoint = function(p) {
-  //var d = b2Math.SubtractVV(p, this.m_position);
-  var d = new b2Vec2();
+box2d.CircleShape.prototype.TestPoint = function(p) {
+  //var d = box2d.Math.SubtractVV(p, this.m_position);
+  var d = new box2d.Vec2();
   d.SetV(p);
   d.subtract(this.m_position);
-  return b2Math.b2Dot(d, d) <= this.m_radius * this.m_radius;
+  return box2d.Math.b2Dot(d, d) <= this.m_radius * this.m_radius;
 };
 
-b2CircleShape.prototype.Synchronize = function(position1, R1, position2, R2) {
+box2d.CircleShape.prototype.Synchronize = function(position1, R1, position2, R2) {
   this.m_R.SetM(R2);
   //this.m_position = position2 + b2Mul(R2, this.m_localPosition);
   this.m_position.x = (R2.col1.x * this.m_localPosition.x + R2.col2.x * this.m_localPosition.y) + position2.x;
   this.m_position.y = (R2.col1.y * this.m_localPosition.x + R2.col2.y * this.m_localPosition.y) + position2.y;
 
-  if (this.m_proxyId == b2Pair.b2_nullProxy) {
+  if (this.m_proxyId == box2d.Pair.b2_nullProxy) {
     return;
   }
 
   // Compute an AABB that covers the swept shape (may miss some rotation effect).
-  //b2Vec2 p1 = position1 + b2Mul(R1, this.m_localPosition);
+  //box2d.Vec2 p1 = position1 + b2Mul(R1, this.m_localPosition);
   var p1X = position1.x + (R1.col1.x * this.m_localPosition.x + R1.col2.x * this.m_localPosition.y);
   var p1Y = position1.y + (R1.col1.y * this.m_localPosition.x + R1.col2.y * this.m_localPosition.y);
-  //b2Vec2 lower = b2Min(p1, this.m_position);
+  //box2d.Vec2 lower = b2Min(p1, this.m_position);
   var lowerX = Math.min(p1X, this.m_position.x);
   var lowerY = Math.min(p1Y, this.m_position.y);
-  //b2Vec2 upper = b2Max(p1, this.m_position);
+  //box2d.Vec2 upper = b2Max(p1, this.m_position);
   var upperX = Math.max(p1X, this.m_position.x);
   var upperY = Math.max(p1Y, this.m_position.y);
 
-  var aabb = new b2AABB();
+  var aabb = new box2d.AABB();
   aabb.minVertex.Set(lowerX - this.m_radius, lowerY - this.m_radius);
   aabb.maxVertex.Set(upperX + this.m_radius, upperY + this.m_radius);
 
@@ -131,15 +131,15 @@ b2CircleShape.prototype.Synchronize = function(position1, R1, position2, R2) {
   }
 };
 
-b2CircleShape.prototype.QuickSync = function(position, R) {
+box2d.CircleShape.prototype.QuickSync = function(position, R) {
   this.m_R.SetM(R);
   //this.m_position = position + b2Mul(R, this.m_localPosition);
   this.m_position.x = (R.col1.x * this.m_localPosition.x + R.col2.x * this.m_localPosition.y) + position.x;
   this.m_position.y = (R.col1.y * this.m_localPosition.x + R.col2.y * this.m_localPosition.y) + position.y;
 };
 
-b2CircleShape.prototype.ResetProxy = function(broadPhase) {
-  if (this.m_proxyId == b2Pair.b2_nullProxy) {
+box2d.CircleShape.prototype.ResetProxy = function(broadPhase) {
+  if (this.m_proxyId == box2d.Pair.b2_nullProxy) {
     return;
   }
 
@@ -148,23 +148,23 @@ b2CircleShape.prototype.ResetProxy = function(broadPhase) {
   broadPhase.DestroyProxy(this.m_proxyId);
   proxy = null;
 
-  var aabb = new b2AABB();
+  var aabb = new box2d.AABB();
   aabb.minVertex.Set(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
   aabb.maxVertex.Set(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
 
   if (broadPhase.InRange(aabb)) {
     this.m_proxyId = broadPhase.CreateProxy(aabb, this);
   } else {
-    this.m_proxyId = b2Pair.b2_nullProxy;
+    this.m_proxyId = box2d.Pair.b2_nullProxy;
   }
 
-  if (this.m_proxyId == b2Pair.b2_nullProxy) {
+  if (this.m_proxyId == box2d.Pair.b2_nullProxy) {
     this.m_body.Freeze();
   }
 };
 
-b2CircleShape.prototype.Support = function(dX, dY, out) {
-  //b2Vec2 u = d;
+box2d.CircleShape.prototype.Support = function(dX, dY, out) {
+  //box2d.Vec2 u = d;
   //u.Normalize();
   var len = Math.sqrt(dX * dX + dY * dY);
   dX /= len;

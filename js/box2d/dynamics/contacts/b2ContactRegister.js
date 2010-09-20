@@ -16,13 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactRegister');
+goog.provide('box2d.ContactRegister');
 
 /**
  @constructor
  */
-b2ContactRegister = function() {};
-b2ContactRegister.prototype = {
+box2d.ContactRegister = function() {};
+box2d.ContactRegister.prototype = {
   createFcn: null,
   destroyFcn: null,
   primary: null

@@ -21,12 +21,12 @@ demoDraw._drawJoint = function(world, joint, context) {
   context.strokeStyle = '#00eeee';
   context.beginPath();
   switch (joint.m_type) {
-  case b2Joint.e_distanceJoint:
+  case box2d.Joint.e_distanceJoint:
     context.moveTo(p1.x, p1.y);
     context.lineTo(p2.x, p2.y);
     break;
 
-  case b2Joint.e_pulleyJoint:
+  case box2d.Joint.e_pulleyJoint:
     // TODO
     break;
 
@@ -52,7 +52,7 @@ demoDraw._drawShape = function(shape, context) {
   context.strokeStyle = '#ffffff';
   context.beginPath();
   switch (shape.m_type) {
-  case b2Shape.e_circleShape:
+  case box2d.Shape.e_circleShape:
     {
       var circle = shape;
       var pos = circle.m_position;
@@ -63,17 +63,17 @@ demoDraw._drawShape = function(shape, context) {
       // draw radius
       context.moveTo(pos.x, pos.y);
       var ax = circle.m_R.col1;
-      var pos2 = new b2Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
+      var pos2 = new box2d.Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
       context.lineTo(pos2.x, pos2.y);
     }
     break;
-  case b2Shape.e_polyShape:
+  case box2d.Shape.e_polyShape:
     {
       var poly = shape;
-      var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
+      var tV = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
       context.moveTo(tV.x, tV.y);
       for (var i = 0; i < poly.m_vertexCount; i++) {
-        var v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
+        var v = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
         context.lineTo(v.x, v.y);
       }
       context.lineTo(tV.x, tV.y);

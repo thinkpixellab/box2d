@@ -1,90 +1,90 @@
-goog.provide('b2JointFactory');
+goog.provide('box2d.JointFactory');
 
-goog.require('b2RevoluteJoint');
-goog.require('b2PrismaticJoint');
-goog.require('b2MouseJoint');
-goog.require('b2DistanceJoint');
-goog.require('b2PulleyJoint');
-goog.require('b2GearJoint');
+goog.require('box2d.RevoluteJoint');
+goog.require('box2d.PrismaticJoint');
+goog.require('box2d.MouseJoint');
+goog.require('box2d.DistanceJoint');
+goog.require('box2d.PulleyJoint');
+goog.require('box2d.GearJoint');
 
-b2JointFactory.Create = function(def, allocator) {
+box2d.JointFactory.Create = function(def, allocator) {
   var joint = null;
 
   switch (def.type) {
-  case b2Joint.e_distanceJoint:
+  case box2d.Joint.e_distanceJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2DistanceJoint));
-      joint = new b2DistanceJoint(def);
+      joint = new box2d.DistanceJoint(def);
     }
     break;
 
-  case b2Joint.e_mouseJoint:
+  case box2d.Joint.e_mouseJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2MouseJoint));
-      joint = new b2MouseJoint(def);
+      joint = new box2d.MouseJoint(def);
     }
     break;
 
-  case b2Joint.e_prismaticJoint:
+  case box2d.Joint.e_prismaticJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2PrismaticJoint));
-      joint = new b2PrismaticJoint(def);
+      joint = new box2d.PrismaticJoint(def);
     }
     break;
 
-  case b2Joint.e_revoluteJoint:
+  case box2d.Joint.e_revoluteJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2RevoluteJoint));
-      joint = new b2RevoluteJoint(def);
+      joint = new box2d.RevoluteJoint(def);
     }
     break;
 
-  case b2Joint.e_pulleyJoint:
+  case box2d.Joint.e_pulleyJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2PulleyJoint));
-      joint = new b2PulleyJoint(def);
+      joint = new box2d.PulleyJoint(def);
     }
     break;
 
-  case b2Joint.e_gearJoint:
+  case box2d.Joint.e_gearJoint:
     {
       //void* mem = allocator->Allocate(sizeof(b2GearJoint));
-      joint = new b2GearJoint(def);
+      joint = new box2d.GearJoint(def);
     }
     break;
 
   default:
-    //b2Settings.b2Assert(false);
+    //box2d.Settings.b2Assert(false);
     break;
   }
 
   return joint;
 };
-b2JointFactory.Destroy = function(joint, allocator) {
+box2d.JointFactory.Destroy = function(joint, allocator) {
   /*joint->~b2Joint();
     switch (joint.m_type)
     {
-    case b2Joint.e_distanceJoint:
+    case box2d.Joint.e_distanceJoint:
       allocator->Free(joint, sizeof(b2DistanceJoint));
       break;
 
-    case b2Joint.e_mouseJoint:
+    case box2d.Joint.e_mouseJoint:
       allocator->Free(joint, sizeof(b2MouseJoint));
       break;
 
-    case b2Joint.e_prismaticJoint:
+    case box2d.Joint.e_prismaticJoint:
       allocator->Free(joint, sizeof(b2PrismaticJoint));
       break;
 
-    case b2Joint.e_revoluteJoint:
+    case box2d.Joint.e_revoluteJoint:
       allocator->Free(joint, sizeof(b2RevoluteJoint));
       break;
 
-    case b2Joint.e_pulleyJoint:
+    case box2d.Joint.e_pulleyJoint:
       allocator->Free(joint, sizeof(b2PulleyJoint));
       break;
 
-    case b2Joint.e_gearJoint:
+    case box2d.Joint.e_gearJoint:
       allocator->Free(joint, sizeof(b2GearJoint));
       break;
 

@@ -16,17 +16,17 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Joint');
+goog.provide('box2d.Joint');
 
-goog.require('b2JointNode');
+goog.require('box2d.JointNode');
 
 /** 
  @constructor
  */
-b2Joint = function(def) {
+box2d.Joint = function(def) {
   // initialize instance variables for references
-  this.m_node1 = new b2JointNode();
-  this.m_node2 = new b2JointNode();
+  this.m_node1 = new box2d.JointNode();
+  this.m_node2 = new box2d.JointNode();
   //
   this.m_type = def.type;
   this.m_prev = null;
@@ -38,7 +38,7 @@ b2Joint = function(def) {
   this.m_userData = def.userData;
 };
 
-b2Joint.prototype = {
+box2d.Joint.prototype = {
   GetType: function() {
     return this.m_type;
   },
@@ -87,8 +87,8 @@ b2Joint.prototype = {
   m_type: 0,
   m_prev: null,
   m_next: null,
-  m_node1: new b2JointNode(),
-  m_node2: new b2JointNode(),
+  m_node1: new box2d.JointNode(),
+  m_node2: new box2d.JointNode(),
   m_body1: null,
   m_body2: null,
 
@@ -106,54 +106,54 @@ b2Joint.prototype = {
  @const
  @type {number}
  */
-b2Joint.e_unknownJoint = 0;
+box2d.Joint.e_unknownJoint = 0;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_revoluteJoint = 1;
+box2d.Joint.e_revoluteJoint = 1;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_prismaticJoint = 2;
+box2d.Joint.e_prismaticJoint = 2;
 /**
  @const
  @type {number} 
  */
-b2Joint.e_distanceJoint = 3;
+box2d.Joint.e_distanceJoint = 3;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_pulleyJoint = 4;
+box2d.Joint.e_pulleyJoint = 4;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_mouseJoint = 5;
+box2d.Joint.e_mouseJoint = 5;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_gearJoint = 6;
+box2d.Joint.e_gearJoint = 6;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_inactiveLimit = 0;
+box2d.Joint.e_inactiveLimit = 0;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_atLowerLimit = 1;
+box2d.Joint.e_atLowerLimit = 1;
 /**
  @const
  @type {number} 
  */
-b2Joint.e_atUpperLimit = 2;
+box2d.Joint.e_atUpperLimit = 2;
 /** 
  @const
  @type {number} 
  */
-b2Joint.e_equalLimits = 3;
+box2d.Joint.e_equalLimits = 3;

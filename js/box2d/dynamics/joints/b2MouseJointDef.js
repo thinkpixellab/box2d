@@ -16,33 +16,33 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2MouseJointDef');
+goog.provide('box2d.MouseJointDef');
 
 /** 
  @constructor 
  */
-b2MouseJointDef = function() {
+box2d.MouseJointDef = function() {
   // The constructor for b2JointDef
-  this.type = b2Joint.e_unknownJoint;
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
   //
   // initialize instance variables for references
-  this.target = new b2Vec2();
+  this.target = new box2d.Vec2();
   //
-  this.type = b2Joint.e_mouseJoint;
+  this.type = box2d.Joint.e_mouseJoint;
   this.maxForce = 0.0;
   this.frequencyHz = 5.0;
   this.dampingRatio = 0.7;
   this.timeStep = 1.0 / 60.0;
 };
 
-goog.object.extend(b2MouseJointDef.prototype, b2JointDef.prototype);
-goog.object.extend(b2MouseJointDef.prototype, {
+goog.object.extend(box2d.MouseJointDef.prototype, box2d.JointDef.prototype);
+goog.object.extend(box2d.MouseJointDef.prototype, {
 
-  target: new b2Vec2(),
+  target: new box2d.Vec2(),
   maxForce: null,
   frequencyHz: null,
   dampingRatio: null,

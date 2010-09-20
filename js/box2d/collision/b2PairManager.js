@@ -19,48 +19,48 @@
 // The pair manager is used by the broad-phase to quickly add/remove/find pairs
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
 // http:
-goog.provide('b2PairManager');
+goog.provide('box2d.PairManager');
 
-goog.require('b2Pair');
-goog.require('b2BufferedPair');
+goog.require('box2d.Pair');
+goog.require('box2d.BufferedPair');
 
 /**
  @constructor
  */
-b2PairManager = function() {
+box2d.PairManager = function() {
   var i = 0;
-  //b2Settings.b2Assert(b2Math.b2IsPowerOfTwo(b2Pair.b2_tableCapacity) == true);
-  //b2Settings.b2Assert(b2Pair.b2_tableCapacity >= b2Settings.b2_maxPairs);
-  this.m_hashTable = new Array(b2Pair.b2_tableCapacity);
-  for (i = 0; i < b2Pair.b2_tableCapacity; ++i) {
-    this.m_hashTable[i] = b2Pair.b2_nullPair;
+  //box2d.Settings.b2Assert(box2d.Math.b2IsPowerOfTwo(box2d.Pair.b2_tableCapacity) == true);
+  //box2d.Settings.b2Assert(box2d.Pair.b2_tableCapacity >= box2d.Settings.b2_maxPairs);
+  this.m_hashTable = new Array(box2d.Pair.b2_tableCapacity);
+  for (i = 0; i < box2d.Pair.b2_tableCapacity; ++i) {
+    this.m_hashTable[i] = box2d.Pair.b2_nullPair;
   }
   /**
    @private
-   @type {!Array.<b2Pair>}
+   @type {!Array.<box2d.Pair>}
    */
-  this.m_pairs = new Array(b2Settings.b2_maxPairs);
-  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-    this.m_pairs[i] = new b2Pair();
+  this.m_pairs = new Array(box2d.Settings.b2_maxPairs);
+  for (i = 0; i < box2d.Settings.b2_maxPairs; ++i) {
+    this.m_pairs[i] = new box2d.Pair();
   }
-  this.m_pairBuffer = new Array(b2Settings.b2_maxPairs);
-  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-    this.m_pairBuffer[i] = new b2BufferedPair();
+  this.m_pairBuffer = new Array(box2d.Settings.b2_maxPairs);
+  for (i = 0; i < box2d.Settings.b2_maxPairs; ++i) {
+    this.m_pairBuffer[i] = new box2d.BufferedPair();
   }
 
-  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-    this.m_pairs[i].proxyId1 = b2Pair.b2_nullProxy;
-    this.m_pairs[i].proxyId2 = b2Pair.b2_nullProxy;
+  for (i = 0; i < box2d.Settings.b2_maxPairs; ++i) {
+    this.m_pairs[i].proxyId1 = box2d.Pair.b2_nullProxy;
+    this.m_pairs[i].proxyId2 = box2d.Pair.b2_nullProxy;
     this.m_pairs[i].userData = null;
     this.m_pairs[i].status = 0;
     this.m_pairs[i].next = (i + 1);
   }
-  this.m_pairs[b2Settings.b2_maxPairs - 1].next = b2Pair.b2_nullPair;
+  this.m_pairs[box2d.Settings.b2_maxPairs - 1].next = box2d.Pair.b2_nullPair;
   this.m_pairCount = 0;
 };
 
-b2PairManager.prototype = {
-  //~b2PairManager();
+box2d.PairManager.prototype = {
+  //~box2d.PairManager();
   Initialize: function(broadPhase, callback) {
     this.m_broadPhase = broadPhase;
     this.m_callback = callback;
@@ -83,35 +83,35 @@ b2PairManager.prototype = {
   If the added pair is not a new pair, then it must be in the pair buffer (because this.RemovePair was called).
   */
   AddBufferedPair: function(proxyId1, proxyId2) {
-    //b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
-    //b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
+    //box2d.Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
+    //box2d.Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
     var pair = this.AddPair(proxyId1, proxyId2);
 
     // If this pair is not in the pair buffer ...
     if (pair.IsBuffered() == false) {
       // This must be a newly added pair.
-      //b2Settings.b2Assert(pair.IsFinal() == false);
+      //box2d.Settings.b2Assert(pair.IsFinal() == false);
       // Add it to the pair buffer.
       pair.SetBuffered();
       this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
       this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
       ++this.m_pairBufferCount;
 
-      //b2Settings.b2Assert(this.m_pairBufferCount <= this.m_pairCount);
+      //box2d.Settings.b2Assert(this.m_pairBufferCount <= this.m_pairCount);
     }
 
     // Confirm this pair for the subsequent call to this.Commit.
     pair.ClearRemoved();
 
-    if (b2BroadPhase.s_validate) {
+    if (box2d.BroadPhase.s_validate) {
       this.ValidateBuffer();
     }
   },
 
   // Buffer a pair for removal.
   RemoveBufferedPair: function(proxyId1, proxyId2) {
-    //b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
-    //b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
+    //box2d.Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
+    //box2d.Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
     var pair = this._find(proxyId1, proxyId2);
 
     if (pair == null) {
@@ -122,18 +122,18 @@ b2PairManager.prototype = {
     // If this pair is not in the pair buffer ...
     if (pair.IsBuffered() == false) {
       // This must be an old pair.
-      //b2Settings.b2Assert(pair.IsFinal() == true);
+      //box2d.Settings.b2Assert(pair.IsFinal() == true);
       pair.SetBuffered();
       this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
       this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
       ++this.m_pairBufferCount;
 
-      //b2Settings.b2Assert(this.m_pairBufferCount <= this.m_pairCount);
+      //box2d.Settings.b2Assert(this.m_pairBufferCount <= this.m_pairCount);
     }
 
     pair.SetRemoved();
 
-    if (b2BroadPhase.s_validate) {
+    if (box2d.BroadPhase.s_validate) {
       this.ValidateBuffer();
     }
   },
@@ -147,10 +147,10 @@ b2PairManager.prototype = {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
-      //b2Math.b2Swap(p1, p2);
+      //box2d.Math.b2Swap(p1, p2);
     }
 
-    var hash = b2PairManager.Hash(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+    var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;
 
     //var pairIndex = this._findHash(proxyId1, proxyId2, hash);
     var pair = this._findHash(proxyId1, proxyId2, hash);
@@ -159,7 +159,7 @@ b2PairManager.prototype = {
       return pair;
     }
 
-    //b2Settings.b2Assert(this.m_pairCount < b2Settings.b2_maxPairs && this.m_freePair != b2_nullPair);
+    //box2d.Settings.b2Assert(this.m_pairCount < box2d.Settings.b2_maxPairs && this.m_freePair != b2_nullPair);
     var pIndex = this.m_freePair;
     pair = this.m_pairs[pIndex];
     this.m_freePair = pair.next;
@@ -180,21 +180,21 @@ b2PairManager.prototype = {
   // Remove a pair, return the pair's userData.
   RemovePair: function(proxyId1, proxyId2) {
 
-    //b2Settings.b2Assert(this.m_pairCount > 0);
+    //box2d.Settings.b2Assert(this.m_pairCount > 0);
     if (proxyId1 > proxyId2) {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
-      //b2Math.b2Swap(proxyId1, proxyId2);
+      //box2d.Math.b2Swap(proxyId1, proxyId2);
     }
 
-    var hash = b2PairManager.Hash(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+    var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;
 
     var node = this.m_hashTable[hash];
     var pNode = null;
 
-    while (node != b2Pair.b2_nullPair) {
-      if (b2PairManager.Equals(this.m_pairs[node], proxyId1, proxyId2)) {
+    while (node != box2d.Pair.b2_nullPair) {
+      if (box2d.PairManager.Equals(this.m_pairs[node], proxyId1, proxyId2)) {
         var index = node;
 
         //*node = this.m_pairs[*node].next;
@@ -209,8 +209,8 @@ b2PairManager.prototype = {
 
         // Scrub
         pair.next = this.m_freePair;
-        pair.proxyId1 = b2Pair.b2_nullProxy;
-        pair.proxyId2 = b2Pair.b2_nullProxy;
+        pair.proxyId1 = box2d.Pair.b2_nullProxy;
+        pair.proxyId2 = box2d.Pair.b2_nullProxy;
         pair.userData = null;
         pair.status = 0;
 
@@ -224,7 +224,7 @@ b2PairManager.prototype = {
       }
     }
 
-    //b2Settings.b2Assert(false);
+    //box2d.Settings.b2Assert(false);
     return null;
   },
 
@@ -255,18 +255,18 @@ b2PairManager.prototype = {
  @private
  @param {number} proxyId1
  @param {number} proxyId2
- @return b2Pair
+ @return box2d.Pair
  */
-b2PairManager.prototype._find = function(proxyId1, proxyId2) {
+box2d.PairManager.prototype._find = function(proxyId1, proxyId2) {
 
   if (proxyId1 > proxyId2) {
     var temp = proxyId1;
     proxyId1 = proxyId2;
     proxyId2 = temp;
-    //b2Math.b2Swap(proxyId1, proxyId2);
+    //box2d.Math.b2Swap(proxyId1, proxyId2);
   }
 
-  var hash = b2PairManager.Hash(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+  var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;
 
   return this._findHash(proxyId1, proxyId2, hash);
 };
@@ -276,27 +276,27 @@ b2PairManager.prototype._find = function(proxyId1, proxyId2) {
  @param {number} proxyId1
  @param {number} proxyId2
  @param {number} hash
- @return b2Pair
+ @return box2d.Pair
  */
-b2PairManager.prototype._findHash = function(proxyId1, proxyId2, hash) {
+box2d.PairManager.prototype._findHash = function(proxyId1, proxyId2, hash) {
   var index = this.m_hashTable[hash];
 
-  while (index != b2Pair.b2_nullPair && b2PairManager.Equals(this.m_pairs[index], proxyId1, proxyId2) == false) {
+  while (index != box2d.Pair.b2_nullPair && box2d.PairManager.Equals(this.m_pairs[index], proxyId1, proxyId2) == false) {
     index = this.m_pairs[index].next;
   }
 
-  if (index == b2Pair.b2_nullPair) {
+  if (index == box2d.Pair.b2_nullPair) {
     return null;
   }
 
-  //b2Settings.b2Assert(index < b2_maxPairs);
+  //box2d.Settings.b2Assert(index < b2_maxPairs);
   return this.m_pairs[index];
 };
 
 /**
-  @return {!Array.<b2Pair>}
+  @return {!Array.<box2d.Pair>}
 */
-b2PairManager.prototype.Commit = function() {
+box2d.PairManager.prototype.Commit = function() {
   var i = 0;
 
   var removeCount = 0;
@@ -307,15 +307,15 @@ b2PairManager.prototype.Commit = function() {
 
   for (i = 0; i < this.m_pairBufferCount; ++i) {
     var pair = this._find(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
-    //b2Settings.b2Assert(pair.IsBuffered());
+    //box2d.Settings.b2Assert(pair.IsBuffered());
     pair.ClearBuffered();
 
-    //b2Settings.b2Assert(pair.proxyId1 < b2Settings.b2_maxProxies && pair.proxyId2 < b2Settings.b2_maxProxies);
+    //box2d.Settings.b2Assert(pair.proxyId1 < box2d.Settings.b2_maxProxies && pair.proxyId2 < box2d.Settings.b2_maxProxies);
     var proxy1 = proxies[pair.proxyId1];
     var proxy2 = proxies[pair.proxyId2];
 
-    //b2Settings.b2Assert(proxy1.IsValid());
-    //b2Settings.b2Assert(proxy2.IsValid());
+    //box2d.Settings.b2Assert(proxy1.IsValid());
+    //box2d.Settings.b2Assert(proxy2.IsValid());
     if (pair.IsRemoved()) {
       // It is possible a pair was added then removed before a commit. Therefore,
       // we should be careful not to tell the user the pair was removed when the
@@ -329,7 +329,7 @@ b2PairManager.prototype.Commit = function() {
       this.m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
       ++removeCount;
     } else {
-      //b2Settings.b2Assert(this.m_broadPhase.TestOverlap(proxy1, proxy2) == true);
+      //box2d.Settings.b2Assert(this.m_broadPhase.TestOverlap(proxy1, proxy2) == true);
       if (pair.IsFinal() == false) {
         pair.contactData = this.m_callback.PairAdded(proxy1.userData, proxy2.userData);
         contactPairs.push(pair.contactData);
@@ -345,14 +345,14 @@ b2PairManager.prototype.Commit = function() {
 
   this.m_pairBufferCount = 0;
 
-  if (b2BroadPhase.s_validate) {
+  if (box2d.BroadPhase.s_validate) {
     this.ValidateTable();
   }
 
   return contactPairs;
 };
 
-b2PairManager.Hash = function(proxyId1, proxyId2) {
+box2d.PairManager.Hash = function(proxyId1, proxyId2) {
   var key = ((proxyId2 << 16) & 0xffff0000) | proxyId1;
   key = ~key + ((key << 15) & 0xFFFF8000);
   key = key ^ ((key >> 12) & 0x000fffff);
@@ -362,9 +362,9 @@ b2PairManager.Hash = function(proxyId1, proxyId2) {
   key = key ^ ((key >> 16) & 0x0000ffff);
   return key;
 };
-b2PairManager.Equals = function(pair, proxyId1, proxyId2) {
+box2d.PairManager.Equals = function(pair, proxyId1, proxyId2) {
   return (pair.proxyId1 == proxyId1 && pair.proxyId2 == proxyId2);
 };
-b2PairManager.EqualsPair = function(pair1, pair2) {
+box2d.PairManager.EqualsPair = function(pair1, pair2) {
   return pair1.proxyId1 == pair2.proxyId1 && pair1.proxyId2 == pair2.proxyId2;
 };

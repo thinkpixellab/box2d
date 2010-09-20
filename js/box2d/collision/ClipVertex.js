@@ -18,14 +18,14 @@
 
 goog.provide('ClipVertex');
 
-goog.require('b2Vec2');
-goog.require('b2ContactID');
+goog.require('box2d.Vec2');
+goog.require('box2d.ContactID');
 
 /**
  @constructor
  */
 var ClipVertex = function() {
   // initialize instance variables for references
-  this.v = new b2Vec2();
-  this.id = new b2ContactID();
+  this.v = new box2d.Vec2();
+  this.id = new box2d.ContactID();
 };

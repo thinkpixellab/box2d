@@ -16,20 +16,20 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BoxDef');
+goog.provide('box2d.BoxDef');
 
-goog.require('b2ShapeDef');
-goog.require('b2Vec2');
+goog.require('box2d.ShapeDef');
+goog.require('box2d.Vec2');
 
 /**
   @constructor
-  @extends {b2ShapeDef}
+  @extends {box2d.ShapeDef}
 */
-b2BoxDef = function() {
-  this.type = b2Shape.e_unknownShape;
+box2d.BoxDef = function() {
+  this.type = box2d.Shape.e_unknownShape;
   this.userData = null;
-  /** @type {b2Vec2} */
-  this.localPosition = new b2Vec2(0.0, 0.0);
+  /** @type {box2d.Vec2} */
+  this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
   this.friction = 0.2;
   this.restitution = 0.0;
@@ -38,9 +38,9 @@ b2BoxDef = function() {
   this.maskBits = 0xFFFF;
   this.groupIndex = 0;
   //
-  this.type = b2Shape.e_boxShape;
-  /** @type {b2Vec2} */
-  this.extents = new b2Vec2(1.0, 1.0);
+  this.type = box2d.Shape.e_boxShape;
+  /** @type {box2d.Vec2} */
+  this.extents = new box2d.Vec2(1.0, 1.0);
 };
 
-goog.inherits(b2BoxDef, b2ShapeDef);
+goog.inherits(box2d.BoxDef, box2d.ShapeDef);

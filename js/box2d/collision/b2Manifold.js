@@ -16,24 +16,24 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Manifold');
+goog.provide('box2d.Manifold');
 
-goog.require('b2Settings');
-goog.require('b2Vec2');
-goog.require('b2ContactPoint');
+goog.require('box2d.Settings');
+goog.require('box2d.Vec2');
+goog.require('box2d.ContactPoint');
 
 // A manifold for two touching convex shapes.
 /**
  @constructor
  */
-b2Manifold = function() {
-  this.points = new Array(b2Settings.b2_maxManifoldPoints);
-  for (var i = 0; i < b2Settings.b2_maxManifoldPoints; i++) {
-    this.points[i] = new b2ContactPoint();
+box2d.Manifold = function() {
+  this.points = new Array(box2d.Settings.b2_maxManifoldPoints);
+  for (var i = 0; i < box2d.Settings.b2_maxManifoldPoints; i++) {
+    this.points[i] = new box2d.ContactPoint();
   }
-  this.normal = new b2Vec2();
+  this.normal = new box2d.Vec2();
 };
-b2Manifold.prototype = {
+box2d.Manifold.prototype = {
   points: null,
   normal: null,
   pointCount: 0

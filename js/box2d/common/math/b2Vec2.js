@@ -16,11 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Vec2');
+goog.provide('box2d.Vec2');
 
-goog.require('b2Math');
+goog.require('box2d.Math');
 
-// b2Vec2 has no constructor so that it
+// box2d.Vec2 has no constructor so that it
 // can be placed in a union.
 /**
  @constructor
@@ -28,7 +28,7 @@ goog.require('b2Math');
  @param {number=} x_
  @param {number=} y_
 */
-var b2Vec2 = function(x_, y_) {
+box2d.Vec2 = function(x_, y_) {
 
   if(x_ === undefined){
     x_ = 0;
@@ -42,83 +42,83 @@ var b2Vec2 = function(x_, y_) {
   /** @type {number} */
   this.y = y_;
 };
-goog.inherits(b2Vec2, goog.math.Vec2);
+goog.inherits(box2d.Vec2, goog.math.Vec2);
 
-b2Vec2.prototype.SetZero = function() {
+box2d.Vec2.prototype.SetZero = function() {
   this.x = 0.0;
   this.y = 0.0;
 };
 
 /** @param {number} x_
  @param {number} y_ */
-b2Vec2.prototype.Set = function(x_, y_) {
+box2d.Vec2.prototype.Set = function(x_, y_) {
   this.x = x_;
   this.y = y_;
 };
 
-/** @param {b2Vec2} v */
-b2Vec2.prototype.SetV = function(v) {
+/** @param {box2d.Vec2} v */
+box2d.Vec2.prototype.SetV = function(v) {
   this.x = v.x;
   this.y = v.y;
 };
 
-/** @return {b2Vec2} */
-b2Vec2.prototype.Negative = function() {
-  return new b2Vec2(-this.x, -this.y);
+/** @return {box2d.Vec2} */
+box2d.Vec2.prototype.Negative = function() {
+  return new box2d.Vec2(-this.x, -this.y);
 };
 
-/** @return {b2Vec2} */
-b2Vec2.prototype.Copy = function() {
-  return new b2Vec2(this.x, this.y);
+/** @return {box2d.Vec2} */
+box2d.Vec2.prototype.Copy = function() {
+  return new box2d.Vec2(this.x, this.y);
 };
 
-/** @param {b2Mat22} A */
-b2Vec2.prototype.MulM = function(A) {
+/** @param {box2d.Mat22} A */
+box2d.Vec2.prototype.MulM = function(A) {
   var tX = this.x;
   this.x = A.col1.x * tX + A.col2.x * this.y;
   this.y = A.col1.y * tX + A.col2.y * this.y;
 };
 
-/** @param {b2Mat22} A */
-b2Vec2.prototype.MulTM = function(A) {
-  var tX = b2Math.b2Dot(this, A.col1);
-  this.y = b2Math.b2Dot(this, A.col2);
+/** @param {box2d.Mat22} A */
+box2d.Vec2.prototype.MulTM = function(A) {
+  var tX = box2d.Math.b2Dot(this, A.col1);
+  this.y = box2d.Math.b2Dot(this, A.col2);
   this.x = tX;
 };
 
 /** @param {number} s */
-b2Vec2.prototype.CrossVF = function(s) {
+box2d.Vec2.prototype.CrossVF = function(s) {
   var tX = this.x;
   this.x = s * this.y;
   this.y = -s * tX;
 };
 
 /** @param {number} s */
-b2Vec2.prototype.CrossFV = function(s) {
+box2d.Vec2.prototype.CrossFV = function(s) {
   var tX = this.x;
   this.x = -s * this.y;
   this.y = s * tX;
 };
 
-/** @param {b2Vec2} b */
-b2Vec2.prototype.MinV = function(b) {
+/** @param {box2d.Vec2} b */
+box2d.Vec2.prototype.MinV = function(b) {
   this.x = this.x < b.x ? this.x : b.x;
   this.y = this.y < b.y ? this.y : b.y;
 };
 
-/** @param {b2Vec2} b */
-b2Vec2.prototype.MaxV = function(b) {
+/** @param {box2d.Vec2} b */
+box2d.Vec2.prototype.MaxV = function(b) {
   this.x = this.x > b.x ? this.x : b.x;
   this.y = this.y > b.y ? this.y : b.y;
 };
 
-b2Vec2.prototype.Abs = function() {
+box2d.Vec2.prototype.Abs = function() {
   this.x = Math.abs(this.x);
   this.y = Math.abs(this.y);
 };
 
 /** @return {number} */
-b2Vec2.prototype.Normalize = function() {
+box2d.Vec2.prototype.Normalize = function() {
   var length = this.magnitude();
   if (length < Number.MIN_VALUE) {
     return 0.0;
@@ -131,14 +131,14 @@ b2Vec2.prototype.Normalize = function() {
 };
 
 /** @return {boolean} */
-b2Vec2.prototype.IsValid = function() {
-  return b2Math.b2IsValid(this.x) && b2Math.b2IsValid(this.y);
+box2d.Vec2.prototype.IsValid = function() {
+  return box2d.Math.b2IsValid(this.x) && box2d.Math.b2IsValid(this.y);
 };
 
 /**
  @param {number} x_
  @param {number} y_
- @return {b2Vec2} */
-b2Vec2.Make = function(x_, y_) {
-  return new b2Vec2(x_, y_);
+ @return {box2d.Vec2} */
+box2d.Vec2.Make = function(x_, y_) {
+  return new box2d.Vec2(x_, y_);
 };

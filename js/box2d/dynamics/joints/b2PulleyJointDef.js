@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PulleyJointDef');
+goog.provide('box2d.PulleyJointDef');
 
 // The pulley joint is connected to two bodies and two fixed ground points.
 // The pulley supports a ratio such that:
@@ -27,37 +27,37 @@ goog.provide('b2PulleyJointDef');
 /** 
  @constructor 
  */
-b2PulleyJointDef = function() {
+box2d.PulleyJointDef = function() {
   // The constructor for b2JointDef
-  this.type = b2Joint.e_unknownJoint;
+  this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
   this.collideConnected = false;
   //
   // initialize instance variables for references
-  this.groundPoint1 = new b2Vec2();
-  this.groundPoint2 = new b2Vec2();
-  this.anchorPoint1 = new b2Vec2();
-  this.anchorPoint2 = new b2Vec2();
+  this.groundPoint1 = new box2d.Vec2();
+  this.groundPoint2 = new box2d.Vec2();
+  this.anchorPoint1 = new box2d.Vec2();
+  this.anchorPoint2 = new box2d.Vec2();
   //
-  this.type = b2Joint.e_pulleyJoint;
+  this.type = box2d.Joint.e_pulleyJoint;
   this.groundPoint1.Set(-1.0, 1.0);
   this.groundPoint2.Set(1.0, 1.0);
   this.anchorPoint1.Set(-1.0, 0.0);
   this.anchorPoint2.Set(1.0, 0.0);
-  this.maxLength1 = 0.5 * b2PulleyJoint.b2_minPulleyLength;
-  this.maxLength2 = 0.5 * b2PulleyJoint.b2_minPulleyLength;
+  this.maxLength1 = 0.5 * box2d.PulleyJoint.b2_minPulleyLength;
+  this.maxLength2 = 0.5 * box2d.PulleyJoint.b2_minPulleyLength;
   this.ratio = 1.0;
   this.collideConnected = true;
 };
 
-goog.object.extend(b2PulleyJointDef.prototype, b2JointDef.prototype);
-goog.object.extend(b2PulleyJointDef.prototype, {
-  groundPoint1: new b2Vec2(),
-  groundPoint2: new b2Vec2(),
-  anchorPoint1: new b2Vec2(),
-  anchorPoint2: new b2Vec2(),
+goog.object.extend(box2d.PulleyJointDef.prototype, box2d.JointDef.prototype);
+goog.object.extend(box2d.PulleyJointDef.prototype, {
+  groundPoint1: new box2d.Vec2(),
+  groundPoint2: new box2d.Vec2(),
+  anchorPoint1: new box2d.Vec2(),
+  anchorPoint2: new box2d.Vec2(),
   maxLength1: null,
   maxLength2: null,
   ratio: null

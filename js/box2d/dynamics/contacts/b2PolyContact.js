@@ -16,21 +16,21 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PolyContact');
+goog.provide('box2d.PolyContact');
 
-goog.require('b2ContactNode');
-goog.require('b2Math');
-goog.require('b2Manifold');
+goog.require('box2d.ContactNode');
+goog.require('box2d.Math');
+goog.require('box2d.Manifold');
 
 /**
   @constructor
-  @extends {b2Contact}
+  @extends {box2d.Contact}
 */
-b2PolyContact = function(s1, s2) {
-  // The constructor for b2Contact
+box2d.PolyContact = function(s1, s2) {
+  // The constructor for box2d.Contact
   // initialize instance variables for references
-  this.m_node1 = new b2ContactNode();
-  this.m_node2 = new b2ContactNode();
+  this.m_node1 = new box2d.ContactNode();
+  this.m_node2 = new box2d.ContactNode();
   //
   this.m_flags = 0;
 
@@ -46,7 +46,7 @@ b2PolyContact = function(s1, s2) {
   this.m_manifoldCount = 0;
 
   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-  this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_restitution = box2d.Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
   this.m_prev = null;
   this.m_next = null;
@@ -62,18 +62,18 @@ b2PolyContact = function(s1, s2) {
   this.m_node2.other = null;
   //
   // initialize instance variables for references
-  this.m0 = new b2Manifold();
-  this.m_manifold = [new b2Manifold()];
+  this.m0 = new box2d.Manifold();
+  this.m_manifold = [new box2d.Manifold()];
   //
   //super(shape1, shape2);
-  //b2Settings.b2Assert(this.m_shape1.m_type == b2Shape.e_polyShape);
-  //b2Settings.b2Assert(this.m_shape2.m_type == b2Shape.e_polyShape);
+  //box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.e_polyShape);
+  //box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.e_polyShape);
   this.m_manifold[0].pointCount = 0;
 };
 
-goog.inherits(b2PolyContact, b2Contact);
+goog.inherits(box2d.PolyContact, box2d.Contact);
 
-b2PolyContact.prototype.Evaluate = function() {
+box2d.PolyContact.prototype.Evaluate = function() {
   var tMani = this.m_manifold[0];
   // replace memcpy
   // memcpy(&this.m0, &this.m_manifold, sizeof(b2Manifold));
@@ -98,7 +98,7 @@ b2PolyContact.prototype.Evaluate = function() {
   //this.m0.normal.SetV( tMani.normal );
   this.m0.pointCount = tMani.pointCount;
 
-  b2Collision.b2CollidePoly(tMani, this.m_shape1, this.m_shape2, false);
+  box2d.Collision.b2CollidePoly(tMani, this.m_shape1, this.m_shape2, false);
 
   // Match contact ids to facilitate warm starting.
   if (tMani.pointCount > 0) {
@@ -135,15 +135,15 @@ b2PolyContact.prototype.Evaluate = function() {
   }
 };
 
-b2PolyContact.prototype.GetManifolds = function() {
+box2d.PolyContact.prototype.GetManifolds = function() {
   return this.m_manifold;
 };
 
-b2PolyContact.Create = function(shape1, shape2, allocator) {
+box2d.PolyContact.Create = function(shape1, shape2, allocator) {
   //void* mem = allocator->Allocate(sizeof(b2PolyContact));
-  return new b2PolyContact(shape1, shape2);
+  return new box2d.PolyContact(shape1, shape2);
 };
-b2PolyContact.Destroy = function(contact, allocator) {
+box2d.PolyContact.Destroy = function(contact, allocator) {
   //((b2PolyContact*)contact)->~b2PolyContact();
   //allocator->Free(contact, sizeof(b2PolyContact));
 };

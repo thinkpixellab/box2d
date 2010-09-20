@@ -16,25 +16,25 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Proxy');
+goog.provide('box2d.Proxy');
 
-goog.require('b2Settings');
+goog.require('box2d.Settings');
 
 /**
   @constructor
 */
-b2Proxy = function() {
+box2d.Proxy = function() {
   // initialize instance variables for references
   this.lowerBounds = [/*uint*/(0), /*uint*/(0)];
   this.upperBounds = [/*uint*/(0), /*uint*/(0)];
   //
 };
 
-b2Proxy.prototype = {
+box2d.Proxy.prototype = {
   GetNext: function(){ return this.lowerBounds[0]; },
   SetNext: function(next) { this.lowerBounds[0] = next /*& 0x0000ffff*/; },
 
-  IsValid: function(){ return this.overlapCount != b2Settings.invalid; },
+  IsValid: function(){ return this.overlapCount != box2d.Settings.invalid; },
 
   lowerBounds: [/*uint*/(0), /*uint*/(0)],
   upperBounds: [/*uint*/(0), /*uint*/(0)],

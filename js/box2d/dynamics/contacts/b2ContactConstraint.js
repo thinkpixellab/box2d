@@ -16,26 +16,26 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2ContactConstraint');
-goog.require('b2ContactConstraintPoint');
-goog.require('b2Settings');
-goog.require('b2Vec2');
+goog.provide('box2d.ContactConstraint');
+goog.require('box2d.ContactConstraintPoint');
+goog.require('box2d.Settings');
+goog.require('box2d.Vec2');
 
 /**
  @constructor
 */
-b2ContactConstraint = function() {
+box2d.ContactConstraint = function() {
   // initialize instance variables for references
-  this.normal = new b2Vec2();
+  this.normal = new box2d.Vec2();
   //
-  this.points = new Array(b2Settings.b2_maxManifoldPoints);
-  for (var i = 0; i < b2Settings.b2_maxManifoldPoints; i++) {
-    this.points[i] = new b2ContactConstraintPoint();
+  this.points = new Array(box2d.Settings.b2_maxManifoldPoints);
+  for (var i = 0; i < box2d.Settings.b2_maxManifoldPoints; i++) {
+    this.points[i] = new box2d.ContactConstraintPoint();
   }
 
 };
 
-b2ContactConstraint.prototype = {
+box2d.ContactConstraint.prototype = {
   manifold: null,
   body1: null,
   body2: null,

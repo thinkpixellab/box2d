@@ -16,12 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BoundValues');
+goog.provide('box2d.BoundValues');
 
 /**
  @constructor
  */
-b2BoundValues = function() {
+box2d.BoundValues = function() {
   this.lowerValues = [0, 0];
   this.upperValues = [0, 0];
 };

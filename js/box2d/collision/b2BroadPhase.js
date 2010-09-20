@@ -16,14 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BroadPhase');
+goog.provide('box2d.BroadPhase');
 
-goog.require('b2PairManager');
-goog.require('b2Vec2');
-goog.require('b2Bound');
-goog.require('b2Settings');
-goog.require('b2Proxy');
-goog.require('b2BoundValues');
+goog.require('box2d.PairManager');
+goog.require('box2d.Vec2');
+goog.require('box2d.Bound');
+goog.require('box2d.Settings');
+goog.require('box2d.Proxy');
+goog.require('box2d.BoundValues');
 
 /*
 This broad phase uses the Sweep and Prune algorithm in:
@@ -46,19 +46,19 @@ Bullet (http:/www.bulletphysics.com).
 /**
  @constructor
  */
-b2BroadPhase = function(worldAABB, callback) {
+box2d.BroadPhase = function(worldAABB, callback) {
   // initialize instance variables for references
-  this.m_pairManager = new b2PairManager();
+  this.m_pairManager = new box2d.PairManager();
 
   /**
-    @type {!Array.<b2Proxy>}
+    @type {!Array.<box2d.Proxy>}
   */
-  this.proxyPool = new Array(b2Settings.b2_maxPairs);
-  this.m_bounds = new Array(2 * b2Settings.b2_maxProxies);
-  this.m_queryResults = new Array(b2Settings.b2_maxProxies);
-  this.m_quantizationFactor = new b2Vec2();
+  this.proxyPool = new Array(box2d.Settings.b2_maxPairs);
+  this.m_bounds = new Array(2 * box2d.Settings.b2_maxProxies);
+  this.m_queryResults = new Array(box2d.Settings.b2_maxProxies);
+  this.m_quantizationFactor = new box2d.Vec2();
   //
-  //b2Settings.b2Assert(worldAABB.IsValid());
+  //box2d.Settings.b2Assert(worldAABB.IsValid());
   var i = 0;
 
   this.m_pairManager.Initialize(this, callback);
@@ -68,42 +68,42 @@ b2BroadPhase = function(worldAABB, callback) {
   this.m_proxyCount = 0;
 
   // query results
-  for (i = 0; i < b2Settings.b2_maxProxies; i++) {
+  for (i = 0; i < box2d.Settings.b2_maxProxies; i++) {
     this.m_queryResults[i] = 0;
   }
 
   // bounds array
   this.m_bounds = new Array(2);
   for (i = 0; i < 2; i++) {
-    this.m_bounds[i] = new Array(2 * b2Settings.b2_maxProxies);
-    for (var j = 0; j < 2 * b2Settings.b2_maxProxies; j++) {
-      this.m_bounds[i][j] = new b2Bound();
+    this.m_bounds[i] = new Array(2 * box2d.Settings.b2_maxProxies);
+    for (var j = 0; j < 2 * box2d.Settings.b2_maxProxies; j++) {
+      this.m_bounds[i][j] = new box2d.Bound();
     }
   }
 
-  //var d = b2Math.SubtractVV(worldAABB.maxVertex, worldAABB.minVertex);
+  //var d = box2d.Math.SubtractVV(worldAABB.maxVertex, worldAABB.minVertex);
   var dX = worldAABB.maxVertex.x;
   var dY = worldAABB.maxVertex.y;
   dX -= worldAABB.minVertex.x;
   dY -= worldAABB.minVertex.y;
 
-  this.m_quantizationFactor.x = b2Settings.USHRT_MAX / dX;
-  this.m_quantizationFactor.y = b2Settings.USHRT_MAX / dY;
+  this.m_quantizationFactor.x = box2d.Settings.USHRT_MAX / dX;
+  this.m_quantizationFactor.y = box2d.Settings.USHRT_MAX / dY;
 
   var tProxy;
-  for (i = 0; i < b2Settings.b2_maxProxies - 1; ++i) {
-    tProxy = new b2Proxy();
+  for (i = 0; i < box2d.Settings.b2_maxProxies - 1; ++i) {
+    tProxy = new box2d.Proxy();
     this.proxyPool[i] = tProxy;
     tProxy.SetNext(i + 1);
     tProxy.timeStamp = 0;
-    tProxy.overlapCount = b2Settings.invalid;
+    tProxy.overlapCount = box2d.Settings.invalid;
     tProxy.userData = null;
   }
-  tProxy = new b2Proxy();
-  this.proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
-  tProxy.SetNext(b2Pair.b2_nullProxy);
+  tProxy = new box2d.Proxy();
+  this.proxyPool[box2d.Settings.b2_maxProxies - 1] = tProxy;
+  tProxy.SetNext(box2d.Pair.b2_nullProxy);
   tProxy.timeStamp = 0;
-  tProxy.overlapCount = b2Settings.invalid;
+  tProxy.overlapCount = box2d.Settings.invalid;
   tProxy.userData = null;
   this.m_freeProxy = 0;
 
@@ -111,14 +111,14 @@ b2BroadPhase = function(worldAABB, callback) {
   this.m_queryResultCount = 0;
 };
 
-b2BroadPhase.prototype = {
+box2d.BroadPhase.prototype = {
 
   //~b2BroadPhase();
   // Use this to see if your proxy is in range. If it is not in range,
   // it should be destroyed. Otherwise you may get O(m^2) pairs, where m
   // is the number of proxies that are out of range.
   InRange: function(aabb) {
-    //var d = b2Math.b2MaxV(b2Math.SubtractVV(aabb.minVertex, this.m_worldAABB.maxVertex), b2Math.SubtractVV(this.m_worldAABB.minVertex, aabb.maxVertex));
+    //var d = box2d.Math.b2MaxV(box2d.Math.SubtractVV(aabb.minVertex, this.m_worldAABB.maxVertex), box2d.Math.SubtractVV(this.m_worldAABB.minVertex, aabb.maxVertex));
     var dX;
     var dY;
     var d2X;
@@ -134,15 +134,15 @@ b2BroadPhase.prototype = {
     d2X -= aabb.maxVertex.x;
     d2Y -= aabb.maxVertex.y;
 
-    dX = b2Math.b2Max(dX, d2X);
-    dY = b2Math.b2Max(dY, d2Y);
+    dX = box2d.Math.b2Max(dX, d2X);
+    dY = box2d.Math.b2Max(dY, d2Y);
 
-    return b2Math.b2Max(dX, dY) < 0.0;
+    return box2d.Math.b2Max(dX, dY) < 0.0;
   },
 
   // Get a single proxy. Returns NULL if the id is invalid.
   GetProxy: function(proxyId) {
-    if (proxyId == b2Pair.b2_nullProxy || this.proxyPool[proxyId].IsValid() == false) {
+    if (proxyId == box2d.Pair.b2_nullProxy || this.proxyPool[proxyId].IsValid() == false) {
       return null;
     }
 
@@ -151,9 +151,9 @@ b2BroadPhase.prototype = {
 
   DestroyProxy: function(proxyId) {
 
-    //b2Settings.b2Assert(0 < this.m_proxyCount && this.m_proxyCount <= b2_maxProxies);
+    //box2d.Settings.b2Assert(0 < this.m_proxyCount && this.m_proxyCount <= b2_maxProxies);
     var proxy = this.proxyPool[proxyId];
-    //b2Settings.b2Assert(proxy.IsValid());
+    //box2d.Settings.b2Assert(proxy.IsValid());
     var boundCount = 2 * this.m_proxyCount;
 
     for (var axis = 0; axis < 2; ++axis) {
@@ -173,7 +173,7 @@ b2BroadPhase.prototype = {
       var tBound2;
       // make temp array
       for (j = 0; j < tEnd; j++) {
-        tArr[j] = new b2Bound();
+        tArr[j] = new box2d.Bound();
         tBound1 = tArr[j];
         tBound2 = bounds[lowerIndex + 1 + j];
         tBound1.value = tBound2.value;
@@ -196,7 +196,7 @@ b2BroadPhase.prototype = {
       tArr = new Array();
       tEnd = boundCount - upperIndex - 1;
       for (j = 0; j < tEnd; j++) {
-        tArr[j] = new b2Bound();
+        tArr[j] = new box2d.Bound();
         tBound1 = tArr[j];
         tBound2 = bounds[upperIndex + 1 + j];
         tBound1.value = tBound2.value;
@@ -237,9 +237,9 @@ b2BroadPhase.prototype = {
       this.Query([0], [0], lowerValue, upperValue, bounds, boundCount - 2, axis);
     }
 
-    //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
+    //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
     for (var i = 0; i < this.m_queryResultCount; ++i) {
-      //b2Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
+      //box2d.Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
       this.m_pairManager.RemoveBufferedPair(proxyId, this.m_queryResults[i]);
     }
 
@@ -251,11 +251,11 @@ b2BroadPhase.prototype = {
 
     // Return the proxy to the pool.
     proxy.userData = null;
-    proxy.overlapCount = b2Settings.invalid;
-    proxy.lowerBounds[0] = b2Settings.invalid;
-    proxy.lowerBounds[1] = b2Settings.invalid;
-    proxy.upperBounds[0] = b2Settings.invalid;
-    proxy.upperBounds[1] = b2Settings.invalid;
+    proxy.overlapCount = box2d.Settings.invalid;
+    proxy.lowerBounds[0] = box2d.Settings.invalid;
+    proxy.lowerBounds[1] = box2d.Settings.invalid;
+    proxy.upperBounds[0] = box2d.Settings.invalid;
+    proxy.upperBounds[1] = box2d.Settings.invalid;
 
     proxy.SetNext(this.m_freeProxy);
     this.m_freeProxy = proxyId;
@@ -273,13 +273,13 @@ b2BroadPhase.prototype = {
     var nextProxyId = 0;
     var nextProxy;
 
-    if (proxyId == b2Pair.b2_nullProxy || b2Settings.b2_maxProxies <= proxyId) {
-      //b2Settings.b2Assert(false);
+    if (proxyId == box2d.Pair.b2_nullProxy || box2d.Settings.b2_maxProxies <= proxyId) {
+      //box2d.Settings.b2Assert(false);
       return;
     }
 
     if (aabb.IsValid() == false) {
-      //b2Settings.b2Assert(false);
+      //box2d.Settings.b2Assert(false);
       return;
     }
 
@@ -287,11 +287,11 @@ b2BroadPhase.prototype = {
 
     var proxy = this.proxyPool[proxyId];
     // Get new bound values
-    var newValues = new b2BoundValues();
+    var newValues = new box2d.BoundValues();
     this.ComputeBounds(newValues.lowerValues, newValues.upperValues, aabb);
 
     // Get old bound values
-    var oldValues = new b2BoundValues();
+    var oldValues = new box2d.BoundValues();
     for (axis = 0; axis < 2; ++axis) {
       oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
       oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
@@ -346,7 +346,7 @@ b2BroadPhase.prototype = {
           //bound = prevEdge;
           //prevEdge = temp;
           bound.Swap(prevBound);
-          //b2Math.b2Swap(bound, prevEdge);
+          //box2d.Math.b2Swap(bound, prevEdge);
           --index;
         }
       }
@@ -380,7 +380,7 @@ b2BroadPhase.prototype = {
           //bound = nextEdge;
           //nextEdge = temp;
           bound.Swap(nextBound);
-          //b2Math.b2Swap(bound, nextEdge);
+          //box2d.Math.b2Swap(bound, nextEdge);
           index++;
         }
       }
@@ -418,7 +418,7 @@ b2BroadPhase.prototype = {
           //bound = nextEdge;
           //nextEdge = temp;
           bound.Swap(nextBound);
-          //b2Math.b2Swap(bound, nextEdge);
+          //box2d.Math.b2Swap(bound, nextEdge);
           index++;
         }
       }
@@ -453,7 +453,7 @@ b2BroadPhase.prototype = {
           //bound = prevEdge;
           //prevEdge = temp;
           bound.Swap(prevBound);
-          //b2Math.b2Swap(bound, prevEdge);
+          //box2d.Math.b2Swap(bound, prevEdge);
           index--;
         }
       }
@@ -474,12 +474,12 @@ b2BroadPhase.prototype = {
     this.Query(lowerIndexOut, upperIndexOut, lowerValues[0], upperValues[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
     this.Query(lowerIndexOut, upperIndexOut, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
 
-    //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
+    //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
     var count = 0;
     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
-      //b2Settings.b2Assert(this.m_queryResults[i] < b2Settings.b2_maxProxies);
+      //box2d.Settings.b2Assert(this.m_queryResults[i] < box2d.Settings.b2_maxProxies);
       var proxy = this.proxyPool[this.m_queryResults[i]];
-      //b2Settings.b2Assert(proxy.IsValid());
+      //box2d.Settings.b2Assert(proxy.IsValid());
       userData[i] = proxy.userData;
     }
 
@@ -504,18 +504,18 @@ b2BroadPhase.prototype = {
 
       for (var i = 0; i < boundCount; ++i) {
         var bound = bounds[i];
-        //b2Settings.b2Assert(i == 0 || bounds[i-1].value <= bound->value);
-        //b2Settings.b2Assert(bound->proxyId != b2_nullProxy);
-        //b2Settings.b2Assert(this.proxyPool[bound->proxyId].IsValid());
+        //box2d.Settings.b2Assert(i == 0 || bounds[i-1].value <= bound->value);
+        //box2d.Settings.b2Assert(bound->proxyId != b2_nullProxy);
+        //box2d.Settings.b2Assert(this.proxyPool[bound->proxyId].IsValid());
         if (bound.IsLower() == true) {
-          //b2Settings.b2Assert(this.proxyPool[bound.proxyId].lowerBounds[axis] == i);
+          //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].lowerBounds[axis] == i);
           stabbingCount++;
         } else {
-          //b2Settings.b2Assert(this.proxyPool[bound.proxyId].upperBounds[axis] == i);
+          //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].upperBounds[axis] == i);
           stabbingCount--;
         }
 
-        //b2Settings.b2Assert(bound.stabbingCount == stabbingCount);
+        //box2d.Settings.b2Assert(bound.stabbingCount == stabbingCount);
       }
     }
 
@@ -523,37 +523,37 @@ b2BroadPhase.prototype = {
 
   //private:
   ComputeBounds: function(lowerValues, upperValues, aabb) {
-    //b2Settings.b2Assert(aabb.maxVertex.x > aabb.minVertex.x);
-    //b2Settings.b2Assert(aabb.maxVertex.y > aabb.minVertex.y);
-    //var minVertex = b2Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
+    //box2d.Settings.b2Assert(aabb.maxVertex.x > aabb.minVertex.x);
+    //box2d.Settings.b2Assert(aabb.maxVertex.y > aabb.minVertex.y);
+    //var minVertex = box2d.Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
     var minVertexX = aabb.minVertex.x;
     var minVertexY = aabb.minVertex.y;
-    minVertexX = b2Math.b2Min(minVertexX, this.m_worldAABB.maxVertex.x);
-    minVertexY = b2Math.b2Min(minVertexY, this.m_worldAABB.maxVertex.y);
-    minVertexX = b2Math.b2Max(minVertexX, this.m_worldAABB.minVertex.x);
-    minVertexY = b2Math.b2Max(minVertexY, this.m_worldAABB.minVertex.y);
+    minVertexX = box2d.Math.b2Min(minVertexX, this.m_worldAABB.maxVertex.x);
+    minVertexY = box2d.Math.b2Min(minVertexY, this.m_worldAABB.maxVertex.y);
+    minVertexX = box2d.Math.b2Max(minVertexX, this.m_worldAABB.minVertex.x);
+    minVertexY = box2d.Math.b2Max(minVertexY, this.m_worldAABB.minVertex.y);
 
-    //var maxVertex = b2Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
+    //var maxVertex = box2d.Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
     var maxVertexX = aabb.maxVertex.x;
     var maxVertexY = aabb.maxVertex.y;
-    maxVertexX = b2Math.b2Min(maxVertexX, this.m_worldAABB.maxVertex.x);
-    maxVertexY = b2Math.b2Min(maxVertexY, this.m_worldAABB.maxVertex.y);
-    maxVertexX = b2Math.b2Max(maxVertexX, this.m_worldAABB.minVertex.x);
-    maxVertexY = b2Math.b2Max(maxVertexY, this.m_worldAABB.minVertex.y);
+    maxVertexX = box2d.Math.b2Min(maxVertexX, this.m_worldAABB.maxVertex.x);
+    maxVertexY = box2d.Math.b2Min(maxVertexY, this.m_worldAABB.maxVertex.y);
+    maxVertexX = box2d.Math.b2Max(maxVertexX, this.m_worldAABB.minVertex.x);
+    maxVertexY = box2d.Math.b2Max(maxVertexY, this.m_worldAABB.minVertex.y);
 
     // Bump lower bounds downs and upper bounds up. This ensures correct sorting of
     // lower/upper bounds that would have equal values.
     // TODO_ERIN implement fast float to uint16 conversion.
     lowerValues[0] =
     /*uint*/
-    (this.m_quantizationFactor.x * (minVertexX - this.m_worldAABB.minVertex.x)) & (b2Settings.USHRT_MAX - 1);
+    (this.m_quantizationFactor.x * (minVertexX - this.m_worldAABB.minVertex.x)) & (box2d.Settings.USHRT_MAX - 1);
     upperValues[0] = (
     /*uint*/
     (this.m_quantizationFactor.x * (maxVertexX - this.m_worldAABB.minVertex.x)) & 0x0000ffff) | 1;
 
     lowerValues[1] =
     /*uint*/
-    (this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y)) & (b2Settings.USHRT_MAX - 1);
+    (this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y)) & (box2d.Settings.USHRT_MAX - 1);
     upperValues[1] = (
     /*uint*/
     (this.m_quantizationFactor.y * (maxVertexY - this.m_worldAABB.minVertex.y)) & 0x0000ffff) | 1;
@@ -565,10 +565,10 @@ b2BroadPhase.prototype = {
     for (var axis = 0; axis < 2; ++axis) {
       var bounds = this.m_bounds[axis];
 
-      //b2Settings.b2Assert(p1.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //b2Settings.b2Assert(p1.upperBounds[axis] < 2 * this.m_proxyCount);
-      //b2Settings.b2Assert(p2.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //b2Settings.b2Assert(p2.upperBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p1.lowerBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p1.upperBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p2.lowerBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p2.upperBounds[axis] < 2 * this.m_proxyCount);
       if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) return false;
 
       if (bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) return false;
@@ -581,8 +581,8 @@ b2BroadPhase.prototype = {
     for (var axis = 0; axis < 2; ++axis) {
       var bounds = this.m_bounds[axis];
 
-      //b2Settings.b2Assert(p.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //b2Settings.b2Assert(p.upperBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p.lowerBounds[axis] < 2 * this.m_proxyCount);
+      //box2d.Settings.b2Assert(p.upperBounds[axis] < 2 * this.m_proxyCount);
       if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) return false;
 
       if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) return false;
@@ -593,8 +593,8 @@ b2BroadPhase.prototype = {
 
   Query: function(lowerQueryOut, upperQueryOut, lowerValue, upperValue, bounds, boundCount, axis) {
 
-    var lowerQuery = b2BroadPhase.BinarySearch(bounds, boundCount, lowerValue);
-    var upperQuery = b2BroadPhase.BinarySearch(bounds, boundCount, upperValue);
+    var lowerQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, lowerValue);
+    var upperQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, upperValue);
 
     // Easy case: lowerQuery <= lowerIndex(i) < upperQuery
     // Solution: search query range for min bounds.
@@ -612,7 +612,7 @@ b2BroadPhase.prototype = {
 
       // Find the s overlaps.
       while (s) {
-        //b2Settings.b2Assert(i >= 0);
+        //box2d.Settings.b2Assert(i >= 0);
         if (bounds[i].IsLower()) {
           var proxy = this.proxyPool[bounds[i].proxyId];
           if (lowerQuery <= proxy.upperBounds[axis]) {
@@ -634,14 +634,14 @@ b2BroadPhase.prototype = {
       proxy.overlapCount = 1;
     } else {
       proxy.overlapCount = 2;
-      //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
+      //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
       this.m_queryResults[this.m_queryResultCount] = proxyId;
       ++this.m_queryResultCount;
     }
   },
   IncrementTimeStamp: function() {
-    if (this.m_timeStamp == b2Settings.USHRT_MAX) {
-      for (var i = 0; i < b2Settings.b2_maxProxies; ++i) {
+    if (this.m_timeStamp == box2d.Settings.USHRT_MAX) {
+      for (var i = 0; i < box2d.Settings.b2_maxProxies; ++i) {
         this.proxyPool[i].timeStamp = 0;
       }
       this.m_timeStamp = 1;
@@ -651,40 +651,40 @@ b2BroadPhase.prototype = {
   },
 
   //public:
-  m_pairManager: new b2PairManager(),
+  m_pairManager: new box2d.PairManager(),
 
-  proxyPool: new Array(b2Settings.b2_maxPairs),
+  proxyPool: new Array(box2d.Settings.b2_maxPairs),
 
-  m_bounds: new Array(2 * b2Settings.b2_maxProxies),
+  m_bounds: new Array(2 * box2d.Settings.b2_maxProxies),
 
-  m_queryResults: new Array(b2Settings.b2_maxProxies),
+  m_queryResults: new Array(box2d.Settings.b2_maxProxies),
   m_queryResultCount: 0,
 
   m_worldAABB: null,
-  m_quantizationFactor: new b2Vec2(),
+  m_quantizationFactor: new box2d.Vec2(),
   m_proxyCount: 0,
   m_timeStamp: 0
 };
 
 /**
-  @return {!Array.<b2Pair>}
+  @return {!Array.<box2d.Pair>}
 */
-b2BroadPhase.prototype.Commit= function() {
+box2d.BroadPhase.prototype.Commit= function() {
   return this.m_pairManager.Commit();
 };
 
 /**
   // Create and destroy proxies. These call Flush first.
-  @param {!b2AABB} aabb
-  @param {!b2Shape} userData
+  @param {!box2d.AABB} aabb
+  @param {!box2d.Shape} userData
   @return {number}
 */
-b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
+box2d.BroadPhase.prototype.CreateProxy = function(aabb, userData) {
   var index = 0;
   var proxy;
 
-  //b2Settings.b2Assert(this.m_proxyCount < b2_maxProxies);
-  //b2Settings.b2Assert(this.m_freeProxy != b2Pair.b2_nullProxy);
+  //box2d.Settings.b2Assert(this.m_proxyCount < b2_maxProxies);
+  //box2d.Settings.b2Assert(this.m_freeProxy != box2d.Pair.b2_nullProxy);
   var proxyId = this.m_freeProxy;
   proxy = this.proxyPool[proxyId];
   this.m_freeProxy = proxy.GetNext();
@@ -717,7 +717,7 @@ b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
     var tBound2;
     // make temp array
     for (j = 0; j < tEnd; j++) {
-      tArr[j] = new b2Bound();
+      tArr[j] = new box2d.Bound();
       tBound1 = tArr[j];
       tBound2 = bounds[upperIndex + j];
       tBound1.value = tBound2.value;
@@ -740,7 +740,7 @@ b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
     tArr = new Array();
     tEnd = upperIndex - lowerIndex;
     for (j = 0; j < tEnd; j++) {
-      tArr[j] = new b2Bound();
+      tArr[j] = new box2d.Bound();
       tBound1 = tArr[j];
       tBound2 = bounds[lowerIndex + j];
       tBound1.value = tBound2.value;
@@ -789,10 +789,10 @@ b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
 
   ++this.m_proxyCount;
 
-  //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
+  //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
   for (var i = 0; i < this.m_queryResultCount; ++i) {
-    //b2Settings.b2Assert(this.m_queryResults[i] < b2_maxProxies);
-    //b2Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
+    //box2d.Settings.b2Assert(this.m_queryResults[i] < b2_maxProxies);
+    //box2d.Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
     this.m_pairManager.AddBufferedPair(proxyId, this.m_queryResults[i]);
   }
 
@@ -809,12 +809,12 @@ b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
   @private
   @type {number}
 */
-b2BroadPhase.m_freeProxy = 0;
+box2d.BroadPhase.m_freeProxy = 0;
 
 
-b2BroadPhase.s_validate = false;
-b2BroadPhase.b2_nullEdge = b2Settings.USHRT_MAX;
-b2BroadPhase.BinarySearch = function(bounds, count, value) {
+box2d.BroadPhase.s_validate = false;
+box2d.BroadPhase.b2_nullEdge = box2d.Settings.USHRT_MAX;
+box2d.BroadPhase.BinarySearch = function(bounds, count, value) {
   var low = 0;
   var high = count - 1;
   while (low <= high) {

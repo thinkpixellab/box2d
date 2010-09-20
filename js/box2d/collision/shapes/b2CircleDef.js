@@ -16,20 +16,20 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2CircleDef');
-goog.require('b2Shape');
-goog.require('b2Vec2');
-goog.require('b2ShapeDef');
+goog.provide('box2d.CircleDef');
+goog.require('box2d.Shape');
+goog.require('box2d.Vec2');
+goog.require('box2d.ShapeDef');
 
 /**
   @constructor
-  @extends {b2ShapeDef}
+  @extends {box2d.ShapeDef}
 */
-b2CircleDef = function() {
-    // The constructor for b2ShapeDef
-    this.type = b2Shape.e_unknownShape;
+box2d.CircleDef = function() {
+    // The constructor for box2d.ShapeDef
+    this.type = box2d.Shape.e_unknownShape;
     this.userData = null;
-    this.localPosition = new b2Vec2(0.0, 0.0);
+    this.localPosition = new box2d.Vec2(0.0, 0.0);
     this.localRotation = 0.0;
     this.friction = 0.2;
     this.restitution = 0.0;
@@ -38,8 +38,8 @@ b2CircleDef = function() {
     this.maskBits = 0xFFFF;
     this.groupIndex = 0;
     //
-    this.type = b2Shape.e_circleShape;
+    this.type = box2d.Shape.e_circleShape;
     this.radius = 1.0;
 };
 
-goog.inherits(b2CircleDef, b2ShapeDef);
+goog.inherits(box2d.CircleDef, box2d.ShapeDef);

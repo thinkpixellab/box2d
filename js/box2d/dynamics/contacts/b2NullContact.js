@@ -16,22 +16,22 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2NullContact');
+goog.provide('box2d.NullContact');
 
-goog.require('b2Contact');
-goog.require('b2ContactNode');
+goog.require('box2d.Contact');
+goog.require('box2d.ContactNode');
 
 /**
- @extends {b2Contact}
+ @extends {box2d.Contact}
  @constructor
  @param {Object=} s1
  @param {Object=} s2
  */
-b2NullContact = function(s1, s2) {
-  // The constructor for b2Contact
+box2d.NullContact = function(s1, s2) {
+  // The constructor for box2d.Contact
   // initialize instance variables for references
-  this.m_node1 = new b2ContactNode();
-  this.m_node2 = new b2ContactNode();
+  this.m_node1 = new box2d.ContactNode();
+  this.m_node2 = new box2d.ContactNode();
   //
   this.m_flags = 0;
 
@@ -47,7 +47,7 @@ b2NullContact = function(s1, s2) {
   this.m_manifoldCount = 0;
 
   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-  this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_restitution = box2d.Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
   this.m_prev = null;
   this.m_next = null;
@@ -64,9 +64,9 @@ b2NullContact = function(s1, s2) {
   //
 };
 
-goog.inherits(b2NullContact, b2Contact);
+goog.inherits(box2d.NullContact, box2d.Contact);
 
-b2NullContact.prototype.Evaluate = function() {};
-b2NullContact.prototype.GetManifolds = function() {
+box2d.NullContact.prototype.Evaluate = function() {};
+box2d.NullContact.prototype.GetManifolds = function() {
   return null;
 };

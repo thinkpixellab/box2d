@@ -16,16 +16,16 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2Distance');
+goog.provide('box2d.Distance');
 
-goog.require('b2Math');
+goog.require('box2d.Math');
 
-b2Distance.ProcessTwo = function(p1Out, p2Out, p1s, p2s, points) {
+box2d.Distance.ProcessTwo = function(p1Out, p2Out, p1s, p2s, points) {
   // If in point[1] region
-  //b2Vec2 r = -points[1];
+  //box2d.Vec2 r = -points[1];
   var rX = -points[1].x;
   var rY = -points[1].y;
-  //b2Vec2 d = points[1] - points[0];
+  //box2d.Vec2 d = points[1] - points[0];
   var dX = points[0].x - points[1].x;
   var dY = points[0].y - points[1].y;
   //float32 length = d.Normalize();
@@ -59,24 +59,24 @@ b2Distance.ProcessTwo = function(p1Out, p2Out, p1s, p2s, points) {
   p2Out.y = p2s[1].y + lambda * (p2s[0].y - p2s[1].y);
   return 2;
 };
-b2Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
-  //b2Vec2 a = points[0];
+box2d.Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
+  //box2d.Vec2 a = points[0];
   var aX = points[0].x;
   var aY = points[0].y;
-  //b2Vec2 b = points[1];
+  //box2d.Vec2 b = points[1];
   var bX = points[1].x;
   var bY = points[1].y;
-  //b2Vec2 c = points[2];
+  //box2d.Vec2 c = points[2];
   var cX = points[2].x;
   var cY = points[2].y;
 
-  //b2Vec2 ab = b - a;
+  //box2d.Vec2 ab = b - a;
   var abX = bX - aX;
   var abY = bY - aY;
-  //b2Vec2 ac = c - a;
+  //box2d.Vec2 ac = c - a;
   var acX = cX - aX;
   var acY = cY - aY;
-  //b2Vec2 bc = c - b;
+  //box2d.Vec2 bc = c - b;
   var bcX = cX - bX;
   var bcY = cY - bY;
 
@@ -106,21 +106,21 @@ b2Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
   }
 
   // Should not be in vertex a or b region.
-  //b2Settings.b2Assert(sn > 0.0 || tn > 0.0);
-  //b2Settings.b2Assert(sd > 0.0 || un > 0.0);
+  //box2d.Settings.b2Assert(sn > 0.0 || tn > 0.0);
+  //box2d.Settings.b2Assert(sd > 0.0 || un > 0.0);
   //float32 n = b2Cross(ab, ac);
   var n = abX * acY - abY * acX;
 
   // Should not be in edge ab region.
   //float32 vc = n * b2Cross(a, b);
   var vc = n * (aX * bY - aY * bX);
-  //b2Settings.b2Assert(vc > 0.0 || sn > 0.0 || sd > 0.0);
+  //box2d.Settings.b2Assert(vc > 0.0 || sn > 0.0 || sd > 0.0);
   // In edge bc region?
   //float32 va = n * b2Cross(b, c);
   var va = n * (bX * cY - bY * cX);
   var lambda;
   if (va <= 0.0 && un >= 0.0 && ud >= 0.0) {
-    //b2Settings.b2Assert(un + ud > 0.0);
+    //box2d.Settings.b2Assert(un + ud > 0.0);
     //float32 lambda = un / (un + ud);
     lambda = un / (un + ud);
     //*p1Out = p1s[1] + lambda * (p1s[2] - p1s[1]);
@@ -142,7 +142,7 @@ b2Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
   //float32 vb = n * b2Cross(c, a);
   var vb = n * (cX * aY - cY * aX);
   if (vb <= 0.0 && tn >= 0.0 && td >= 0.0) {
-    //b2Settings.b2Assert(tn + td > 0.0);
+    //box2d.Settings.b2Assert(tn + td > 0.0);
     //float32 lambda = tn / (tn + td);
     lambda = tn / (tn + td);
     //*p1Out = p1s[0] + lambda * (p1s[2] - p1s[0]);
@@ -163,7 +163,7 @@ b2Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
   // Inside the triangle, compute barycentric coordinates
   //float32 denom = va + vb + vc;
   var denom = va + vb + vc;
-  //b2Settings.b2Assert(denom > 0.0);
+  //box2d.Settings.b2Assert(denom > 0.0);
   denom = 1.0 / denom;
   //float32 u = va * denom;
   var u = va * denom;
@@ -179,7 +179,7 @@ b2Distance.ProcessThree = function(p1Out, p2Out, p1s, p2s, points) {
   p2Out.y = u * p2s[0].y + v * p2s[1].y + w * p2s[2].y;
   return 3;
 };
-b2Distance.InPoinsts = function(w, points, pointCount) {
+box2d.Distance.InPoinsts = function(w, points, pointCount) {
   for (var i = 0; i < pointCount; ++i) {
     if (w.x == points[i].x && w.y == points[i].y) {
       return true;
@@ -188,11 +188,11 @@ b2Distance.InPoinsts = function(w, points, pointCount) {
 
   return false;
 };
-b2Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
-  //b2Vec2 p1s[3], p2s[3];
+box2d.Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
+  //box2d.Vec2 p1s[3], p2s[3];
   var p1s = new Array(3);
   var p2s = new Array(3);
-  //b2Vec2 points[3];
+  //box2d.Vec2 points[3];
   var points = new Array(3);
   //int32 pointCount = 0;
   var pointCount = 0;
@@ -205,16 +205,16 @@ b2Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
   var vSqr = 0.0;
   var maxIterations = 20;
   for (var iter = 0; iter < maxIterations; ++iter) {
-    //b2Vec2 v = *p2Out - *p1Out;
+    //box2d.Vec2 v = *p2Out - *p1Out;
     var vX = p2Out.x - p1Out.x;
     var vY = p2Out.y - p1Out.y;
-    //b2Vec2 w1 = shape1->Support(v);
+    //box2d.Vec2 w1 = shape1->Support(v);
     var w1 = shape1.Support(vX, vY);
-    //b2Vec2 w2 = shape2->Support(-v);
+    //box2d.Vec2 w2 = shape2->Support(-v);
     var w2 = shape2.Support(-vX, -vY);
     //float32 vSqr = b2Dot(v, v);
     vSqr = (vX * vX + vY * vY);
-    //b2Vec2 w = w2 - w1;
+    //box2d.Vec2 w = w2 - w1;
     var wX = w2.x - w1.x;
     var wY = w2.y - w1.y;
     //float32 vw = b2Dot(v, w);
@@ -227,7 +227,7 @@ b2Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
         //*p2Out = w2;
         p2Out.SetV(w2);
       }
-      b2Distance.g_GJK_Iterations = iter;
+      box2d.Distance.g_GJK_Iterations = iter;
       return Math.sqrt(vSqr);
     }
 
@@ -254,7 +254,7 @@ b2Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
       //points[1] = w;
       points[1].x = wX;
       points[1].y = wY;
-      pointCount = b2Distance.ProcessTwo(p1Out, p2Out, p1s, p2s, points);
+      pointCount = box2d.Distance.ProcessTwo(p1Out, p2Out, p1s, p2s, points);
       break;
 
     case 2:
@@ -265,30 +265,30 @@ b2Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
       //points[2] = w;
       points[2].x = wX;
       points[2].y = wY;
-      pointCount = b2Distance.ProcessThree(p1Out, p2Out, p1s, p2s, points);
+      pointCount = box2d.Distance.ProcessThree(p1Out, p2Out, p1s, p2s, points);
       break;
     }
 
     // If we have three points, then the origin is in the corresponding triangle.
     if (pointCount == 3) {
-      b2Distance.g_GJK_Iterations = iter;
+      box2d.Distance.g_GJK_Iterations = iter;
       return 0.0;
     }
 
     //float32 maxSqr = -FLT_MAX;
     var maxSqr = -Number.MAX_VALUE;
     for (var i = 0; i < pointCount; ++i) {
-      //maxSqr = b2Math.b2Max(maxSqr, b2Dot(points[i], points[i]));
-      maxSqr = b2Math.b2Max(maxSqr, (points[i].x * points[i].x + points[i].y * points[i].y));
+      //maxSqr = box2d.Math.b2Max(maxSqr, b2Dot(points[i], points[i]));
+      maxSqr = box2d.Math.b2Max(maxSqr, (points[i].x * points[i].x + points[i].y * points[i].y));
     }
 
     if (pointCount == 3 || vSqr <= 100.0 * Number.MIN_VALUE * maxSqr) {
-      b2Distance.g_GJK_Iterations = iter;
+      box2d.Distance.g_GJK_Iterations = iter;
       return Math.sqrt(vSqr);
     }
   }
 
-  b2Distance.g_GJK_Iterations = maxIterations;
+  box2d.Distance.g_GJK_Iterations = maxIterations;
   return Math.sqrt(vSqr);
 };
-b2Distance.g_GJK_Iterations = 0;
+box2d.Distance.g_GJK_Iterations = 0;

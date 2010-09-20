@@ -16,18 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2PairCallback');
+goog.provide('box2d.PairCallback');
 
 /**
  @constructor
  */
-b2PairCallback = function() {};
+box2d.PairCallback = function() {};
 
 // This returns the new pair user data.
-b2PairCallback.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
+box2d.PairCallback.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
   return null;
 };
 
 // This should free the pair's user data. In extreme circumstances, it is possible
 // this will be called with null pairUserData because the pair never existed.
-b2PairCallback.prototype.PairRemoved = function(proxyUserData1, proxyUserData2, pairUserData) {};
+box2d.PairCallback.prototype.PairRemoved = function(proxyUserData1, proxyUserData2, pairUserData) {};

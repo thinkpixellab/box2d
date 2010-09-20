@@ -16,17 +16,17 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2MassData');
+goog.provide('box2d.MassData');
 
-goog.require('b2Vec2');
+goog.require('box2d.Vec2');
 
 /** @constructor */
-var b2MassData = function() {
-  this.center = new b2Vec2(0, 0);
+box2d.MassData = function() {
+  this.center = new box2d.Vec2(0, 0);
 };
 
-b2MassData.prototype = {
+box2d.MassData.prototype = {
   mass: 0.0,
-  center: new b2Vec2(0, 0),
+  center: new box2d.Vec2(0, 0),
   I: 0.0
 };
