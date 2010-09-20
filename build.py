@@ -6,7 +6,7 @@ from _tools import HtmlPost
 from _tools.HtmlCompressor import HtmlCompressor
 
 js_path = "js"
-js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','demo'])
+js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','demo','pixelLab'])
 application_js_path = os.path.join(js_path, 'application.js')
 deps_js_path = os.path.join(js_path, "deps.js")
 compiled_js_path = os.path.join(js_path, "compiled.js")
