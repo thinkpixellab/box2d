@@ -10,6 +10,8 @@ goog.require('b2BodyDef');
 goog.require('b2BoxDef');
 goog.require('b2CircleDef');
 
+goog.require('pixelLab.FpsLogger');
+
 goog.require('demoDraw');
 
 goog.require('demos.stack');
@@ -50,17 +52,20 @@ Demo = function(canvas) {
   },
   false, this);
 
+  this.m_fpsLogger = new pixelLab.FpsLogger();
+  this.m_fps = 0;
+
   this.m_initId = Math.floor(Math.random() * this.m_demos.length);
   this._setupWorld();
   this._step();
 };
 
 Demo.prototype.nextDemo = function(delta) {
-  if(this.m_demos.length == 0){
+  if (this.m_demos.length == 0) {
     throw "No demos to load";
   }
   this.m_initId += delta;
-  while(this.m_initId < 0){
+  while (this.m_initId < 0) {
     this.m_initId += this.m_demos.length;
   }
   this.m_initId %= this.m_demos.length;
@@ -79,12 +84,13 @@ Demo.prototype._setupWorld = function() {
  @private
  */
 Demo.prototype._step = function() {
+  goog.global.setTimeout(goog.bind(this._step, this), Demo._millisecondsPerFrame);
+  this.m_fps = this.m_fpsLogger.AddInterval();
   this.m_world.Step(Demo._secondsPerFrame, 1);
   if (!this.m_world.sleeping) {
     this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
     demoDraw.drawWorld(this.m_world, this.m_canvasContext);
   }
-  goog.global.setTimeout(goog.bind(this._step, this), Demo._millisecondsPerFrame);
 };
 
 Demo.createWorld = function() {
