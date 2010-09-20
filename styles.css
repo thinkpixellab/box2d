@@ -16,16 +16,18 @@ canvas {
 
 #fps{
   float: right;
-  width: 100px;
   height: 20px;
   margin-top: -25px;
   padding-right: 5px;
-  background: #338;
   font-size: 20px;
   color: white;
   text-align: right;
   font-family: monospace;
   position: relative;
+}
+
+#fps.sleeping{
+  color: gray;
 }
 
 button{

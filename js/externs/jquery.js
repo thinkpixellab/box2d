@@ -107,3 +107,15 @@ jQueryObject.prototype.css = function(nameOrProperties, opt_value) {};
  * @return {jQueryObject}
  */
 jQueryObject.prototype.each = function(callback) {};
+
+/**
+ * @param {string} className
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.addClass = function(className) {};
+
+/**
+ * @param {string} className
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.removeClass = function(className) {};

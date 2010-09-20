@@ -89,13 +89,13 @@ Demo.prototype._setupWorld = function() {
  */
 Demo.prototype._step = function() {
   goog.global.setTimeout(goog.bind(this._step, this));
-  this.m_fps = Math.round(this.m_fpsLogger.AddInterval());
-  this.dispatchEvent(new Demo.FrameEvent(this.m_fps));
   this.m_world.Step(Demo._secondsPerFrame, 1);
   if (!this.m_world.sleeping) {
     this.m_canvasContext.clearRect(-this.m_translate.x, -this.m_translate.y, this.m_canvasWidth, this.m_canvasHeight);
     demoDraw.drawWorld(this.m_world, this.m_canvasContext);
   }
+  var fps = Math.round(this.m_fpsLogger.AddInterval());
+  this.dispatchEvent(new Demo.FrameEvent(fps, this.m_world.sleeping));
 };
 
 Demo.createWorld = function() {
@@ -179,9 +179,10 @@ Demo._millisecondsPerFrame = Demo._secondsPerFrame * 1000;
  * @constructor
  * @extends {goog.events.Event}
  */
-Demo.FrameEvent = function(fps) {
+Demo.FrameEvent = function(fps, sleeping) {
   goog.base(this, Demo.FrameEvent.Type);
   this.fps = fps;
+  this.sleeping = sleeping;
 };
 goog.inherits(Demo.FrameEvent, goog.events.Event);
 
