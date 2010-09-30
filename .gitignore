@@ -1,6 +1,1 @@
 .DS_Store
-.svn
-*test*.html
-lib/goog/demos/*
-*.pyc
-tmp
