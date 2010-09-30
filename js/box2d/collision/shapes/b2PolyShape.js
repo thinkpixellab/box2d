@@ -73,7 +73,7 @@ box2d.PolyShape = function(def, body, newOrigin) {
   // Vertices
   /**
    @private
-   @type {!Array.<box2d.Vec2>}
+   @type {!Array.<!box2d.Vec2>}
   */
   this.m_vertices = new Array(box2d.Settings.b2_maxPolyVertices);
   /**

@@ -64,9 +64,9 @@ box2d.Math.b2CrossFV = function(s, a) {
 };
 /**
  @const 
- @param {box2d.Mat22} A
- @param {box2d.Vec2} v
- @return {box2d.Vec2}
+ @param {!box2d.Mat22} A
+ @param {!box2d.Vec2} v
+ @return {!box2d.Vec2}
  */
 box2d.Math.b2MulMV = function(A, v) {
   var u = new box2d.Vec2(A.col1.x * v.x + A.col2.x * v.y, A.col1.y * v.x + A.col2.y * v.y);
