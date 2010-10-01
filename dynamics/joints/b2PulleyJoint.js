@@ -1,4 +1,4 @@
-/*
+﻿;/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -18,8 +18,11 @@
 
 goog.provide('box2d.PulleyJoint');
 
+goog.require('box2d.Joint');
+
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.PulleyJoint = function(def) {
   // The constructor for b2Joint
@@ -94,8 +97,8 @@ box2d.PulleyJoint = function(def) {
   this.m_limitImpulse2 = 0.0;
 
 };
+goog.inherits(box2d.PulleyJoint, box2d.Joint);
 
-goog.object.extend(box2d.PulleyJoint.prototype, box2d.Joint.prototype);
 box2d.PulleyJoint.prototype.GetAnchor1 = function() {
   //return this.m_body1->m_position + b2Mul(this.m_body1->m_R, this.m_localAnchor1);
   var tMat = this.m_body1.m_R;

@@ -39,6 +39,7 @@ goog.require('box2d.Vec2');
 // J = [-ax1 -cross(d+r1,ax1) ax1 cross(r2,ax1)]
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.PrismaticJoint = function(def) {
   // The constructor for b2Joint
@@ -112,8 +113,8 @@ box2d.PrismaticJoint = function(def) {
   this.m_enableLimit = def.enableLimit;
   this.m_enableMotor = def.enableMotor;
 };
+goog.inherits(box2d.PrismaticJoint, box2d.Joint);
 
-goog.object.extend(box2d.PrismaticJoint.prototype, box2d.Joint.prototype);
 box2d.PrismaticJoint.prototype.GetAnchor1 = function() {
   var b1 = this.m_body1;
   //return box2d.Math.AddVV(b1.m_position, box2d.Math.b2MulMV(b1.m_R, this.m_localAnchor1));

@@ -18,8 +18,10 @@
 
 goog.provide('box2d.DistanceJointDef');
 
+goog.require('box2d.JointDef');
 /**
  @constructor
+ @extends {box2d.JointDef}
  */
 box2d.DistanceJointDef = function() {
   // The constructor for b2JointDef
@@ -37,10 +39,4 @@ box2d.DistanceJointDef = function() {
   //this.anchorPoint1.Set(0.0, 0.0);
   //this.anchorPoint2.Set(0.0, 0.0);
 };
-
-goog.object.extend(box2d.DistanceJointDef.prototype, box2d.JointDef.prototype);
-goog.object.extend(box2d.DistanceJointDef.prototype, {
-
-  anchorPoint1: new box2d.Vec2(),
-  anchorPoint2: new box2d.Vec2()
-});
+goog.inherits(box2d.DistanceJointDef, box2d.JointDef);

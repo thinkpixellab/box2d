@@ -18,8 +18,11 @@
 
 goog.provide('box2d.MouseJointDef');
 
+goog.require('box2d.JointDef');
+
 /**
  @constructor
+ @extends {box2d.JointDef}
  */
 box2d.MouseJointDef = function() {
   // The constructor for b2JointDef
@@ -38,13 +41,4 @@ box2d.MouseJointDef = function() {
   this.dampingRatio = 0.7;
   this.timeStep = 1.0 / 60.0;
 };
-
-goog.object.extend(box2d.MouseJointDef.prototype, box2d.JointDef.prototype);
-goog.object.extend(box2d.MouseJointDef.prototype, {
-
-  target: new box2d.Vec2(),
-  maxForce: null,
-  frequencyHz: null,
-  dampingRatio: null,
-  timeStep: null
-});
+goog.inherits(box2d.MouseJointDef, box2d.JointDef);

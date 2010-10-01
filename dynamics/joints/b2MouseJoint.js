@@ -18,6 +18,7 @@
 
 goog.provide('box2d.MouseJoint');
 
+goog.require('box2d.Joint');
 // p = attached point, m = mouse point
 // C = p - m
 // Cdot = v
@@ -27,6 +28,7 @@ goog.provide('box2d.MouseJoint');
 // w k % (rx i + ry j) = w * (-ry i + rx j)
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.MouseJoint = function(def) {
   // The constructor for b2Joint
@@ -79,8 +81,8 @@ box2d.MouseJoint = function(def) {
   this.m_gamma = 1.0 / (d + def.timeStep * k);
   this.m_beta = def.timeStep * k / (d + def.timeStep * k);
 };
+goog.inherits(box2d.MouseJoint, box2d.Joint);
 
-goog.object.extend(box2d.MouseJoint.prototype, box2d.Joint.prototype);
 box2d.MouseJoint.prototype.GetAnchor1 = function() {
   return this.m_target;
 };

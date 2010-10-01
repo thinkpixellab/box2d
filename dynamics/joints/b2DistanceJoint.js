@@ -28,6 +28,7 @@ goog.require('box2d.Joint');
 //   = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.DistanceJoint = function(def) {
   // The constructor for b2Joint
@@ -73,8 +74,7 @@ box2d.DistanceJoint = function(def) {
   this.m_length = Math.sqrt(tX * tX + tY * tY);
   this.m_impulse = 0.0;
 };
-
-goog.object.extend(box2d.DistanceJoint.prototype, box2d.Joint.prototype);
+goog.inherits(box2d.DistanceJoint, box2d.Joint);
 
 box2d.DistanceJoint.prototype.PrepareVelocitySolver = function() {
 

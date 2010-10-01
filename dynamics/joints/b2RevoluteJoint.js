@@ -33,6 +33,7 @@ goog.require('box2d.Joint');
 // K = invI1 + invI2
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.RevoluteJoint = function(def) {
   // The constructor for b2Joint
@@ -91,8 +92,7 @@ box2d.RevoluteJoint = function(def) {
   this.m_enableLimit = def.enableLimit;
   this.m_enableMotor = def.enableMotor;
 };
-
-goog.object.extend(box2d.RevoluteJoint.prototype, box2d.Joint.prototype);
+goog.inherits(box2d.RevoluteJoint, box2d.Joint);
 
 box2d.RevoluteJoint.prototype.GetAnchor1 = function() {
   var tMat = this.m_body1.m_R;

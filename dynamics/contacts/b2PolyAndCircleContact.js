@@ -24,6 +24,7 @@ goog.require('box2d.Manifold');
 
 /**
  @constructor
+ @extends {box2d.Contact}
  */
 box2d.PolyAndCircleContact = function(s1, s2) {
   // The constructor for box2d.Contact
@@ -70,8 +71,8 @@ box2d.PolyAndCircleContact = function(s1, s2) {
   this.m_manifold[0].points[0].normalImpulse = 0.0;
   this.m_manifold[0].points[0].tangentImpulse = 0.0;
 };
+goog.inherits(box2d.PolyAndCircleContact, box2d.Contact);
 
-goog.object.extend(box2d.PolyAndCircleContact.prototype, box2d.Contact.prototype);
 box2d.PolyAndCircleContact.prototype.Evaluate = function() {
   box2d.Collision.b2CollidePolyAndCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
 

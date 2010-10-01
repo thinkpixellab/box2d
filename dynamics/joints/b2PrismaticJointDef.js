@@ -23,6 +23,7 @@ goog.require('box2d.Vec2');
 
 /**
  @constructor
+ @extends {box2d.JointDef}
  */
 box2d.PrismaticJointDef = function() {
   // The constructor for b2JointDef
@@ -42,16 +43,4 @@ box2d.PrismaticJointDef = function() {
   this.enableLimit = false;
   this.enableMotor = false;
 };
-
-goog.object.extend(box2d.PrismaticJointDef.prototype, box2d.JointDef.prototype);
-goog.object.extend(box2d.PrismaticJointDef.prototype, {
-
-  anchorPoint: null,
-  axis: null,
-  lowerTranslation: null,
-  upperTranslation: null,
-  motorForce: null,
-  motorSpeed: null,
-  enableLimit: null,
-  enableMotor: null
-});
+goog.inherits(box2d.PrismaticJointDef, box2d.JointDef);

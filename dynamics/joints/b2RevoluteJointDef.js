@@ -24,6 +24,7 @@ goog.require('box2d.Vec2');
 
 /**
  @constructor
+ @extends {box2d.JointDef}
  */
 box2d.RevoluteJointDef = function() {
   // The constructor for b2JointDef
@@ -42,15 +43,4 @@ box2d.RevoluteJointDef = function() {
   this.enableLimit = false;
   this.enableMotor = false;
 };
-
-goog.object.extend(box2d.RevoluteJointDef.prototype, box2d.JointDef.prototype);
-goog.object.extend(box2d.RevoluteJointDef.prototype, {
-
-  anchorPoint: null,
-  lowerAngle: null,
-  upperAngle: null,
-  motorTorque: null,
-  motorSpeed: null,
-  enableLimit: null,
-  enableMotor: null
-});
+goog.inherits(box2d.RevoluteJointDef, box2d.JointDef);

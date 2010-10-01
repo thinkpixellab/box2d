@@ -21,6 +21,7 @@ goog.provide('box2d.GearJoint');
 goog.require('box2d.Joint');
 /**
  @constructor
+ @extends {box2d.Joint}
  */
 box2d.GearJoint = function(def) {
   // The constructor for b2Joint
@@ -93,8 +94,7 @@ box2d.GearJoint = function(def) {
   this.m_impulse = 0.0;
 
 };
-
-goog.object.extend(box2d.GearJoint.prototype, box2d.Joint.prototype);
+goog.inherits(box2d.GearJoint, box2d.Joint);
 
 box2d.GearJoint.prototype.GetAnchor1 = function() {
   //return this.m_body1.m_position + b2MulMV(this.m_body1.m_R, this.m_localAnchor1);

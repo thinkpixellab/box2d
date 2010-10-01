@@ -18,6 +18,8 @@
 
 goog.provide('box2d.PulleyJointDef');
 
+goog.require('box2d.JointDef');
+
 // The pulley joint is connected to two bodies and two fixed ground points.
 // The pulley supports a ratio such that:
 // length1 + ratio * length2 = constant
@@ -26,6 +28,7 @@ goog.provide('box2d.PulleyJointDef');
 // useful to prevent one side of the pulley hitting the top.
 /**
  @constructor
+ @extends {box2d.JointDef}
  */
 box2d.PulleyJointDef = function() {
   // The constructor for b2JointDef
@@ -51,14 +54,4 @@ box2d.PulleyJointDef = function() {
   this.ratio = 1.0;
   this.collideConnected = true;
 };
-
-goog.object.extend(box2d.PulleyJointDef.prototype, box2d.JointDef.prototype);
-goog.object.extend(box2d.PulleyJointDef.prototype, {
-  groundPoint1: new box2d.Vec2(),
-  groundPoint2: new box2d.Vec2(),
-  anchorPoint1: new box2d.Vec2(),
-  anchorPoint2: new box2d.Vec2(),
-  maxLength1: null,
-  maxLength2: null,
-  ratio: null
-});
+goog.inherits(box2d.PulleyJointDef, box2d.JointDef);
