@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('ClipVertex');
+goog.provide('box2d.ClipVertex');
 
 goog.require('box2d.ContactID');
 goog.require('box2d.Vec2');
@@ -24,7 +24,7 @@ goog.require('box2d.Vec2');
 /**
  @constructor
  */
-var ClipVertex = function() {
+box2d.ClipVertex = function() {
   // initialize instance variables for references
   this.v = new box2d.Vec2();
   this.id = new box2d.ContactID();

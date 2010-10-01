@@ -18,39 +18,32 @@
 
 goog.provide('box2d.ContactID');
 
-goog.require('Features');
+goog.require('box2d.Features');
 
 // We use contact ids to facilitate warm starting.
 /**
  @constructor
  */
 box2d.ContactID = function() {
-  // initialize instance variables for references
-  this.features = new Features();
-  //
-  this.features._m_id = this;
-
+  this._key = 0;
+  this.features = new box2d.Features(this);
 };
 
-box2d.ContactID.prototype = {
-  Set: function(id) {
-    this.set_key(id._key);
-  },
-  Copy: function() {
-    var id = new box2d.ContactID();
-    id.set_key(this._key);
-    return id;
-  },
-  get_key: function() {
-    return this._key;
-  },
-  set_key: function(value) {
-    this._key = value;
-    this.features._referenceFace = this._key & 0x000000ff;
-    this.features._incidentEdge = ((this._key & 0x0000ff00) >> 8) & 0x000000ff;
-    this.features._incidentVertex = ((this._key & 0x00ff0000) >> 16) & 0x000000ff;
-    this.features._flip = ((this._key & 0xff000000) >> 24) & 0x000000ff;
-  },
-  features: new Features(),
-  _key: 0
+box2d.ContactID.prototype.Set = function(id) {
+  this.set_key(id._key);
+};
+box2d.ContactID.prototype.Copy = function() {
+  var id = new box2d.ContactID();
+  id.set_key(this._key);
+  return id;
+};
+box2d.ContactID.prototype.get_key = function() {
+  return this._key;
+};
+box2d.ContactID.prototype.set_key = function(value) {
+  this._key = value;
+  this.features._referenceFace = this._key & 0x000000ff;
+  this.features._incidentEdge = ((this._key & 0x0000ff00) >> 8) & 0x000000ff;
+  this.features._incidentVertex = ((this._key & 0x00ff0000) >> 16) & 0x000000ff;
+  this.features._flip = ((this._key & 0xff000000) >> 24) & 0x000000ff;
 };

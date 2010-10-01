@@ -18,7 +18,7 @@
 
 goog.provide('box2d.Collision');
 
-goog.require('ClipVertex');
+goog.require('box2d.ClipVertex');
 
 box2d.Collision.b2_nullFeature = 0x000000ff;
 box2d.Collision.ClipSegmentToLine = function(vOut, vIn, normal, offset) {
@@ -325,7 +325,7 @@ box2d.Collision.b2CollidePoly = function(manifold, polyA, polyB, conservative) {
     flip = 0;
   }
 
-  var incidentEdge = [new ClipVertex(), new ClipVertex()];
+  var incidentEdge = [new box2d.ClipVertex(), new box2d.ClipVertex()];
   box2d.Collision.FindIncidentEdge(incidentEdge, poly1, edge1, poly2);
 
   var count1 = poly1.m_vertexCount;
@@ -388,8 +388,8 @@ box2d.Collision.b2CollidePoly = function(manifold, polyA, polyB, conservative) {
   var sideOffset2 = sideNormalX * v12X + sideNormalY * v12Y;
 
   // Clip incident edge against extruded edge1 side edges.
-  var clipPoints1 = [new ClipVertex(), new ClipVertex()];
-  var clipPoints2 = [new ClipVertex(), new ClipVertex()];
+  var clipPoints1 = [new box2d.ClipVertex(), new box2d.ClipVertex()];
+  var clipPoints2 = [new box2d.ClipVertex(), new box2d.ClipVertex()];
 
   var np = 0;
 
