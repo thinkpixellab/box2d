@@ -18,8 +18,8 @@
 
 goog.provide('box2d.ContactPoint');
 
-goog.require('box2d.Vec2');
 goog.require('box2d.ContactID');
+goog.require('box2d.Vec2');
 
 // We use contact ids to facilitate warm starting.
 /**

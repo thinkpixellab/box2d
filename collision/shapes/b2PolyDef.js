@@ -18,8 +18,8 @@
 
 goog.provide('box2d.PolyDef');
 
-goog.require('box2d.ShapeDef');
 goog.require('box2d.Shape');
+goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
 /**
@@ -49,7 +49,6 @@ box2d.PolyDef = function() {
     this.vertices[i] = new box2d.Vec2();
   }
 };
-
 goog.inherits(box2d.PolyDef, box2d.ShapeDef);
 
 box2d.PolyDef.prototype.SetVertices = function(vertexArray) {

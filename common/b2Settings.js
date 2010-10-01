@@ -63,6 +63,6 @@ box2d.Settings.FLT_EPSILON = 0.0000001192092896;
 /** @const @type {function(boolean)} */
 box2d.Settings.b2Assert = function(a) {
   if (!a) {
-    throw "Assert Failed!";
+    throw 'Assert Failed!';
   }
 };

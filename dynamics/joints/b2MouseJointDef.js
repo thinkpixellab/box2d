@@ -18,8 +18,8 @@
 
 goog.provide('box2d.MouseJointDef');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.MouseJointDef = function() {
   // The constructor for b2JointDef

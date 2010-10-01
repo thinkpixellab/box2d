@@ -31,8 +31,8 @@ goog.require('box2d.Joint');
 // Cdot = w2 - w1
 // J = [0 0 -1 0 0 1]
 // K = invI1 + invI2
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.RevoluteJoint = function(def) {
   // The constructor for b2Joint

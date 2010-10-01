@@ -18,9 +18,9 @@
 
 goog.provide('box2d.PrismaticJoint');
 
+goog.require('box2d.Jacobian');
 goog.require('box2d.Joint');
 goog.require('box2d.Vec2');
-goog.require('box2d.Jacobian');
 
 // Linear constraint (point-to-line)
 // d = p2 - p1 = x2 + r2 - x1 - r1

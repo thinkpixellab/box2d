@@ -1,11 +1,11 @@
 goog.provide('box2d.JointFactory');
 
-goog.require('box2d.RevoluteJoint');
-goog.require('box2d.PrismaticJoint');
-goog.require('box2d.MouseJoint');
 goog.require('box2d.DistanceJoint');
-goog.require('box2d.PulleyJoint');
 goog.require('box2d.GearJoint');
+goog.require('box2d.MouseJoint');
+goog.require('box2d.PrismaticJoint');
+goog.require('box2d.PulleyJoint');
+goog.require('box2d.RevoluteJoint');
 
 box2d.JointFactory.Create = function(def, allocator) {
   var joint = null;

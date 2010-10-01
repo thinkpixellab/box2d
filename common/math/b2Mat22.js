@@ -23,7 +23,7 @@ goog.provide('box2d.Mat22');
  @param {box2d.Vec2=} c1
  @param {box2d.Vec2=} c2 */
 box2d.Mat22 = function(angle, c1, c2) {
-  if (angle == null ) angle = 0;
+  if (angle == null) angle = 0;
   // initialize instance variables for references
 
   /** @type {box2d.Vec2} */

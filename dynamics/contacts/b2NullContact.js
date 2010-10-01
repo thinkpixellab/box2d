@@ -63,7 +63,6 @@ box2d.NullContact = function(s1, s2) {
   this.m_node2.other = null;
   //
 };
-
 goog.inherits(box2d.NullContact, box2d.Contact);
 
 box2d.NullContact.prototype.Evaluate = function() {};

@@ -21,8 +21,8 @@ goog.provide('box2d.AABB');
 goog.require('box2d.Vec2');
 
 // A manifold for two touching convex shapes.
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.AABB = function() {
 

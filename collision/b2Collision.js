@@ -48,7 +48,7 @@ box2d.Collision.ClipSegmentToLine = function(vOut, vIn, normal, offset) {
       vOut[numOut].id = vIn[0].id;
     } else {
       vOut[numOut].id = vIn[1].id;
-    }++numOut;
+    } ++numOut;
   }
 
   return numOut;

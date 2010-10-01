@@ -17,8 +17,8 @@
 */
 
 goog.provide('box2d.ContactSolver');
-goog.require('box2d.Settings');
 goog.require('box2d.ContactConstraint');
+goog.require('box2d.Settings');
 
 /**
  @constructor

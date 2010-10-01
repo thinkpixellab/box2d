@@ -18,8 +18,8 @@
 
 goog.provide('box2d.DistanceJointDef');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.DistanceJointDef = function() {
   // The constructor for b2JointDef

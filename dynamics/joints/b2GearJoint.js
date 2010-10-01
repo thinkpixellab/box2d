@@ -19,8 +19,8 @@
 goog.provide('box2d.GearJoint');
 
 goog.require('box2d.Joint');
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.GearJoint = function(def) {
   // The constructor for b2Joint

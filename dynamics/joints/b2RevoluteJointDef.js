@@ -18,12 +18,12 @@
 
 goog.provide('box2d.RevoluteJointDef');
 
-goog.require('box2d.Vec2');
-goog.require('box2d.JointDef');
 goog.require('box2d.Joint');
+goog.require('box2d.JointDef');
+goog.require('box2d.Vec2');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.RevoluteJointDef = function() {
   // The constructor for b2JointDef

@@ -18,8 +18,8 @@
 
 goog.provide('box2d.JointNode');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.JointNode = function() {};
 

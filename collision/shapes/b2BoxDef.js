@@ -42,5 +42,4 @@ box2d.BoxDef = function() {
   /** @type {box2d.Vec2} */
   this.extents = new box2d.Vec2(1.0, 1.0);
 };
-
 goog.inherits(box2d.BoxDef, box2d.ShapeDef);

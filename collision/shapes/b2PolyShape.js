@@ -18,10 +18,10 @@
 
 goog.provide('box2d.PolyShape');
 goog.require('box2d.Mat22');
-goog.require('box2d.Vec2');
+goog.require('box2d.OBB');
 goog.require('box2d.Settings');
 goog.require('box2d.Shape');
-goog.require('box2d.OBB');
+goog.require('box2d.Vec2');
 
 // A convex polygon. The position of the polygon (m_position) is the
 // position of the centroid. The vertices of the incoming polygon are pre-rotated
@@ -31,7 +31,7 @@ goog.require('box2d.OBB');
 // the polygon position is centered on the polygon centroid. This simplifies
 // some collision algorithms.
 /**
- @constructor 
+ @constructor
  @extends {box2d.Shape}
  */
 box2d.PolyShape = function(def, body, newOrigin) {
@@ -271,7 +271,6 @@ box2d.PolyShape = function(def, body, newOrigin) {
     this.m_body.Freeze();
   }
 };
-
 goog.inherits(box2d.PolyShape, box2d.Shape);
 
 box2d.PolyShape.prototype.TestPoint = function(p) {

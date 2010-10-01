@@ -18,13 +18,13 @@
 
 goog.provide('box2d.World');
 
-goog.require('box2d.TimeStep');
-goog.require('box2d.ContactManager');
-goog.require('box2d.CollisionFilter');
-goog.require('box2d.BroadPhase');
 goog.require('box2d.Body');
+goog.require('box2d.BroadPhase');
+goog.require('box2d.CollisionFilter');
+goog.require('box2d.ContactManager');
 goog.require('box2d.Island');
 goog.require('box2d.JointFactory');
+goog.require('box2d.TimeStep');
 goog.require('box2d.WorldListener');
 
 /**
@@ -361,7 +361,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
     island.Clear();
     var stackCount = 0;
     stack[stackCount++] = seed;
-    seed.m_flags |= box2d.Body.e_islandFlag;;
+    seed.m_flags |= box2d.Body.e_islandFlag;
 
     // Perform a depth first search (DFS) on the constraint graph.
     while (stackCount > 0) {

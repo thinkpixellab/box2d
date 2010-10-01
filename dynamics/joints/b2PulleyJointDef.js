@@ -24,8 +24,8 @@ goog.provide('box2d.PulleyJointDef');
 // Yes, the force transmitted is scaled by the ratio.
 // The pulley also enforces a maximum length limit on both sides. This is
 // useful to prevent one side of the pulley hitting the top.
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.PulleyJointDef = function() {
   // The constructor for b2JointDef

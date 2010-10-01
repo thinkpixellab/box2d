@@ -18,10 +18,10 @@
 
 goog.provide('box2d.CircleShape');
 
-goog.require('box2d.Mat22');
-goog.require('box2d.Vec2');
 goog.require('box2d.AABB');
+goog.require('box2d.Mat22');
 goog.require('box2d.Shape');
+goog.require('box2d.Vec2');
 
 /**
  @constructor
@@ -87,7 +87,6 @@ box2d.CircleShape = function(def, body, localCenter) {
     this.m_body.Freeze();
   }
 };
-
 goog.inherits(box2d.CircleShape, box2d.Shape);
 
 box2d.CircleShape.prototype.TestPoint = function(p) {

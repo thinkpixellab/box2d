@@ -20,8 +20,8 @@ goog.provide('box2d.JointDef');
 
 goog.require('box2d.Joint');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.JointDef = function() {
   this.type = box2d.Joint.e_unknownJoint;

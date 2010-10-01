@@ -18,12 +18,12 @@
 
 goog.provide('box2d.BroadPhase');
 
-goog.require('box2d.PairManager');
-goog.require('box2d.Vec2');
 goog.require('box2d.Bound');
-goog.require('box2d.Settings');
-goog.require('box2d.Proxy');
 goog.require('box2d.BoundValues');
+goog.require('box2d.PairManager');
+goog.require('box2d.Proxy');
+goog.require('box2d.Settings');
+goog.require('box2d.Vec2');
 
 /*
 This broad phase uses the Sweep and Prune algorithm in:
@@ -619,7 +619,7 @@ box2d.BroadPhase.prototype = {
             this.IncrementOverlapCount(bounds[i].proxyId);
             --s;
           }
-        }--i;
+        } --i;
       }
     }
 
@@ -669,7 +669,7 @@ box2d.BroadPhase.prototype = {
 /**
   @return {!Array.<box2d.Pair>}
 */
-box2d.BroadPhase.prototype.Commit= function() {
+box2d.BroadPhase.prototype.Commit = function() {
   return this.m_pairManager.Commit();
 };
 

@@ -124,8 +124,8 @@ box2d.Shape.Destroy = function(shape) {
     shape.m_body.m_world.m_broadPhase.DestroyProxy(shape.m_proxyId);
   }
 };
-/** 
- @const 
+/**
+ @const
  @type {number}
  */
 box2d.Shape.e_unknownShape = -1;

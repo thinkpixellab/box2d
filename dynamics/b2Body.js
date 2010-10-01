@@ -17,17 +17,17 @@
 */
 
 goog.provide('box2d.Body');
-goog.require('box2d.Mat22');
-goog.require('box2d.Vec2');
-goog.require('box2d.Math');
 goog.require('box2d.MassData');
+goog.require('box2d.Mat22');
+goog.require('box2d.Math');
 goog.require('box2d.ShapeFactory');
+goog.require('box2d.Vec2');
 
 // A rigid body. Internal computation are done in terms
 // of the center of mass position. The center of mass may
 // be offset from the body's origin.
-/** 
- @constructor 
+/**
+ @constructor
  @param {!box2d.BodyDef} bd
  @param {!box2d.World} world
  */

@@ -18,8 +18,8 @@
 
 goog.provide('box2d.CircleDef');
 goog.require('box2d.Shape');
-goog.require('box2d.Vec2');
 goog.require('box2d.ShapeDef');
+goog.require('box2d.Vec2');
 
 /**
   @constructor
@@ -41,5 +41,4 @@ box2d.CircleDef = function() {
     this.type = box2d.Shape.e_circleShape;
     this.radius = 1.0;
 };
-
 goog.inherits(box2d.CircleDef, box2d.ShapeDef);

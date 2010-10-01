@@ -31,10 +31,10 @@ box2d.Proxy = function() {
 };
 
 box2d.Proxy.prototype = {
-  GetNext: function(){ return this.lowerBounds[0]; },
+  GetNext: function() { return this.lowerBounds[0]; },
   SetNext: function(next) { this.lowerBounds[0] = next /*& 0x0000ffff*/; },
 
-  IsValid: function(){ return this.overlapCount != box2d.Settings.invalid; },
+  IsValid: function() { return this.overlapCount != box2d.Settings.invalid; },
 
   lowerBounds: [/*uint*/(0), /*uint*/(0)],
   upperBounds: [/*uint*/(0), /*uint*/(0)],

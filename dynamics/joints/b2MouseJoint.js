@@ -25,8 +25,8 @@ goog.provide('box2d.MouseJoint');
 // J = [I r_skew]
 // Identity used:
 // w k % (rx i + ry j) = w * (-ry i + rx j)
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.MouseJoint = function(def) {
   // The constructor for b2Joint

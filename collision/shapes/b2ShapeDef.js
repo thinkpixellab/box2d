@@ -42,7 +42,7 @@ box2d.ShapeDef.prototype.ComputeMass = function(massData) {
     massData.mass = 0.0;
     massData.center.Set(0.0, 0.0);
     massData.I = 0.0;
-  };
+  }
 
   switch (this.type) {
   case box2d.Shape.e_circleShape:

@@ -18,9 +18,9 @@
 
 goog.provide('box2d.CircleContact');
 
+goog.require('box2d.Collision');
 goog.require('box2d.Contact');
 goog.require('box2d.Manifold');
-goog.require('box2d.Collision');
 
 /**
  @constructor

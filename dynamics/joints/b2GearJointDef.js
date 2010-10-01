@@ -28,8 +28,8 @@ goog.provide('box2d.GearJointDef');
 //
 // RESTRICITON: The revolute and prismatic joints must be attached to
 // a fixed body (which must be body1 on those joints).
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.GearJointDef = function() {
   this.type = box2d.Joint.e_gearJoint;

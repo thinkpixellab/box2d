@@ -20,7 +20,7 @@ goog.provide('box2d.Joint');
 
 goog.require('box2d.JointNode');
 
-/** 
+/**
  @constructor
  */
 box2d.Joint = function(def) {
@@ -102,58 +102,58 @@ box2d.Joint.prototype = {
   // enum b2LimitState
 };
 
-/** 
+/**
  @const
  @type {number}
  */
 box2d.Joint.e_unknownJoint = 0;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_revoluteJoint = 1;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_prismaticJoint = 2;
 /**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_distanceJoint = 3;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_pulleyJoint = 4;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_mouseJoint = 5;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_gearJoint = 6;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_inactiveLimit = 0;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_atLowerLimit = 1;
 /**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_atUpperLimit = 2;
-/** 
+/**
  @const
- @type {number} 
+ @type {number}
  */
 box2d.Joint.e_equalLimits = 3;

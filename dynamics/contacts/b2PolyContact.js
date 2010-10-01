@@ -19,8 +19,8 @@
 goog.provide('box2d.PolyContact');
 
 goog.require('box2d.ContactNode');
-goog.require('box2d.Math');
 goog.require('box2d.Manifold');
+goog.require('box2d.Math');
 
 /**
   @constructor
@@ -70,7 +70,6 @@ box2d.PolyContact = function(s1, s2) {
   //box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.e_polyShape);
   this.m_manifold[0].pointCount = 0;
 };
-
 goog.inherits(box2d.PolyContact, box2d.Contact);
 
 box2d.PolyContact.prototype.Evaluate = function() {

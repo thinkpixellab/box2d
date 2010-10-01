@@ -22,8 +22,8 @@ goog.require('box2d.Contact');
 goog.require('box2d.ContactNode');
 goog.require('box2d.Manifold');
 
-/** 
- @constructor 
+/**
+ @constructor
  */
 box2d.PolyAndCircleContact = function(s1, s2) {
   // The constructor for box2d.Contact

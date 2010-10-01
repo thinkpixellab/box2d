@@ -19,7 +19,7 @@
 goog.provide('box2d.Math');
 
 /**
- @const 
+ @const
  @param {number} x
  @return {boolean}
  */
@@ -27,7 +27,7 @@ box2d.Math.b2IsValid = function(x) {
   return isFinite(x);
 };
 /**
- @const 
+ @const
  @param {box2d.Vec2} a
  @param {box2d.Vec2} b
  @return {number}
@@ -36,7 +36,7 @@ box2d.Math.b2Dot = function(a, b) {
   return a.x * b.x + a.y * b.y;
 };
 /**
- @const 
+ @const
  @param {box2d.Vec2} a
  @param {box2d.Vec2} b
  @return {number}
@@ -45,7 +45,7 @@ box2d.Math.b2CrossVV = function(a, b) {
   return a.x * b.y - a.y * b.x;
 };
 /**
- @const 
+ @const
  @param {box2d.Vec2} a
  @param {number} s
  @return {box2d.Vec2}
@@ -54,7 +54,7 @@ box2d.Math.b2CrossVF = function(a, s) {
   return new box2d.Vec2(s * a.y, -s * a.x);
 };
 /**
- @const 
+ @const
  @param {number} s
  @param {box2d.Vec2} a
  @return {!box2d.Vec2}
@@ -63,7 +63,7 @@ box2d.Math.b2CrossFV = function(s, a) {
   return new box2d.Vec2(-s * a.y, s * a.x);
 };
 /**
- @const 
+ @const
  @param {!box2d.Mat22} A
  @param {!box2d.Vec2} v
  @return {!box2d.Vec2}
@@ -73,7 +73,7 @@ box2d.Math.b2MulMV = function(A, v) {
   return u;
 };
 /**
- @const 
+ @const
  @return {box2d.Vec2}
  */
 box2d.Math.b2MulTMV = function(A, v) {
@@ -81,7 +81,7 @@ box2d.Math.b2MulTMV = function(A, v) {
   return u;
 };
 /**
- @const 
+ @const
  @param {box2d.Vec2} a
  @param {box2d.Vec2} b
  @return {!box2d.Vec2}

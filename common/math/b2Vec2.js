@@ -30,13 +30,13 @@ goog.require('box2d.Math');
 */
 box2d.Vec2 = function(x_, y_) {
 
-  if(x_ === undefined){
+  if (x_ === undefined) {
     x_ = 0;
   }
   /** @type {number} */
   this.x = x_;
 
-  if(y_ === undefined){
+  if (y_ === undefined) {
     y_ = 0;
   }
   /** @type {number} */

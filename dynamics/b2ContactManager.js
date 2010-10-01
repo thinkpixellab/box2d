@@ -19,11 +19,11 @@
 goog.provide('box2d.ContactManager');
 
 goog.require('box2d.Contact');
-goog.require('box2d.PairCallback');
-goog.require('box2d.NullContact');
 goog.require('box2d.ContactFactory');
+goog.require('box2d.NullContact');
+goog.require('box2d.PairCallback');
 
-/** 
+/**
  @constructor
  @extends {box2d.PairCallback}
  @param {!box2d.World} world
@@ -41,7 +41,6 @@ box2d.ContactManager = function(world) {
   this.m_world = world;
   this.m_destroyImmediate = false;
 };
-
 goog.inherits(box2d.ContactManager, box2d.PairCallback);
 
 /**
