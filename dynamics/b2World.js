@@ -51,6 +51,9 @@ box2d.World = function(worldAABB, gravity, doSleep) {
 
   this.m_bodyList = null;
 
+  /**
+   @type {box2d.Contact}
+   */
   this.m_contactList = null;
   this.m_jointList = null;
 
