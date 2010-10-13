@@ -23,23 +23,19 @@ goog.require('box2d.Vec2');
 
 /**
  @constructor
-*/
+ */
 box2d.ContactConstraint = function() {
-  // initialize instance variables for references
+  this.manifold = null;
+  this.body1 = null;
+  this.body2 = null;
+  this.friction = null;
+  this.restitution = null;
+  this.pointCount = 0;
   this.normal = new box2d.Vec2();
-  //
+
   this.points = new Array(box2d.Settings.b2_maxManifoldPoints);
   for (var i = 0; i < box2d.Settings.b2_maxManifoldPoints; i++) {
     this.points[i] = new box2d.ContactConstraintPoint();
   }
 
-};
-
-box2d.ContactConstraint.prototype = {
-  manifold: null,
-  body1: null,
-  body2: null,
-  friction: null,
-  restitution: null,
-  pointCount: 0
 };

@@ -22,11 +22,7 @@ goog.require('box2d.Vec2');
 
 /** @constructor */
 box2d.MassData = function() {
+  this.I = 0.0;
+  this.mass = 0.0;
   this.center = new box2d.Vec2(0, 0);
-};
-
-box2d.MassData.prototype = {
-  mass: 0.0,
-  center: new box2d.Vec2(0, 0),
-  I: 0.0
 };

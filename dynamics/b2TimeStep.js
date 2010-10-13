@@ -21,9 +21,8 @@ goog.provide('box2d.TimeStep');
 /**
   @constructor
  */
-box2d.TimeStep = function() {};
-box2d.TimeStep.prototype = {
-  dt: null,
-  inv_dt: null,
-  iterations: 0
+box2d.TimeStep = function() {
+  this.dt = null;
+  this.inv_dt = null;
+  this.iterations = 0;
 };

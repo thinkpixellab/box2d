@@ -21,10 +21,9 @@ goog.provide('box2d.ContactNode');
 /**
  @constructor
  */
-box2d.ContactNode = function() {};
-box2d.ContactNode.prototype = {
-  other: null,
-  contact: null,
-  prev: null,
-  next: null
+box2d.ContactNode = function() {
+  this.other = null;
+  this.contact = null;
+  this.prev = null;
+  this.next = null;
 };

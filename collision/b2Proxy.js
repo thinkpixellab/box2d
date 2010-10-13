@@ -21,26 +21,20 @@ goog.provide('box2d.Proxy');
 goog.require('box2d.Settings');
 
 /**
-  @constructor
-*/
+ @constructor
+ */
 box2d.Proxy = function() {
   // initialize instance variables for references
   this.lowerBounds = [/*uint*/(0), /*uint*/(0)];
   this.upperBounds = [/*uint*/(0), /*uint*/(0)];
-  //
+  this.overlapCount = 0;
+  this.timeStamp = 0;
+  this.userData = null;
 };
 
 box2d.Proxy.prototype = {
   GetNext: function() { return this.lowerBounds[0]; },
   SetNext: function(next) { this.lowerBounds[0] = next /*& 0x0000ffff*/; },
 
-  IsValid: function() { return this.overlapCount != box2d.Settings.invalid; },
-
-  lowerBounds: [/*uint*/(0), /*uint*/(0)],
-  upperBounds: [/*uint*/(0), /*uint*/(0)],
-  overlapCount: 0,
-  timeStamp: 0,
-
-  userData: null
-
+  IsValid: function() { return this.overlapCount != box2d.Settings.invalid; }
 };

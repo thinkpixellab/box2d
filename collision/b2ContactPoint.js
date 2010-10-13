@@ -29,10 +29,8 @@ box2d.ContactPoint = function() {
   // initialize instance variables for references
   this.position = new box2d.Vec2();
   this.id = new box2d.ContactID();
-  //
-};
-box2d.ContactPoint.prototype = {
-  separation: null,
-  normalImpulse: null,
-  tangentImpulse: null
+
+  this.separation = null;
+  this.normalImpulse = null;
+  this.tangentImpulse = null;
 };

@@ -30,12 +30,3 @@ box2d.JointDef = function() {
   this.body2 = null;
   this.collideConnected = false;
 };
-
-box2d.JointDef.prototype = {
-
-  type: 0,
-  userData: null,
-  body1: null,
-  body2: null,
-  collideConnected: null
-};

@@ -83,26 +83,7 @@ box2d.Contact.prototype = {
   // this.m_flags
   // enum
   //virtual ~box2d.Contact() {}
-  Evaluate: function() {},
-
-  m_flags: 0,
-
-  // World pool and list pointers.
-  m_prev: null,
-  m_next: null,
-
-  // Nodes for connecting bodies.
-  m_node1: new box2d.ContactNode(),
-  m_node2: new box2d.ContactNode(),
-
-  m_shape1: null,
-  m_shape2: null,
-
-  m_manifoldCount: 0,
-
-  // Combined friction
-  m_friction: null,
-  m_restitution: null
+  Evaluate: function() {}
 };
 /*
   @const

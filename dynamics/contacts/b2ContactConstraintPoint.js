@@ -21,19 +21,16 @@ goog.provide('box2d.ContactConstraintPoint');
 goog.require('box2d.Vec2');
 
 /**
-  @constructor
-*/
+ @constructor
+ */
 box2d.ContactConstraintPoint = function() {
   this.localAnchor1 = new box2d.Vec2();
   this.localAnchor2 = new box2d.Vec2();
-};
-
-box2d.ContactConstraintPoint.prototype = {
-  normalImpulse: null,
-  tangentImpulse: null,
-  positionImpulse: null,
-  normalMass: null,
-  tangentMass: null,
-  separation: null,
-  velocityBias: null
+  this.normalImpulse = null;
+  this.tangentImpulse = null;
+  this.positionImpulse = null;
+  this.normalMass = null;
+  this.tangentMass = null;
+  this.separation = null;
+  this.velocityBias = null;
 };

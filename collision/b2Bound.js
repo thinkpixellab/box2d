@@ -21,29 +21,34 @@ goog.provide('box2d.Bound');
 /**
  @constructor
  */
-box2d.Bound = function() {};
-box2d.Bound.prototype = {
-  IsLower: function() {
-    return (this.value & 1) == 0;
-  },
-  IsUpper: function() {
-    return (this.value & 1) == 1;
-  },
-  Swap: function(b) {
-    var tempValue = this.value;
-    var tempProxyId = this.proxyId;
-    var tempStabbingCount = this.stabbingCount;
+box2d.Bound = function() {
+  this.value = 0;
+  this.proxyId = 0;
+  this.stabbingCount = 0;
+};
 
-    this.value = b.value;
-    this.proxyId = b.proxyId;
-    this.stabbingCount = b.stabbingCount;
+/**
+ @return {boolean}
+*/
+box2d.Bound.prototype.IsLower = function() {
+  return (this.value & 1) == 0;
+};
+/**
+ @return {boolean}
+*/
+box2d.Bound.prototype.IsUpper = function() {
+  return (this.value & 1) == 1;
+};
+box2d.Bound.prototype.Swap = function(b) {
+  var tempValue = this.value;
+  var tempProxyId = this.proxyId;
+  var tempStabbingCount = this.stabbingCount;
 
-    b.value = tempValue;
-    b.proxyId = tempProxyId;
-    b.stabbingCount = tempStabbingCount;
-  },
+  this.value = b.value;
+  this.proxyId = b.proxyId;
+  this.stabbingCount = b.stabbingCount;
 
-  value: 0,
-  proxyId: 0,
-  stabbingCount: 0
+  b.value = tempValue;
+  b.proxyId = tempProxyId;
+  b.stabbingCount = tempStabbingCount;
 };

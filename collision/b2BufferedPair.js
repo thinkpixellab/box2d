@@ -21,9 +21,7 @@ goog.provide('box2d.BufferedPair');
 /**
  @constructor
  */
-box2d.BufferedPair = function() {};
-
-box2d.BufferedPair.prototype = {
-  proxyId1: 0,
-  proxyId2: 0
+box2d.BufferedPair = function() {
+  this.proxyId1 = 0;
+  this.proxyId2 = 0;
 };

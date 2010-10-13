@@ -21,9 +21,8 @@ goog.provide('box2d.ContactRegister');
 /**
  @constructor
  */
-box2d.ContactRegister = function() {};
-box2d.ContactRegister.prototype = {
-  createFcn: null,
-  destroyFcn: null,
-  primary: null
+box2d.ContactRegister = function() {
+  this.createFcn = null;
+  this.destroyFcn = null;
+  this.primary = null;
 };

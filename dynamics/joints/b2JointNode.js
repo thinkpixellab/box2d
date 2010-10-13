@@ -21,13 +21,9 @@ goog.provide('box2d.JointNode');
 /**
  @constructor
  */
-box2d.JointNode = function() {};
-
-box2d.JointNode.prototype = {
-
-  other: null,
-  joint: null,
-  prev: null,
-  next: null
-
+box2d.JointNode = function() {
+  this.other = null;
+  this.joint = null;
+  this.prev = null;
+  this.next = null;
 };

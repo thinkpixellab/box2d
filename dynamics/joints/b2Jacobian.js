@@ -31,9 +31,7 @@ box2d.Jacobian = function() {
 };
 
 box2d.Jacobian.prototype = {
-  linear1: new box2d.Vec2(),
   angular1: null,
-  linear2: new box2d.Vec2(),
   angular2: null,
 
   SetZero: function() {
