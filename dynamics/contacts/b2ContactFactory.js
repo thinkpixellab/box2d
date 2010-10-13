@@ -5,7 +5,7 @@ goog.require('box2d.PolyAndCircleContact');
 goog.require('box2d.PolyContact');
 
 /**
- @returns {box2d.Contact}
+ @return {box2d.Contact}
  */
 box2d.ContactFactory.Create = function(shape1, shape2, allocator) {
   if (box2d.ContactFactory.s_initialized == false) {
