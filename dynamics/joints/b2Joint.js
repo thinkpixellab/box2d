@@ -25,7 +25,13 @@ goog.require('box2d.JointNode');
  */
 box2d.Joint = function(def) {
   // initialize instance variables for references
+  /**
+   @type {!box2d.JointNode}
+   */
   this.m_node1 = new box2d.JointNode();
+  /**
+   @type {!box2d.JointNode}
+   */
   this.m_node2 = new box2d.JointNode();
   //
   this.m_type = def.type;
@@ -38,68 +44,43 @@ box2d.Joint = function(def) {
   this.m_userData = def.userData;
 };
 
-box2d.Joint.prototype = {
-  GetType: function() {
-    return this.m_type;
-  },
+box2d.Joint.prototype.GetType = function() {
+  return this.m_type;
+};
+box2d.Joint.prototype.GetAnchor1 = function() {
+  return null;
+};
+box2d.Joint.prototype.GetAnchor2 = function() {
+  return null;
+};
+box2d.Joint.prototype.GetReactionForce = function(invTimeStep) {
+  return null;
+};
+box2d.Joint.prototype.GetReactionTorque = function(invTimeStep) {
+  return 0.0;
+};
+box2d.Joint.prototype.GetBody1 = function() {
+  return this.m_body1;
+};
+box2d.Joint.prototype.GetBody2 = function() {
+  return this.m_body2;
+};
+box2d.Joint.prototype.GetNext = function() {
+  return this.m_next;
+};
+box2d.Joint.prototype.GetUserData = function() {
+  return this.m_userData;
+};
 
-  GetAnchor1: function() {
-    return null;
-  },
-  GetAnchor2: function() {
-    return null;
-  },
+//--------------- Internals Below -------------------
+//virtual ~b2Joint() {}
+box2d.Joint.prototype.PrepareVelocitySolver = function() {};
+box2d.Joint.SolveVelocityConstraints = function(step) {};
 
-  GetReactionForce: function(invTimeStep) {
-    return null;
-  },
-  GetReactionTorque: function(invTimeStep) {
-    return 0.0;
-  },
-
-  GetBody1: function() {
-    return this.m_body1;
-  },
-
-  GetBody2: function() {
-    return this.m_body2;
-  },
-
-  GetNext: function() {
-    return this.m_next;
-  },
-
-  GetUserData: function() {
-    return this.m_userData;
-  },
-
-  //--------------- Internals Below -------------------
-  //virtual ~b2Joint() {}
-  PrepareVelocitySolver: function() {},
-  SolveVelocityConstraints: function(step) {},
-
-  // This returns true if the position errors are within tolerance.
-  PreparePositionSolver: function() {},
-  SolvePositionConstraints: function() {
-    return false;
-  },
-
-  m_type: 0,
-  m_prev: null,
-  m_next: null,
-  m_node1: new box2d.JointNode(),
-  m_node2: new box2d.JointNode(),
-  m_body1: null,
-  m_body2: null,
-
-  m_islandFlag: null,
-  m_collideConnected: null,
-
-  m_userData: null
-
-  // ENUMS
-  // enum b2JointType
-  // enum b2LimitState
+// This returns true if the position errors are within tolerance.
+box2d.Joint.prototype.PreparePositionSolver = function() {};
+box2d.Joint.prototype.SolvePositionConstraints = function() {
+  return false;
 };
 
 /**

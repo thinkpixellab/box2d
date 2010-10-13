@@ -148,6 +148,9 @@ box2d.Body = function(bd, world) {
   this.m_linearVelocity = box2d.Math.AddVV(bd.linearVelocity, box2d.Math.b2CrossFV(bd.angularVelocity, this.m_center));
   this.m_angularVelocity = bd.angularVelocity;
 
+  /**
+   @type {box2d.Joint}
+   */
   this.m_jointList = null;
   this.m_contactList = null;
   this.m_prev = null;
