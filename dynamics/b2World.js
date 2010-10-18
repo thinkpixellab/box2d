@@ -176,6 +176,14 @@ box2d.World.prototype.CleanBodyList = function() {
       this.DestroyJoint(jn0.joint);
     }
 
+    // Delete the attached contacts.
+    var contact = b0.m_contactList;
+    while (contact) {
+      var contact0 = contact;
+      contact = contact.next;
+      this.m_contactManager.DestroyContact(contact0.contact);
+    }
+
     b0.Destroy();
   }
 
@@ -321,11 +329,11 @@ box2d.World.prototype.Step = function(dt, iterations) {
 
   this.m_positionIterationCount = 0;
 
-  // Handle deferred contact destruction.
-  this.m_contactManager.CleanContactList();
-
   // Handle deferred body destruction.
   this.CleanBodyList();
+
+  // Handle deferred contact destruction.
+  this.m_contactManager.CleanContactList();
 
   // Update contacts.
   this.m_contactManager.Collide();
