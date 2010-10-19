@@ -31,12 +31,12 @@ goog.require('box2d.JointDef');
  @extends {box2d.JointDef}
  */
 box2d.PulleyJointDef = function() {
+  box2d.JointDef.call(this, true);
   // The constructor for b2JointDef
   this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
-  this.collideConnected = false;
   //
   // initialize instance variables for references
   this.groundPoint1 = new box2d.Vec2();
@@ -52,6 +52,5 @@ box2d.PulleyJointDef = function() {
   this.maxLength1 = 0.5 * box2d.PulleyJoint.b2_minPulleyLength;
   this.maxLength2 = 0.5 * box2d.PulleyJoint.b2_minPulleyLength;
   this.ratio = 1.0;
-  this.collideConnected = true;
 };
 goog.inherits(box2d.PulleyJointDef, box2d.JointDef);

@@ -22,11 +22,16 @@ goog.require('box2d.Joint');
 
 /**
  @constructor
+ @param {boolean} collideConnected
  */
-box2d.JointDef = function() {
+box2d.JointDef = function(collideConnected) {
   this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
-  this.collideConnected = false;
+  this.m_collideConnected = collideConnected;
+};
+
+box2d.JointDef.prototype.getCollideConnected = function() {
+  return this.m_collideConnected;
 };

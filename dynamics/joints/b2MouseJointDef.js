@@ -25,12 +25,13 @@ goog.require('box2d.JointDef');
  @extends {box2d.JointDef}
  */
 box2d.MouseJointDef = function() {
+  box2d.JointDef.call(this, false);
+
   // The constructor for b2JointDef
   this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
-  this.collideConnected = false;
   //
   // initialize instance variables for references
   this.target = new box2d.Vec2();

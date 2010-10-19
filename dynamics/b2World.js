@@ -23,6 +23,7 @@ goog.require('box2d.BroadPhase');
 goog.require('box2d.CollisionFilter');
 goog.require('box2d.ContactManager');
 goog.require('box2d.Island');
+goog.require('box2d.JointDef');
 goog.require('box2d.JointFactory');
 goog.require('box2d.TimeStep');
 goog.require('box2d.WorldListener');
@@ -182,6 +183,11 @@ box2d.World.prototype.CleanBodyList = function() {
 
   this.m_contactManager.m_destroyImmediate = false;
 };
+
+/**
+ @param {!box2d.JointDef} def
+ @return {!box2d.Joint}
+ */
 box2d.World.prototype.CreateJoint = function(def) {
   var j = box2d.JointFactory.Create(def);
 
@@ -210,7 +216,7 @@ box2d.World.prototype.CreateJoint = function(def) {
   j.m_body2.m_jointList = j.m_node2;
 
   // If the joint prevents collisions, then reset collision filtering.
-  if (def.collideConnected == false) {
+  if (def.getCollideConnected() == false) {
     // Reset the proxies on the body with the minimum number of shapes.
     var b = def.body1.m_shapeCount < def.body2.m_shapeCount ? def.body1 : def.body2;
     for (var s = b.m_shapeList; s; s = s.m_next) {

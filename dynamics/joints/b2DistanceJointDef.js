@@ -24,12 +24,13 @@ goog.require('box2d.JointDef');
  @extends {box2d.JointDef}
  */
 box2d.DistanceJointDef = function() {
+  box2d.JointDef.call(this, false);
+
   // The constructor for b2JointDef
   this.type = box2d.Joint.e_unknownJoint;
   this.userData = null;
   this.body1 = null;
   this.body2 = null;
-  this.collideConnected = false;
   //
   // initialize instance variables for references
   this.anchorPoint1 = new box2d.Vec2();

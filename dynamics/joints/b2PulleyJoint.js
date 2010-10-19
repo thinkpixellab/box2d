@@ -35,7 +35,7 @@ box2d.PulleyJoint = function(def) {
   this.m_next = null;
   this.m_body1 = def.body1;
   this.m_body2 = def.body2;
-  this.m_collideConnected = def.collideConnected;
+  this.m_collideConnected = def.getCollideConnected();
   this.m_islandFlag = false;
   this.m_userData = def.userData;
   //
