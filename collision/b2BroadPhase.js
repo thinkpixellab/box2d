@@ -45,14 +45,16 @@ Bullet (http:/www.bulletphysics.com).
 //   worlds (use a multi-SAP instead), it is not great for large objects.
 /**
  @constructor
+ @param {!box2d.AABB} worldAABB
+ @param {!box2d.ContactManager} callback
  */
 box2d.BroadPhase = function(worldAABB, callback) {
   // initialize instance variables for references
   this.m_pairManager = new box2d.PairManager();
 
   /**
-    @type {!Array.<box2d.Proxy>}
-  */
+   @type {!Array.<box2d.Proxy>}
+   */
   this.proxyPool = new Array(box2d.Settings.b2_maxPairs);
   this.m_bounds = new Array(2 * box2d.Settings.b2_maxProxies);
   this.m_queryResults = new Array(box2d.Settings.b2_maxProxies);
@@ -111,574 +113,560 @@ box2d.BroadPhase = function(worldAABB, callback) {
   this.m_queryResultCount = 0;
 };
 
-box2d.BroadPhase.prototype = {
+//~b2BroadPhase();
+// Use this to see if your proxy is in range. If it is not in range,
+// it should be destroyed. Otherwise you may get O(m^2) pairs, where m
+// is the number of proxies that are out of range.
+box2d.BroadPhase.prototype.InRange = function(aabb) {
+  //var d = box2d.Math.b2MaxV(box2d.Math.SubtractVV(aabb.minVertex, this.m_worldAABB.maxVertex), box2d.Math.SubtractVV(this.m_worldAABB.minVertex, aabb.maxVertex));
+  var dX;
+  var dY;
+  var d2X;
+  var d2Y;
 
-  //~b2BroadPhase();
-  // Use this to see if your proxy is in range. If it is not in range,
-  // it should be destroyed. Otherwise you may get O(m^2) pairs, where m
-  // is the number of proxies that are out of range.
-  InRange: function(aabb) {
-    //var d = box2d.Math.b2MaxV(box2d.Math.SubtractVV(aabb.minVertex, this.m_worldAABB.maxVertex), box2d.Math.SubtractVV(this.m_worldAABB.minVertex, aabb.maxVertex));
-    var dX;
-    var dY;
-    var d2X;
-    var d2Y;
+  dX = aabb.minVertex.x;
+  dY = aabb.minVertex.y;
+  dX -= this.m_worldAABB.maxVertex.x;
+  dY -= this.m_worldAABB.maxVertex.y;
 
-    dX = aabb.minVertex.x;
-    dY = aabb.minVertex.y;
-    dX -= this.m_worldAABB.maxVertex.x;
-    dY -= this.m_worldAABB.maxVertex.y;
+  d2X = this.m_worldAABB.minVertex.x;
+  d2Y = this.m_worldAABB.minVertex.y;
+  d2X -= aabb.maxVertex.x;
+  d2Y -= aabb.maxVertex.y;
 
-    d2X = this.m_worldAABB.minVertex.x;
-    d2Y = this.m_worldAABB.minVertex.y;
-    d2X -= aabb.maxVertex.x;
-    d2Y -= aabb.maxVertex.y;
+  dX = box2d.Math.b2Max(dX, d2X);
+  dY = box2d.Math.b2Max(dY, d2Y);
 
-    dX = box2d.Math.b2Max(dX, d2X);
-    dY = box2d.Math.b2Max(dY, d2Y);
+  return box2d.Math.b2Max(dX, dY) < 0.0;
+};
 
-    return box2d.Math.b2Max(dX, dY) < 0.0;
-  },
+// Get a single proxy. Returns NULL if the id is invalid.
+box2d.BroadPhase.prototype.GetProxy = function(proxyId) {
+  if (proxyId == box2d.Pair.b2_nullProxy || this.proxyPool[proxyId].IsValid() == false) {
+    return null;
+  }
 
-  // Get a single proxy. Returns NULL if the id is invalid.
-  GetProxy: function(proxyId) {
-    if (proxyId == box2d.Pair.b2_nullProxy || this.proxyPool[proxyId].IsValid() == false) {
-      return null;
+  return this.proxyPool[proxyId];
+};
+
+box2d.BroadPhase.prototype.DestroyProxy = function(proxyId) {
+
+  //box2d.Settings.b2Assert(0 < this.m_proxyCount && this.m_proxyCount <= b2_maxProxies);
+  var proxy = this.proxyPool[proxyId];
+  //box2d.Settings.b2Assert(proxy.IsValid());
+  var boundCount = 2 * this.m_proxyCount;
+
+  for (var axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
+
+    var lowerIndex = proxy.lowerBounds[axis];
+    var upperIndex = proxy.upperBounds[axis];
+    var lowerValue = bounds[lowerIndex].value;
+    var upperValue = bounds[upperIndex].value;
+
+    // replace memmove calls
+    //memmove(bounds + lowerIndex, bounds + lowerIndex + 1, (upperIndex - lowerIndex - 1) * sizeof(b2Bound));
+    var tArr = new Array();
+    var j = 0;
+    var tEnd = upperIndex - lowerIndex - 1;
+    var tBound1;
+    var tBound2;
+    // make temp array
+    for (j = 0; j < tEnd; j++) {
+      tArr[j] = new box2d.Bound();
+      tBound1 = tArr[j];
+      tBound2 = bounds[lowerIndex + 1 + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    // move temp array back in to bounds
+    tEnd = tArr.length;
+    var tIndex = lowerIndex;
+    for (j = 0; j < tEnd; j++) {
+      //bounds[tIndex+j] = tArr[j];
+      tBound2 = tArr[j];
+      tBound1 = bounds[tIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    //memmove(bounds + upperIndex-1, bounds + upperIndex + 1, (edgeCount - upperIndex - 1) * sizeof(b2Bound));
+    // make temp array
+    tArr = new Array();
+    tEnd = boundCount - upperIndex - 1;
+    for (j = 0; j < tEnd; j++) {
+      tArr[j] = new box2d.Bound();
+      tBound1 = tArr[j];
+      tBound2 = bounds[upperIndex + 1 + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    // move temp array back in to bounds
+    tEnd = tArr.length;
+    tIndex = upperIndex - 1;
+    for (j = 0; j < tEnd; j++) {
+      //bounds[tIndex+j] = tArr[j];
+      tBound2 = tArr[j];
+      tBound1 = bounds[tIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
     }
 
-    return this.proxyPool[proxyId];
-  },
+    // Fix bound indices.
+    tEnd = boundCount - 2;
+    for (var index = lowerIndex; index < tEnd; ++index) {
+      var proxy2 = this.proxyPool[bounds[index].proxyId];
+      if (bounds[index].IsLower()) {
+        proxy2.lowerBounds[axis] = index;
+      } else {
+        proxy2.upperBounds[axis] = index;
+      }
+    }
 
-  DestroyProxy: function(proxyId) {
+    // Fix stabbing count.
+    tEnd = upperIndex - 1;
+    for (var index2 = lowerIndex; index2 < tEnd; ++index2) {
+      bounds[index2].stabbingCount--;
+    }
 
-    //box2d.Settings.b2Assert(0 < this.m_proxyCount && this.m_proxyCount <= b2_maxProxies);
-    var proxy = this.proxyPool[proxyId];
+    // this.Query for pairs to be removed. lowerIndex and upperIndex are not needed.
+    // make lowerIndex and upper output using an array and do this for others if compiler doesn't pick them up
+    this.Query([0], [0], lowerValue, upperValue, bounds, boundCount - 2, axis);
+  }
+
+  //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
+  for (var i = 0; i < this.m_queryResultCount; ++i) {
+    //box2d.Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
+    this.m_pairManager.RemoveBufferedPair(proxyId, this.m_queryResults[i]);
+  }
+
+  this.m_pairManager.Commit();
+
+  // Prepare for next query.
+  this.m_queryResultCount = 0;
+  this.IncrementTimeStamp();
+
+  // Return the proxy to the pool.
+  proxy.userData = null;
+  proxy.overlapCount = box2d.Settings.invalid;
+  proxy.lowerBounds[0] = box2d.Settings.invalid;
+  proxy.lowerBounds[1] = box2d.Settings.invalid;
+  proxy.upperBounds[0] = box2d.Settings.invalid;
+  proxy.upperBounds[1] = box2d.Settings.invalid;
+
+  proxy.SetNext(this.m_freeProxy);
+  this.m_freeProxy = proxyId;
+  --this.m_proxyCount;
+};
+
+// this.Query an AABB for overlapping proxies, returns the user data and
+// the count, up to the supplied maximum count.
+box2d.BroadPhase.prototype.QueryAABB = function(aabb, userData, maxCount) {
+  var lowerValues = new Array();
+  var upperValues = new Array();
+  this.ComputeBounds(lowerValues, upperValues, aabb);
+
+  var lowerIndex = 0;
+  var upperIndex = 0;
+  var lowerIndexOut = [lowerIndex];
+  var upperIndexOut = [upperIndex];
+  this.Query(lowerIndexOut, upperIndexOut, lowerValues[0], upperValues[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
+  this.Query(lowerIndexOut, upperIndexOut, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
+
+  //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
+  var count = 0;
+  for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
+    //box2d.Settings.b2Assert(this.m_queryResults[i] < box2d.Settings.b2_maxProxies);
+    var proxy = this.proxyPool[this.m_queryResults[i]];
     //box2d.Settings.b2Assert(proxy.IsValid());
-    var boundCount = 2 * this.m_proxyCount;
+    userData[i] = proxy.userData;
+  }
 
-    for (var axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
+  // Prepare for next query.
+  this.m_queryResultCount = 0;
+  this.IncrementTimeStamp();
 
-      var lowerIndex = proxy.lowerBounds[axis];
-      var upperIndex = proxy.upperBounds[axis];
-      var lowerValue = bounds[lowerIndex].value;
-      var upperValue = bounds[upperIndex].value;
+  return count;
+};
 
-      // replace memmove calls
-      //memmove(bounds + lowerIndex, bounds + lowerIndex + 1, (upperIndex - lowerIndex - 1) * sizeof(b2Bound));
-      var tArr = new Array();
-      var j = 0;
-      var tEnd = upperIndex - lowerIndex - 1;
-      var tBound1;
-      var tBound2;
-      // make temp array
-      for (j = 0; j < tEnd; j++) {
-        tArr[j] = new box2d.Bound();
-        tBound1 = tArr[j];
-        tBound2 = bounds[lowerIndex + 1 + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      // move temp array back in to bounds
-      tEnd = tArr.length;
-      var tIndex = lowerIndex;
-      for (j = 0; j < tEnd; j++) {
-        //bounds[tIndex+j] = tArr[j];
-        tBound2 = tArr[j];
-        tBound1 = bounds[tIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      //memmove(bounds + upperIndex-1, bounds + upperIndex + 1, (edgeCount - upperIndex - 1) * sizeof(b2Bound));
-      // make temp array
-      tArr = new Array();
-      tEnd = boundCount - upperIndex - 1;
-      for (j = 0; j < tEnd; j++) {
-        tArr[j] = new box2d.Bound();
-        tBound1 = tArr[j];
-        tBound2 = bounds[upperIndex + 1 + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      // move temp array back in to bounds
-      tEnd = tArr.length;
-      tIndex = upperIndex - 1;
-      for (j = 0; j < tEnd; j++) {
-        //bounds[tIndex+j] = tArr[j];
-        tBound2 = tArr[j];
-        tBound1 = bounds[tIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
+box2d.BroadPhase.prototype.Validate = function() {
+  var pair;
+  var proxy1;
+  var proxy2;
+  var overlap;
 
-      // Fix bound indices.
-      tEnd = boundCount - 2;
-      for (var index = lowerIndex; index < tEnd; ++index) {
-        var proxy2 = this.proxyPool[bounds[index].proxyId];
-        if (bounds[index].IsLower()) {
-          proxy2.lowerBounds[axis] = index;
-        } else {
-          proxy2.upperBounds[axis] = index;
-        }
-      }
-
-      // Fix stabbing count.
-      tEnd = upperIndex - 1;
-      for (var index2 = lowerIndex; index2 < tEnd; ++index2) {
-        bounds[index2].stabbingCount--;
-      }
-
-      // this.Query for pairs to be removed. lowerIndex and upperIndex are not needed.
-      // make lowerIndex and upper output using an array and do this for others if compiler doesn't pick them up
-      this.Query([0], [0], lowerValue, upperValue, bounds, boundCount - 2, axis);
-    }
-
-    //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
-    for (var i = 0; i < this.m_queryResultCount; ++i) {
-      //box2d.Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
-      this.m_pairManager.RemoveBufferedPair(proxyId, this.m_queryResults[i]);
-    }
-
-    this.m_pairManager.Commit();
-
-    // Prepare for next query.
-    this.m_queryResultCount = 0;
-    this.IncrementTimeStamp();
-
-    // Return the proxy to the pool.
-    proxy.userData = null;
-    proxy.overlapCount = box2d.Settings.invalid;
-    proxy.lowerBounds[0] = box2d.Settings.invalid;
-    proxy.lowerBounds[1] = box2d.Settings.invalid;
-    proxy.upperBounds[0] = box2d.Settings.invalid;
-    proxy.upperBounds[1] = box2d.Settings.invalid;
-
-    proxy.SetNext(this.m_freeProxy);
-    this.m_freeProxy = proxyId;
-    --this.m_proxyCount;
-  },
-
-  // Call this.MoveProxy times like, then when you are done
-  // call this.Commit to finalized the proxy pairs (for your time step).
-  MoveProxy: function(proxyId, aabb) {
-    var axis = 0;
-    var index = 0;
-    var bound;
-    var prevBound;
-    var nextBound;
-    var nextProxyId = 0;
-    var nextProxy;
-
-    if (proxyId == box2d.Pair.b2_nullProxy || box2d.Settings.b2_maxProxies <= proxyId) {
-      //box2d.Settings.b2Assert(false);
-      return;
-    }
-
-    if (aabb.IsValid() == false) {
-      //box2d.Settings.b2Assert(false);
-      return;
-    }
+  for (var axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
 
     var boundCount = 2 * this.m_proxyCount;
+    var stabbingCount = 0;
 
-    var proxy = this.proxyPool[proxyId];
-    // Get new bound values
-    var newValues = new box2d.BoundValues();
-    this.ComputeBounds(newValues.lowerValues, newValues.upperValues, aabb);
+    for (var i = 0; i < boundCount; ++i) {
+      var bound = bounds[i];
+      //box2d.Settings.b2Assert(i == 0 || bounds[i-1].value <= bound->value);
+      //box2d.Settings.b2Assert(bound->proxyId != b2_nullProxy);
+      //box2d.Settings.b2Assert(this.proxyPool[bound->proxyId].IsValid());
+      if (bound.IsLower() == true) {
+        //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].lowerBounds[axis] == i);
+        stabbingCount++;
+      } else {
+        //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].upperBounds[axis] == i);
+        stabbingCount--;
+      }
 
-    // Get old bound values
-    var oldValues = new box2d.BoundValues();
-    for (axis = 0; axis < 2; ++axis) {
-      oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
-      oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+      //box2d.Settings.b2Assert(bound.stabbingCount == stabbingCount);
     }
+  }
 
-    for (axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
+};
 
-      var lowerIndex = proxy.lowerBounds[axis];
-      var upperIndex = proxy.upperBounds[axis];
+//private:
+box2d.BroadPhase.prototype.ComputeBounds = function(lowerValues, upperValues, aabb) {
+  //box2d.Settings.b2Assert(aabb.maxVertex.x > aabb.minVertex.x);
+  //box2d.Settings.b2Assert(aabb.maxVertex.y > aabb.minVertex.y);
+  //var minVertex = box2d.Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
+  var minVertexX = aabb.minVertex.x;
+  var minVertexY = aabb.minVertex.y;
+  minVertexX = box2d.Math.b2Min(minVertexX, this.m_worldAABB.maxVertex.x);
+  minVertexY = box2d.Math.b2Min(minVertexY, this.m_worldAABB.maxVertex.y);
+  minVertexX = box2d.Math.b2Max(minVertexX, this.m_worldAABB.minVertex.x);
+  minVertexY = box2d.Math.b2Max(minVertexY, this.m_worldAABB.minVertex.y);
 
-      var lowerValue = newValues.lowerValues[axis];
-      var upperValue = newValues.upperValues[axis];
+  //var maxVertex = box2d.Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
+  var maxVertexX = aabb.maxVertex.x;
+  var maxVertexY = aabb.maxVertex.y;
+  maxVertexX = box2d.Math.b2Min(maxVertexX, this.m_worldAABB.maxVertex.x);
+  maxVertexY = box2d.Math.b2Min(maxVertexY, this.m_worldAABB.maxVertex.y);
+  maxVertexX = box2d.Math.b2Max(maxVertexX, this.m_worldAABB.minVertex.x);
+  maxVertexY = box2d.Math.b2Max(maxVertexY, this.m_worldAABB.minVertex.y);
 
-      var deltaLower = lowerValue - bounds[lowerIndex].value;
-      var deltaUpper = upperValue - bounds[upperIndex].value;
+  // Bump lower bounds downs and upper bounds up. This ensures correct sorting of
+  // lower/upper bounds that would have equal values.
+  // TODO_ERIN implement fast float to uint16 conversion.
+  lowerValues[0] =
+  /*uint*/
+  (this.m_quantizationFactor.x * (minVertexX - this.m_worldAABB.minVertex.x)) & (box2d.Settings.USHRT_MAX - 1);
+  upperValues[0] = (
+  /*uint*/
+  (this.m_quantizationFactor.x * (maxVertexX - this.m_worldAABB.minVertex.x)) & 0x0000ffff) | 1;
 
-      bounds[lowerIndex].value = lowerValue;
-      bounds[upperIndex].value = upperValue;
+  lowerValues[1] =
+  /*uint*/
+  (this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y)) & (box2d.Settings.USHRT_MAX - 1);
+  upperValues[1] = (
+  /*uint*/
+  (this.m_quantizationFactor.y * (maxVertexY - this.m_worldAABB.minVertex.y)) & 0x0000ffff) | 1;
+};
 
-      //
-      // Expanding adds overlaps
-      //
-      // Should we move the lower bound down?
-      if (deltaLower < 0) {
-        index = lowerIndex;
-        while (index > 0 && lowerValue < bounds[index - 1].value) {
-          bound = bounds[index];
-          prevBound = bounds[index - 1];
+// This one is only used for validation.
+box2d.BroadPhase.prototype.TestOverlapValidate = function(p1, p2) {
 
-          var prevProxyId = prevBound.proxyId;
-          var prevProxy = this.proxyPool[prevBound.proxyId];
+  for (var axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
 
-          prevBound.stabbingCount++;
+    //box2d.Settings.b2Assert(p1.lowerBounds[axis] < 2 * this.m_proxyCount);
+    //box2d.Settings.b2Assert(p1.upperBounds[axis] < 2 * this.m_proxyCount);
+    //box2d.Settings.b2Assert(p2.lowerBounds[axis] < 2 * this.m_proxyCount);
+    //box2d.Settings.b2Assert(p2.upperBounds[axis] < 2 * this.m_proxyCount);
+    if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) return false;
 
-          if (prevBound.IsUpper() == true) {
-            if (this.TestOverlap(newValues, prevProxy)) {
-              this.m_pairManager.AddBufferedPair(proxyId, prevProxyId);
-            }
+    if (bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) return false;
+  }
 
-            prevProxy.upperBounds[axis]++;
-            bound.stabbingCount++;
-          } else {
-            prevProxy.lowerBounds[axis]++;
-            bound.stabbingCount--;
-          }
+  return true;
+};
 
-          proxy.lowerBounds[axis]--;
+box2d.BroadPhase.prototype.TestOverlap = function(b, p) {
+  for (var axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
 
-          // swap
-          //var temp = bound;
-          //bound = prevEdge;
-          //prevEdge = temp;
-          bound.Swap(prevBound);
-          //box2d.Math.b2Swap(bound, prevEdge);
-          --index;
-        }
-      }
+    //box2d.Settings.b2Assert(p.lowerBounds[axis] < 2 * this.m_proxyCount);
+    //box2d.Settings.b2Assert(p.upperBounds[axis] < 2 * this.m_proxyCount);
+    if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) return false;
 
-      // Should we move the upper bound up?
-      if (deltaUpper > 0) {
-        index = upperIndex;
-        while (index < boundCount - 1 && bounds[index + 1].value <= upperValue) {
-          bound = bounds[index];
-          nextBound = bounds[index + 1];
-          nextProxyId = nextBound.proxyId;
-          nextProxy = this.proxyPool[nextProxyId];
+    if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) return false;
+  }
 
-          nextBound.stabbingCount++;
+  return true;
+};
 
-          if (nextBound.IsLower() == true) {
-            if (this.TestOverlap(newValues, nextProxy)) {
-              this.m_pairManager.AddBufferedPair(proxyId, nextProxyId);
-            }
+box2d.BroadPhase.prototype.Query = function(lowerQueryOut, upperQueryOut, lowerValue, upperValue, bounds, boundCount, axis) {
 
-            nextProxy.lowerBounds[axis]--;
-            bound.stabbingCount++;
-          } else {
-            nextProxy.upperBounds[axis]--;
-            bound.stabbingCount--;
-          }
+  var lowerQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, lowerValue);
+  var upperQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, upperValue);
 
-          proxy.upperBounds[axis]++;
-          // swap
-          //var temp = bound;
-          //bound = nextEdge;
-          //nextEdge = temp;
-          bound.Swap(nextBound);
-          //box2d.Math.b2Swap(bound, nextEdge);
-          index++;
-        }
-      }
-
-      //
-      // Shrinking removes overlaps
-      //
-      // Should we move the lower bound up?
-      if (deltaLower > 0) {
-        index = lowerIndex;
-        while (index < boundCount - 1 && bounds[index + 1].value <= lowerValue) {
-          bound = bounds[index];
-          nextBound = bounds[index + 1];
-
-          nextProxyId = nextBound.proxyId;
-          nextProxy = this.proxyPool[nextProxyId];
-
-          nextBound.stabbingCount--;
-
-          if (nextBound.IsUpper()) {
-            if (this.TestOverlap(oldValues, nextProxy)) {
-              this.m_pairManager.RemoveBufferedPair(proxyId, nextProxyId);
-            }
-
-            nextProxy.upperBounds[axis]--;
-            bound.stabbingCount--;
-          } else {
-            nextProxy.lowerBounds[axis]--;
-            bound.stabbingCount++;
-          }
-
-          proxy.lowerBounds[axis]++;
-          // swap
-          //var temp = bound;
-          //bound = nextEdge;
-          //nextEdge = temp;
-          bound.Swap(nextBound);
-          //box2d.Math.b2Swap(bound, nextEdge);
-          index++;
-        }
-      }
-
-      // Should we move the upper bound down?
-      if (deltaUpper < 0) {
-        index = upperIndex;
-        while (index > 0 && upperValue < bounds[index - 1].value) {
-          bound = bounds[index];
-          prevBound = bounds[index - 1];
-
-          prevProxyId = prevBound.proxyId;
-          prevProxy = this.proxyPool[prevProxyId];
-
-          prevBound.stabbingCount--;
-
-          if (prevBound.IsLower() == true) {
-            if (this.TestOverlap(oldValues, prevProxy)) {
-              this.m_pairManager.RemoveBufferedPair(proxyId, prevProxyId);
-            }
-
-            prevProxy.lowerBounds[axis]++;
-            bound.stabbingCount--;
-          } else {
-            prevProxy.upperBounds[axis]++;
-            bound.stabbingCount++;
-          }
-
-          proxy.upperBounds[axis]--;
-          // swap
-          //var temp = bound;
-          //bound = prevEdge;
-          //prevEdge = temp;
-          bound.Swap(prevBound);
-          //box2d.Math.b2Swap(bound, prevEdge);
-          index--;
-        }
-      }
+  // Easy case: lowerQuery <= lowerIndex(i) < upperQuery
+  // Solution: search query range for min bounds.
+  for (var j = lowerQuery; j < upperQuery; ++j) {
+    if (bounds[j].IsLower()) {
+      this.IncrementOverlapCount(bounds[j].proxyId);
     }
-  },
+  }
 
-  // this.Query an AABB for overlapping proxies, returns the user data and
-  // the count, up to the supplied maximum count.
-  QueryAABB: function(aabb, userData, maxCount) {
-    var lowerValues = new Array();
-    var upperValues = new Array();
-    this.ComputeBounds(lowerValues, upperValues, aabb);
+  // Hard case: lowerIndex(i) < lowerQuery < upperIndex(i)
+  // Solution: use the stabbing count to search down the bound array.
+  if (lowerQuery > 0) {
+    var i = lowerQuery - 1;
+    var s = bounds[i].stabbingCount;
 
-    var lowerIndex = 0;
-    var upperIndex = 0;
-    var lowerIndexOut = [lowerIndex];
-    var upperIndexOut = [upperIndex];
-    this.Query(lowerIndexOut, upperIndexOut, lowerValues[0], upperValues[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
-    this.Query(lowerIndexOut, upperIndexOut, lowerValues[1], upperValues[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
+    // Find the s overlaps.
+    while (s) {
+      //box2d.Settings.b2Assert(i >= 0);
+      if (bounds[i].IsLower()) {
+        var proxy = this.proxyPool[bounds[i].proxyId];
+        if (lowerQuery <= proxy.upperBounds[axis]) {
+          this.IncrementOverlapCount(bounds[i].proxyId);
+          --s;
+        }
+      } --i;
+    }
+  }
 
+  lowerQueryOut[0] = lowerQuery;
+  upperQueryOut[0] = upperQuery;
+};
+
+box2d.BroadPhase.prototype.IncrementOverlapCount = function(proxyId) {
+  var proxy = this.proxyPool[proxyId];
+  if (proxy.timeStamp < this.m_timeStamp) {
+    proxy.timeStamp = this.m_timeStamp;
+    proxy.overlapCount = 1;
+  } else {
+    proxy.overlapCount = 2;
     //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
-    var count = 0;
-    for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
-      //box2d.Settings.b2Assert(this.m_queryResults[i] < box2d.Settings.b2_maxProxies);
-      var proxy = this.proxyPool[this.m_queryResults[i]];
-      //box2d.Settings.b2Assert(proxy.IsValid());
-      userData[i] = proxy.userData;
+    this.m_queryResults[this.m_queryResultCount] = proxyId;
+    ++this.m_queryResultCount;
+  }
+};
+box2d.BroadPhase.prototype.IncrementTimeStamp = function() {
+  if (this.m_timeStamp == box2d.Settings.USHRT_MAX) {
+    for (var i = 0; i < box2d.Settings.b2_maxProxies; ++i) {
+      this.proxyPool[i].timeStamp = 0;
     }
+    this.m_timeStamp = 1;
+  } else {
+    ++this.m_timeStamp;
+  }
+};
 
-    // Prepare for next query.
-    this.m_queryResultCount = 0;
-    this.IncrementTimeStamp();
+// Call this.MoveProxy times like, then when you are done
+// call this.Commit to finalized the proxy pairs (for your time step).
+/**
+ @param {number} proxyId
+ @param {!box2d.AABB} aabb
+ */
+box2d.BroadPhase.prototype.MoveProxy = function(proxyId, aabb) {
+  var axis = 0;
+  var index = 0;
+  var bound;
+  var prevBound;
+  var nextBound;
+  var nextProxyId = 0;
+  var nextProxy;
 
-    return count;
-  },
+  if (proxyId == box2d.Pair.b2_nullProxy || box2d.Settings.b2_maxProxies <= proxyId) {
+    //box2d.Settings.b2Assert(false);
+    return;
+  }
 
-  Validate: function() {
-    var pair;
-    var proxy1;
-    var proxy2;
-    var overlap;
+  if (aabb.IsValid() == false) {
+    //box2d.Settings.b2Assert(false);
+    return;
+  }
 
-    for (var axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
+  var boundCount = 2 * this.m_proxyCount;
 
-      var boundCount = 2 * this.m_proxyCount;
-      var stabbingCount = 0;
+  var proxy = this.proxyPool[proxyId];
+  // Get new bound values
+  var newValues = new box2d.BoundValues();
+  this.ComputeBounds(newValues.lowerValues, newValues.upperValues, aabb);
 
-      for (var i = 0; i < boundCount; ++i) {
-        var bound = bounds[i];
-        //box2d.Settings.b2Assert(i == 0 || bounds[i-1].value <= bound->value);
-        //box2d.Settings.b2Assert(bound->proxyId != b2_nullProxy);
-        //box2d.Settings.b2Assert(this.proxyPool[bound->proxyId].IsValid());
-        if (bound.IsLower() == true) {
-          //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].lowerBounds[axis] == i);
-          stabbingCount++;
+  // Get old bound values
+  var oldValues = new box2d.BoundValues();
+  for (axis = 0; axis < 2; ++axis) {
+    oldValues.lowerValues[axis] = this.m_bounds[axis][proxy.lowerBounds[axis]].value;
+    oldValues.upperValues[axis] = this.m_bounds[axis][proxy.upperBounds[axis]].value;
+  }
+
+  for (axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
+
+    var lowerIndex = proxy.lowerBounds[axis];
+    var upperIndex = proxy.upperBounds[axis];
+
+    var lowerValue = newValues.lowerValues[axis];
+    var upperValue = newValues.upperValues[axis];
+
+    var deltaLower = lowerValue - bounds[lowerIndex].value;
+    var deltaUpper = upperValue - bounds[upperIndex].value;
+
+    bounds[lowerIndex].value = lowerValue;
+    bounds[upperIndex].value = upperValue;
+
+    //
+    // Expanding adds overlaps
+    //
+    // Should we move the lower bound down?
+    if (deltaLower < 0) {
+      index = lowerIndex;
+      while (index > 0 && lowerValue < bounds[index - 1].value) {
+        bound = bounds[index];
+        prevBound = bounds[index - 1];
+
+        var prevProxyId = prevBound.proxyId;
+        var prevProxy = this.proxyPool[prevBound.proxyId];
+
+        prevBound.stabbingCount++;
+
+        if (prevBound.IsUpper() == true) {
+          if (this.TestOverlap(newValues, prevProxy)) {
+            this.m_pairManager.AddBufferedPair(proxyId, prevProxyId);
+          }
+
+          prevProxy.upperBounds[axis]++;
+          bound.stabbingCount++;
         } else {
-          //box2d.Settings.b2Assert(this.proxyPool[bound.proxyId].upperBounds[axis] == i);
-          stabbingCount--;
+          prevProxy.lowerBounds[axis]++;
+          bound.stabbingCount--;
         }
 
-        //box2d.Settings.b2Assert(bound.stabbingCount == stabbingCount);
+        proxy.lowerBounds[axis]--;
+
+        // swap
+        //var temp = bound;
+        //bound = prevEdge;
+        //prevEdge = temp;
+        bound.Swap(prevBound);
+        //box2d.Math.b2Swap(bound, prevEdge);
+        --index;
       }
     }
 
-  },
+    // Should we move the upper bound up?
+    if (deltaUpper > 0) {
+      index = upperIndex;
+      while (index < boundCount - 1 && bounds[index + 1].value <= upperValue) {
+        bound = bounds[index];
+        nextBound = bounds[index + 1];
+        nextProxyId = nextBound.proxyId;
+        nextProxy = this.proxyPool[nextProxyId];
 
-  //private:
-  ComputeBounds: function(lowerValues, upperValues, aabb) {
-    //box2d.Settings.b2Assert(aabb.maxVertex.x > aabb.minVertex.x);
-    //box2d.Settings.b2Assert(aabb.maxVertex.y > aabb.minVertex.y);
-    //var minVertex = box2d.Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
-    var minVertexX = aabb.minVertex.x;
-    var minVertexY = aabb.minVertex.y;
-    minVertexX = box2d.Math.b2Min(minVertexX, this.m_worldAABB.maxVertex.x);
-    minVertexY = box2d.Math.b2Min(minVertexY, this.m_worldAABB.maxVertex.y);
-    minVertexX = box2d.Math.b2Max(minVertexX, this.m_worldAABB.minVertex.x);
-    minVertexY = box2d.Math.b2Max(minVertexY, this.m_worldAABB.minVertex.y);
+        nextBound.stabbingCount++;
 
-    //var maxVertex = box2d.Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
-    var maxVertexX = aabb.maxVertex.x;
-    var maxVertexY = aabb.maxVertex.y;
-    maxVertexX = box2d.Math.b2Min(maxVertexX, this.m_worldAABB.maxVertex.x);
-    maxVertexY = box2d.Math.b2Min(maxVertexY, this.m_worldAABB.maxVertex.y);
-    maxVertexX = box2d.Math.b2Max(maxVertexX, this.m_worldAABB.minVertex.x);
-    maxVertexY = box2d.Math.b2Max(maxVertexY, this.m_worldAABB.minVertex.y);
-
-    // Bump lower bounds downs and upper bounds up. This ensures correct sorting of
-    // lower/upper bounds that would have equal values.
-    // TODO_ERIN implement fast float to uint16 conversion.
-    lowerValues[0] =
-    /*uint*/
-    (this.m_quantizationFactor.x * (minVertexX - this.m_worldAABB.minVertex.x)) & (box2d.Settings.USHRT_MAX - 1);
-    upperValues[0] = (
-    /*uint*/
-    (this.m_quantizationFactor.x * (maxVertexX - this.m_worldAABB.minVertex.x)) & 0x0000ffff) | 1;
-
-    lowerValues[1] =
-    /*uint*/
-    (this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y)) & (box2d.Settings.USHRT_MAX - 1);
-    upperValues[1] = (
-    /*uint*/
-    (this.m_quantizationFactor.y * (maxVertexY - this.m_worldAABB.minVertex.y)) & 0x0000ffff) | 1;
-  },
-
-  // This one is only used for validation.
-  TestOverlapValidate: function(p1, p2) {
-
-    for (var axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
-
-      //box2d.Settings.b2Assert(p1.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //box2d.Settings.b2Assert(p1.upperBounds[axis] < 2 * this.m_proxyCount);
-      //box2d.Settings.b2Assert(p2.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //box2d.Settings.b2Assert(p2.upperBounds[axis] < 2 * this.m_proxyCount);
-      if (bounds[p1.lowerBounds[axis]].value > bounds[p2.upperBounds[axis]].value) return false;
-
-      if (bounds[p1.upperBounds[axis]].value < bounds[p2.lowerBounds[axis]].value) return false;
-    }
-
-    return true;
-  },
-
-  TestOverlap: function(b, p) {
-    for (var axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
-
-      //box2d.Settings.b2Assert(p.lowerBounds[axis] < 2 * this.m_proxyCount);
-      //box2d.Settings.b2Assert(p.upperBounds[axis] < 2 * this.m_proxyCount);
-      if (b.lowerValues[axis] > bounds[p.upperBounds[axis]].value) return false;
-
-      if (b.upperValues[axis] < bounds[p.lowerBounds[axis]].value) return false;
-    }
-
-    return true;
-  },
-
-  Query: function(lowerQueryOut, upperQueryOut, lowerValue, upperValue, bounds, boundCount, axis) {
-
-    var lowerQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, lowerValue);
-    var upperQuery = box2d.BroadPhase.BinarySearch(bounds, boundCount, upperValue);
-
-    // Easy case: lowerQuery <= lowerIndex(i) < upperQuery
-    // Solution: search query range for min bounds.
-    for (var j = lowerQuery; j < upperQuery; ++j) {
-      if (bounds[j].IsLower()) {
-        this.IncrementOverlapCount(bounds[j].proxyId);
-      }
-    }
-
-    // Hard case: lowerIndex(i) < lowerQuery < upperIndex(i)
-    // Solution: use the stabbing count to search down the bound array.
-    if (lowerQuery > 0) {
-      var i = lowerQuery - 1;
-      var s = bounds[i].stabbingCount;
-
-      // Find the s overlaps.
-      while (s) {
-        //box2d.Settings.b2Assert(i >= 0);
-        if (bounds[i].IsLower()) {
-          var proxy = this.proxyPool[bounds[i].proxyId];
-          if (lowerQuery <= proxy.upperBounds[axis]) {
-            this.IncrementOverlapCount(bounds[i].proxyId);
-            --s;
+        if (nextBound.IsLower() == true) {
+          if (this.TestOverlap(newValues, nextProxy)) {
+            this.m_pairManager.AddBufferedPair(proxyId, nextProxyId);
           }
-        } --i;
+
+          nextProxy.lowerBounds[axis]--;
+          bound.stabbingCount++;
+        } else {
+          nextProxy.upperBounds[axis]--;
+          bound.stabbingCount--;
+        }
+
+        proxy.upperBounds[axis]++;
+        // swap
+        //var temp = bound;
+        //bound = nextEdge;
+        //nextEdge = temp;
+        bound.Swap(nextBound);
+        //box2d.Math.b2Swap(bound, nextEdge);
+        index++;
       }
     }
 
-    lowerQueryOut[0] = lowerQuery;
-    upperQueryOut[0] = upperQuery;
-  },
+    //
+    // Shrinking removes overlaps
+    //
+    // Should we move the lower bound up?
+    if (deltaLower > 0) {
+      index = lowerIndex;
+      while (index < boundCount - 1 && bounds[index + 1].value <= lowerValue) {
+        bound = bounds[index];
+        nextBound = bounds[index + 1];
 
-  IncrementOverlapCount: function(proxyId) {
-    var proxy = this.proxyPool[proxyId];
-    if (proxy.timeStamp < this.m_timeStamp) {
-      proxy.timeStamp = this.m_timeStamp;
-      proxy.overlapCount = 1;
-    } else {
-      proxy.overlapCount = 2;
-      //box2d.Settings.b2Assert(this.m_queryResultCount < box2d.Settings.b2_maxProxies);
-      this.m_queryResults[this.m_queryResultCount] = proxyId;
-      ++this.m_queryResultCount;
-    }
-  },
-  IncrementTimeStamp: function() {
-    if (this.m_timeStamp == box2d.Settings.USHRT_MAX) {
-      for (var i = 0; i < box2d.Settings.b2_maxProxies; ++i) {
-        this.proxyPool[i].timeStamp = 0;
+        nextProxyId = nextBound.proxyId;
+        nextProxy = this.proxyPool[nextProxyId];
+
+        nextBound.stabbingCount--;
+
+        if (nextBound.IsUpper()) {
+          if (this.TestOverlap(oldValues, nextProxy)) {
+            this.m_pairManager.RemoveBufferedPair(proxyId, nextProxyId);
+          }
+
+          nextProxy.upperBounds[axis]--;
+          bound.stabbingCount--;
+        } else {
+          nextProxy.lowerBounds[axis]--;
+          bound.stabbingCount++;
+        }
+
+        proxy.lowerBounds[axis]++;
+        // swap
+        //var temp = bound;
+        //bound = nextEdge;
+        //nextEdge = temp;
+        bound.Swap(nextBound);
+        //box2d.Math.b2Swap(bound, nextEdge);
+        index++;
       }
-      this.m_timeStamp = 1;
-    } else {
-      ++this.m_timeStamp;
     }
-  },
 
-  //public:
-  m_pairManager: new box2d.PairManager(),
+    // Should we move the upper bound down?
+    if (deltaUpper < 0) {
+      index = upperIndex;
+      while (index > 0 && upperValue < bounds[index - 1].value) {
+        bound = bounds[index];
+        prevBound = bounds[index - 1];
 
-  proxyPool: new Array(box2d.Settings.b2_maxPairs),
+        prevProxyId = prevBound.proxyId;
+        prevProxy = this.proxyPool[prevProxyId];
 
-  m_bounds: new Array(2 * box2d.Settings.b2_maxProxies),
+        prevBound.stabbingCount--;
 
-  m_queryResults: new Array(box2d.Settings.b2_maxProxies),
-  m_queryResultCount: 0,
+        if (prevBound.IsLower() == true) {
+          if (this.TestOverlap(oldValues, prevProxy)) {
+            this.m_pairManager.RemoveBufferedPair(proxyId, prevProxyId);
+          }
 
-  m_worldAABB: null,
-  m_quantizationFactor: new box2d.Vec2(),
-  m_proxyCount: 0,
-  m_timeStamp: 0
+          prevProxy.lowerBounds[axis]++;
+          bound.stabbingCount--;
+        } else {
+          prevProxy.upperBounds[axis]++;
+          bound.stabbingCount++;
+        }
+
+        proxy.upperBounds[axis]--;
+        // swap
+        //var temp = bound;
+        //bound = prevEdge;
+        //prevEdge = temp;
+        bound.Swap(prevBound);
+        //box2d.Math.b2Swap(bound, prevEdge);
+        index--;
+      }
+    }
+  }
 };
 
 /**
-  @return {!Array.<box2d.Pair>}
-*/
+ @return {!Array.<box2d.Pair>}
+ */
 box2d.BroadPhase.prototype.Commit = function() {
   return this.m_pairManager.Commit();
 };
 
 /**
-  // Create and destroy proxies. These call Flush first.
-  @param {!box2d.AABB} aabb
-  @param {!box2d.Shape} userData
-  @return {number}
-*/
+ // Create and destroy proxies. These call Flush first.
+ @param {!box2d.AABB} aabb
+ @param {!box2d.Shape} userData
+ @return {number}
+ */
 box2d.BroadPhase.prototype.CreateProxy = function(aabb, userData) {
   var index = 0;
   var proxy;
@@ -806,11 +794,10 @@ box2d.BroadPhase.prototype.CreateProxy = function(aabb, userData) {
 };
 
 /**
-  @private
-  @type {number}
-*/
+ @private
+ @type {number}
+ */
 box2d.BroadPhase.m_freeProxy = 0;
-
 
 box2d.BroadPhase.s_validate = false;
 box2d.BroadPhase.b2_nullEdge = box2d.Settings.USHRT_MAX;
