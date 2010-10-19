@@ -19,10 +19,12 @@
 goog.provide('box2d.PulleyJoint');
 
 goog.require('box2d.Joint');
+goog.require('box2d.PulleyJointDef');
 
 /**
  @constructor
  @extends {box2d.Joint}
+ @param {!box2d.PulleyJointDef} def
  */
 box2d.PulleyJoint = function(def) {
   // The constructor for b2Joint

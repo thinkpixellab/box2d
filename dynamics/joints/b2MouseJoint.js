@@ -19,6 +19,7 @@
 goog.provide('box2d.MouseJoint');
 
 goog.require('box2d.Joint');
+goog.require('box2d.MouseJointDef');
 // p = attached point, m = mouse point
 // C = p - m
 // Cdot = v
@@ -29,6 +30,7 @@ goog.require('box2d.Joint');
 /**
  @constructor
  @extends {box2d.Joint}
+ @param {!box2d.MouseJointDef} def
  */
 box2d.MouseJoint = function(def) {
   // The constructor for b2Joint

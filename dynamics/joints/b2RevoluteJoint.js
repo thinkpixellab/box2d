@@ -19,6 +19,7 @@
 goog.provide('box2d.RevoluteJoint');
 
 goog.require('box2d.Joint');
+goog.require('box2d.RevoluteJointDef');
 
 // Point-to-point constraint
 // C = p2 - p1
@@ -34,6 +35,7 @@ goog.require('box2d.Joint');
 /**
  @constructor
  @extends {box2d.Joint}
+ @param {!box2d.RevoluteJointDef} def
  */
 box2d.RevoluteJoint = function(def) {
   // The constructor for b2Joint

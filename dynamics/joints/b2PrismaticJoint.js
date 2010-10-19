@@ -20,6 +20,7 @@ goog.provide('box2d.PrismaticJoint');
 
 goog.require('box2d.Jacobian');
 goog.require('box2d.Joint');
+goog.require('box2d.PrismaticJointDef');
 goog.require('box2d.Vec2');
 
 // Linear constraint (point-to-line)
@@ -40,6 +41,7 @@ goog.require('box2d.Vec2');
 /**
  @constructor
  @extends {box2d.Joint}
+ @param {!box2d.PrismaticJointDef} def
  */
 box2d.PrismaticJoint = function(def) {
   // The constructor for b2Joint

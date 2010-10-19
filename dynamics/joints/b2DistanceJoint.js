@@ -19,6 +19,7 @@
 goog.provide('box2d.DistanceJoint');
 
 goog.require('box2d.Joint');
+goog.require('box2d.DistanceJointDef');
 
 // C = norm(p2 - p1) - L
 // u = (p2 - p1) / norm(p2 - p1)
@@ -29,6 +30,7 @@ goog.require('box2d.Joint');
 /**
  @constructor
  @extends {box2d.Joint}
+ @param {!box2d.DistanceJointDef} def
  */
 box2d.DistanceJoint = function(def) {
   // The constructor for b2Joint
