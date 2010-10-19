@@ -58,5 +58,5 @@ box2d.BoxDef.prototype.ComputeMass = function(massData) {
 
   massData.mass = 4.0 * this.density * this.extents.x * this.extents.y;
   massData.center.Set(0.0, 0.0);
-  massData.I = massData.mass / 3.0 * box2d.Math.b2Dot(this.extents, box.extents);
+  massData.I = massData.mass / 3.0 * box2d.Math.b2Dot(this.extents, this.extents);
 };
