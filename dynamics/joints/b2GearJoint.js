@@ -18,8 +18,8 @@
 
 goog.provide('box2d.GearJoint');
 
-goog.require('box2d.Joint');
 goog.require('box2d.GearJointDef');
+goog.require('box2d.Joint');
 /**
  @constructor
  @extends {box2d.Joint}
