@@ -95,10 +95,10 @@ box2d.MouseJoint.prototype.GetAnchor2 = function() {
 };
 box2d.MouseJoint.prototype.GetReactionForce = function(invTimeStep) {
   //box2d.Vec2 F = invTimeStep * this.m_impulse;
-  var F = new box2d.Vec2();
-  F.SetV(this.m_impulse);
-  F.Multiply(invTimeStep);
-  return F;
+  var f = new box2d.Vec2();
+  f.SetV(this.m_impulse);
+  f.scale(invTimeStep);
+  return f;
 };
 box2d.MouseJoint.prototype.GetReactionTorque = function(invTimeStep) {
   //NOT_USED(invTimeStep);
@@ -192,10 +192,10 @@ box2d.MouseJoint.prototype.SolveVelocityConstraints = function(step) {
   //this.m_impulse += impulse;
   this.m_impulse.x += impulseX;
   this.m_impulse.y += impulseY;
-  var length = this.m_impulse.Length();
+  var length = this.m_impulse.magnitude();
   if (length > step.dt * this.m_maxForce) {
     //this.m_impulse *= step.dt * this.m_maxForce / length;
-    this.m_impulse.Multiply(step.dt * this.m_maxForce / length);
+    this.m_impulse.scale(step.dt * this.m_maxForce / length);
   }
   //impulse = this.m_impulse - oldImpulse;
   impulseX = this.m_impulse.x - oldImpulseX;
