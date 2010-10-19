@@ -84,10 +84,6 @@ box2d.World = function(worldAABB, gravity, doSleep) {
   this.sleeping = false;
 };
 
-//~box2d.World(){
-//  this.DestroyBody(this.m_groundBody);
-//  delete this.m_broadPhase;
-//}
 // Set a callback to notify you when a joint is implicitly destroyed
 // when an attached body is destroyed.
 box2d.World.prototype.SetListener = function(listener) {
@@ -111,7 +107,6 @@ box2d.World.prototype.SetFilter = function(filter) {
  @return {!box2d.Body}
  */
 box2d.World.prototype.CreateBody = function(def) {
-  //void* mem = this.m_blockAllocator.Allocate(sizeof(box2d.Body));
   var b = new box2d.Body(def, this);
   b.m_prev = null;
 
@@ -151,8 +146,6 @@ box2d.World.prototype.DestroyBody = function(b) {
   //box2d.Settings.b2Assert(this.m_bodyCount > 0);
   --this.m_bodyCount;
 
-  //b->~box2d.Body();
-  //b.Destroy();
   // Add to the deferred destruction list.
   b.m_prev = null;
   b.m_next = this.m_bodyDestroyList;
@@ -182,7 +175,6 @@ box2d.World.prototype.CleanBodyList = function() {
     }
 
     b0.Destroy();
-    //this.m_blockAllocator.Free(b0, sizeof(box2d.Body));
   }
 
   // Reset the list.
@@ -191,7 +183,7 @@ box2d.World.prototype.CleanBodyList = function() {
   this.m_contactManager.m_destroyImmediate = false;
 };
 box2d.World.prototype.CreateJoint = function(def) {
-  var j = box2d.JointFactory.Create(def, this.m_blockAllocator);
+  var j = box2d.JointFactory.Create(def);
 
   // Connect to the world list.
   j.m_prev = null;
@@ -285,9 +277,6 @@ box2d.World.prototype.DestroyJoint = function(j) {
   j.m_node2.prev = null;
   j.m_node2.next = null;
 
-  box2d.JointFactory.Destroy(j, this.m_blockAllocator);
-
-  //box2d.Settings.b2Assert(this.m_jointCount > 0);
   --this.m_jointCount;
 
   // If the joint prevents collisions, then reset collision filtering.
@@ -335,7 +324,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
   this.m_contactManager.Collide();
 
   // Size the island for the worst case.
-  var island = new box2d.Island(this.m_bodyCount, this.m_contactCount, this.m_jointCount, this.m_stackAllocator);
+  var island = new box2d.Island(this.m_bodyCount, this.m_contactCount, this.m_jointCount);
 
   // Clear all the island flags.
   for (b = this.m_bodyList; b != null; b = b.m_next) {
@@ -350,7 +339,6 @@ box2d.World.prototype.Step = function(dt, iterations) {
 
   // Build and simulate all awake islands.
   var stackSize = this.m_bodyCount;
-  //var stack = (box2d.Body**)this.m_stackAllocator.Allocate(stackSize * sizeof(box2d.Body*));
   var stack = new Array(this.m_bodyCount);
   for (var k = 0; k < this.m_bodyCount; k++)
   stack[k] = null;
@@ -456,7 +444,6 @@ box2d.World.prototype.Step = function(dt, iterations) {
 // size. The number of shapes found is returned.
 box2d.World.prototype.Query = function(aabb, shapes, maxCount) {
 
-  //void** results = (void**)this.m_stackAllocator.Allocate(maxCount * sizeof(void*));
   var results = new Array();
   var count = this.m_broadPhase.QueryAABB(aabb, results, maxCount);
 
@@ -464,7 +451,6 @@ box2d.World.prototype.Query = function(aabb, shapes, maxCount) {
     shapes[i] = results[i];
   }
 
-  //this.m_stackAllocator.Free(results);
   return count;
 };
 

@@ -102,7 +102,7 @@ goog.require('box2d.ContactSolver');
 /**
  @constructor
  */
-box2d.Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
+box2d.Island = function(bodyCapacity, contactCapacity, jointCapacity) {
   var i = 0;
 
   this.m_bodyCapacity = bodyCapacity;
@@ -112,22 +112,17 @@ box2d.Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator)
   this.m_contactCount = 0;
   this.m_jointCount = 0;
 
-  //this.m_bodies = (box2d.Body**)allocator->Allocate(bodyCapacity * sizeof(box2d.Body*));
   this.m_bodies = new Array(bodyCapacity);
   for (i = 0; i < bodyCapacity; i++)
-  this.m_bodies[i] = null;
+    this.m_bodies[i] = null;
 
-  //this.m_contacts = (box2d.Contact**)allocator->Allocate(contactCapacity   * sizeof(box2d.Contact*));
   this.m_contacts = new Array(contactCapacity);
   for (i = 0; i < contactCapacity; i++)
-  this.m_contacts[i] = null;
+    this.m_contacts[i] = null;
 
-  //this.m_joints = (b2Joint**)allocator->Allocate(jointCapacity * sizeof(b2Joint*));
   this.m_joints = new Array(jointCapacity);
   for (i = 0; i < jointCapacity; i++)
-  this.m_joints[i] = null;
-
-  this.m_allocator = allocator;
+    this.m_joints[i] = null;
 };
 
 box2d.Island.prototype.Clear = function() {
@@ -156,7 +151,7 @@ box2d.Island.prototype.Solve = function(step, gravity) {
     b.m_rotation0 = b.m_rotation;
   }
 
-  var contactSolver = new box2d.ContactSolver(this.m_contacts, this.m_contactCount, this.m_allocator);
+  var contactSolver = new box2d.ContactSolver(this.m_contacts, this.m_contactCount);
 
   // Pre-solve
   contactSolver.PreSolve();

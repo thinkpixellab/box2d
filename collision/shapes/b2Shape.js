@@ -99,27 +99,6 @@ box2d.Shape.prototype.GetMaxRadius = function() {
 };
 
 box2d.Shape.Destroy = function(shape) {
-  /*b2BlockAllocator& allocator = shape->m_body->m_world->m_blockAllocator;
-
-    switch (shape.m_type)
-    {
-    case box2d.Shape.e_circleShape:
-      shape->~box2d.Shape();
-      allocator.Free(shape, sizeof(b2CircleShape));
-      break;
-
-    case box2d.Shape.e_polyShape:
-      shape->~box2d.Shape();
-      allocator.Free(shape, sizeof(b2PolyShape));
-      break;
-
-    default:
-      b2Assert(false);
-    }
-
-    shape = NULL;*/
-
-  // FROM DESTRUCTOR
   if (shape.m_proxyId != box2d.Pair.b2_nullProxy) {
     shape.m_body.m_world.m_broadPhase.DestroyProxy(shape.m_proxyId);
   }

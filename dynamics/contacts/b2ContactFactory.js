@@ -7,7 +7,7 @@ goog.require('box2d.PolyContact');
 /**
  @return {box2d.Contact}
  */
-box2d.ContactFactory.Create = function(shape1, shape2, allocator) {
+box2d.ContactFactory.Create = function(shape1, shape2) {
   if (box2d.ContactFactory.s_initialized == false) {
     box2d.ContactFactory._InitializeRegisters();
     box2d.ContactFactory.s_initialized = true;
@@ -21,9 +21,9 @@ box2d.ContactFactory.Create = function(shape1, shape2, allocator) {
   var createFcn = box2d.ContactFactory.s_registers[type1][type2].createFcn;
   if (createFcn) {
     if (box2d.ContactFactory.s_registers[type1][type2].primary) {
-      return createFcn(shape1, shape2, allocator);
+      return createFcn(shape1, shape2);
     } else {
-      var c = createFcn(shape2, shape1, allocator);
+      var c = createFcn(shape2, shape1);
       for (var i = 0; i < c.GetManifoldCount(); ++i) {
         var m = c.GetManifolds()[i];
         m.normal = m.normal.Negative();

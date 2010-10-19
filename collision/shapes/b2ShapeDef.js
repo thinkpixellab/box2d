@@ -54,15 +54,6 @@ box2d.ShapeDef.prototype.ComputeMass = function(massData) {
     }
     break;
 
-  case box2d.Shape.e_boxShape:
-    {
-      var box = this;
-      massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
-      massData.center.Set(0.0, 0.0);
-      massData.I = massData.mass / 3.0 * box2d.Math.b2Dot(box.extents, box.extents);
-    }
-    break;
-
   case box2d.Shape.e_polyShape:
     {
       var poly = this;

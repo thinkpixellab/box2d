@@ -22,9 +22,9 @@ goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
 /**
-  @constructor
-  @extends {box2d.ShapeDef}
-*/
+ @constructor
+ @extends {box2d.ShapeDef}
+ */
 box2d.BoxDef = function() {
   this.type = box2d.Shape.e_unknownShape;
   this.userData = null;
@@ -43,3 +43,20 @@ box2d.BoxDef = function() {
   this.extents = new box2d.Vec2(1.0, 1.0);
 };
 goog.inherits(box2d.BoxDef, box2d.ShapeDef);
+
+/**
+ @override
+ */
+box2d.BoxDef.prototype.ComputeMass = function(massData) {
+  massData.center = new box2d.Vec2(0.0, 0.0);
+
+  if (this.density == 0.0) {
+    massData.mass = 0.0;
+    massData.center.Set(0.0, 0.0);
+    massData.I = 0.0;
+  }
+
+  massData.mass = 4.0 * this.density * this.extents.x * this.extents.y;
+  massData.center.Set(0.0, 0.0);
+  massData.I = massData.mass / 3.0 * box2d.Math.b2Dot(this.extents, box.extents);
+};

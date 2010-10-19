@@ -87,9 +87,6 @@ box2d.CircleContact.prototype.GetManifolds = function() {
   return this.m_manifold;
 };
 
-box2d.CircleContact.Create = function(shape1, shape2, allocator) {
+box2d.CircleContact.Create = function(shape1, shape2) {
   return new box2d.CircleContact(shape1, shape2);
-};
-box2d.CircleContact.Destroy = function(contact, allocator) {
-  //
 };

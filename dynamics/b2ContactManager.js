@@ -86,7 +86,7 @@ box2d.ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserDat
   }
 
   // Call the factory.
-  var contact = box2d.ContactFactory.Create(shape1, shape2, this.m_world.m_blockAllocator);
+  var contact = box2d.ContactFactory.Create(shape1, shape2);
 
   if (contact == null) {
     return this.m_nullContact;
@@ -184,8 +184,6 @@ box2d.ContactManager.prototype.DestroyContact = function(c) {
     node2.next = null;
   }
 
-  // Call the factory.
-  box2d.ContactFactory.Destroy(c, this.m_world.m_blockAllocator);
   --this.m_world.m_contactCount;
 };
 

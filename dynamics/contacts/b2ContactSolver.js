@@ -23,11 +23,9 @@ goog.require('box2d.Settings');
 /**
  @constructor
  */
-box2d.ContactSolver = function(contacts, contactCount, allocator) {
+box2d.ContactSolver = function(contacts, contactCount) {
   // initialize instance variables for references
   this.m_constraints = new Array();
-  //
-  this.m_allocator = allocator;
 
   var i = 0;
   var tVec;
@@ -508,9 +506,5 @@ box2d.ContactSolver.prototype = {
         mPoint.tangentImpulse = cPoint.tangentImpulse;
       }
     }
-  },
-
-  m_allocator: null,
-  m_constraints: new Array(),
-  m_constraintCount: 0
+  }
 };

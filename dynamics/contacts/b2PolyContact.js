@@ -138,11 +138,6 @@ box2d.PolyContact.prototype.GetManifolds = function() {
   return this.m_manifold;
 };
 
-box2d.PolyContact.Create = function(shape1, shape2, allocator) {
-  //void* mem = allocator->Allocate(sizeof(b2PolyContact));
+box2d.PolyContact.Create = function(shape1, shape2) {
   return new box2d.PolyContact(shape1, shape2);
-};
-box2d.PolyContact.Destroy = function(contact, allocator) {
-  //((b2PolyContact*)contact)->~b2PolyContact();
-  //allocator->Free(contact, sizeof(b2PolyContact));
 };

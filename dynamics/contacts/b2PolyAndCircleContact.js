@@ -86,9 +86,6 @@ box2d.PolyAndCircleContact.prototype.GetManifolds = function() {
   return this.m_manifold;
 };
 
-box2d.PolyAndCircleContact.Create = function(shape1, shape2, allocator) {
+box2d.PolyAndCircleContact.Create = function(shape1, shape2) {
   return new box2d.PolyAndCircleContact(shape1, shape2);
-};
-box2d.PolyAndCircleContact.Destroy = function(contact, allocator) {
-  //
 };
