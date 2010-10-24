@@ -10,7 +10,7 @@ The folks at [Pixel Lab](http://thinkpixellab.com) modified the library to use [
 
 It's being used for [Agent 008 Ball](http://www.agent8ball.com/) - an HTML5 billiards game.
 
-The demo site is [here](http://box2d.heroku.com/).
+The demo site is [here](http://box2d.thinkpixellab.com/).
 
 The demo site source, including demo code, can be found in [this Github repository](http://github.com/thinkpixellab/box2dWeb).
 
