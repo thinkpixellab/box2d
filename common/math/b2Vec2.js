@@ -68,7 +68,7 @@ box2d.Vec2.prototype.Negative = function() {
   return new box2d.Vec2(-this.x, -this.y);
 };
 
-/** @return {box2d.Vec2} */
+/** @return {!box2d.Vec2} */
 box2d.Vec2.prototype.Copy = function() {
   return new box2d.Vec2(this.x, this.y);
 };
