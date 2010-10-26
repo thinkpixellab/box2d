@@ -83,7 +83,7 @@ box2d.BroadPhase = function(worldAABB, callback) {
     }
   }
 
-  //var d = box2d.Math.SubtractVV(worldAABB.maxVertex, worldAABB.minVertex);
+  //var d = box2d.Vec2.subtract(worldAABB.maxVertex, worldAABB.minVertex);
   var dX = worldAABB.maxVertex.x;
   var dY = worldAABB.maxVertex.y;
   dX -= worldAABB.minVertex.x;
@@ -118,7 +118,6 @@ box2d.BroadPhase = function(worldAABB, callback) {
 // it should be destroyed. Otherwise you may get O(m^2) pairs, where m
 // is the number of proxies that are out of range.
 box2d.BroadPhase.prototype.InRange = function(aabb) {
-  //var d = box2d.Math.b2MaxV(box2d.Math.SubtractVV(aabb.minVertex, this.m_worldAABB.maxVertex), box2d.Math.SubtractVV(this.m_worldAABB.minVertex, aabb.maxVertex));
   var dX;
   var dY;
   var d2X;
@@ -327,7 +326,6 @@ box2d.BroadPhase.prototype.Validate = function() {
 box2d.BroadPhase.prototype.ComputeBounds = function(lowerValues, upperValues, aabb) {
   //box2d.Settings.b2Assert(aabb.maxVertex.x > aabb.minVertex.x);
   //box2d.Settings.b2Assert(aabb.maxVertex.y > aabb.minVertex.y);
-  //var minVertex = box2d.Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
   var minVertexX = aabb.minVertex.x;
   var minVertexY = aabb.minVertex.y;
   minVertexX = Math.min(minVertexX, this.m_worldAABB.maxVertex.x);
@@ -335,7 +333,6 @@ box2d.BroadPhase.prototype.ComputeBounds = function(lowerValues, upperValues, aa
   minVertexX = Math.max(minVertexX, this.m_worldAABB.minVertex.x);
   minVertexY = Math.max(minVertexY, this.m_worldAABB.minVertex.y);
 
-  //var maxVertex = box2d.Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
   var maxVertexX = aabb.maxVertex.x;
   var maxVertexY = aabb.maxVertex.y;
   maxVertexX = Math.min(maxVertexX, this.m_worldAABB.maxVertex.x);
@@ -540,7 +537,6 @@ box2d.BroadPhase.prototype.MoveProxy = function(proxyId, aabb) {
         //bound = prevEdge;
         //prevEdge = temp;
         bound.Swap(prevBound);
-        //box2d.Math.b2Swap(bound, prevEdge);
         --index;
       }
     }
@@ -574,7 +570,6 @@ box2d.BroadPhase.prototype.MoveProxy = function(proxyId, aabb) {
         //bound = nextEdge;
         //nextEdge = temp;
         bound.Swap(nextBound);
-        //box2d.Math.b2Swap(bound, nextEdge);
         index++;
       }
     }
@@ -612,7 +607,6 @@ box2d.BroadPhase.prototype.MoveProxy = function(proxyId, aabb) {
         //bound = nextEdge;
         //nextEdge = temp;
         bound.Swap(nextBound);
-        //box2d.Math.b2Swap(bound, nextEdge);
         index++;
       }
     }
@@ -647,7 +641,6 @@ box2d.BroadPhase.prototype.MoveProxy = function(proxyId, aabb) {
         //bound = prevEdge;
         //prevEdge = temp;
         bound.Swap(prevBound);
-        //box2d.Math.b2Swap(bound, prevEdge);
         index--;
       }
     }

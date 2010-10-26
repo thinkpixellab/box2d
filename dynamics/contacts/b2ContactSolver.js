@@ -88,10 +88,10 @@ box2d.ContactSolver = function(contacts, contactCount) {
         ccp.tangentImpulse = cp.tangentImpulse;
         ccp.separation = cp.separation;
 
-        //var r1 = box2d.Math.SubtractVV( cp.position, b1.m_position );
+        //var r1 = box2d.Vec2.subtract( cp.position, b1.m_position );
         var r1X = cp.position.x - b1.m_position.x;
         var r1Y = cp.position.y - b1.m_position.y;
-        //var r2 = box2d.Math.SubtractVV( cp.position, b2.m_position );
+        //var r2 = box2d.Vec2.subtract( cp.position, b2.m_position );
         var r2X = cp.position.x - b2.m_position.x;
         var r2Y = cp.position.y - b2.m_position.y;
 
@@ -137,7 +137,7 @@ box2d.ContactSolver = function(contacts, contactCount) {
         if (ccp.separation > 0.0) {
           ccp.velocityBias = -60.0 * ccp.separation;
         }
-        //var vRel = goog.math.Vec2.dot(c.normal, box2d.Math.SubtractVV( box2d.Math.SubtractVV( box2d.Math.AddVV( v2, box2d.Math.b2CrossFV(w2, r2)), v1 ), box2d.Math.b2CrossFV(w1, r1)));
+        //var vRel = goog.math.Vec2.dot(c.normal, box2d.Vec2.subtract( box2d.Vec2.subtract( box2d.Vec2.add( v2, box2d.Vec2.crossScalar(w2, r2)), v1 ), box2d.Vec2.crossScalar(w1, r1)));
         var tX = v2X + (-w2 * r2Y) - v1X - (-w1 * r1Y);
         var tY = v2Y + (w2 * r2X) - v1Y - (w1 * r1X);
         //var vRel = b2Dot(c.normal, tX/Y);
@@ -184,7 +184,7 @@ box2d.ContactSolver.prototype = {
         tCount = c.pointCount;
         for (j = 0; j < tCount; ++j) {
           var ccp = c.points[j];
-          //var P = box2d.Math.AddVV( box2d.Math.MulFV(ccp.normalImpulse, normal), box2d.Math.MulFV(ccp.tangentImpulse, tangent));
+          //var P = box2d.Vec2.add( box2d.Vec2.multiplyScalar(ccp.normalImpulse, normal), box2d.Vec2.multiplyScalar(ccp.tangentImpulse, tangent));
           var PX = ccp.normalImpulse * normalX + ccp.tangentImpulse * tangentX;
           var PY = ccp.normalImpulse * normalY + ccp.tangentImpulse * tangentY;
 
@@ -202,12 +202,12 @@ box2d.ContactSolver.prototype = {
 
           //b1.m_angularVelocity -= invI1 * box2d.Math.b2CrossVV(r1, P);
           b1.m_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
-          //b1.m_linearVelocity.subtract( box2d.Math.MulFV(invMass1, P) );
+          //b1.m_linearVelocity.subtract( box2d.Vec2.multiplyScalar(invMass1, P) );
           b1.m_linearVelocity.x -= invMass1 * PX;
           b1.m_linearVelocity.y -= invMass1 * PY;
           //b2.m_angularVelocity += invI2 * box2d.Math.b2CrossVV(r2, P);
           b2.m_angularVelocity += invI2 * (r2X * PY - r2Y * PX);
-          //b2.m_linearVelocity.Add( box2d.Math.MulFV(invMass2, P) );
+          //b2.m_linearVelocity.Add( box2d.Vec2.multiplyScalar(invMass2, P) );
           b2.m_linearVelocity.x += invMass2 * PX;
           b2.m_linearVelocity.y += invMass2 * PY;
 
@@ -279,8 +279,8 @@ box2d.ContactSolver.prototype = {
         r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
 
         // Relative velocity at contact
-        //var dv = box2d.Math.SubtractVV( box2d.Math.AddVV( b2.m_linearVelocity, box2d.Math.b2CrossFV(b2.m_angularVelocity, r2)), box2d.Math.SubtractVV(b1.m_linearVelocity, box2d.Math.b2CrossFV(b1.m_angularVelocity, r1)));
-        //dv = box2d.Math.SubtractVV(box2d.Math.SubtractVV( box2d.Math.AddVV( b2.m_linearVelocity, box2d.Math.b2CrossFV(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Math.b2CrossFV(b1.m_angularVelocity, r1));
+        //var dv = box2d.Vec2.subtract( box2d.Vec2.add( b2.m_linearVelocity, box2d.Vec2.crossScalar(b2.m_angularVelocity, r2)), box2d.Vec2.subtract(b1.m_linearVelocity, box2d.Vec2.crossScalar(b1.m_angularVelocity, r1)));
+        //dv = box2d.Vec2.subtract(box2d.Vec2.subtract( box2d.Vec2.add( b2.m_linearVelocity, box2d.Vec2.crossScalar(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Vec2.crossScalar(b1.m_angularVelocity, r1));
         dvX = b2_linearVelocity.x + (-b2_angularVelocity * r2Y) - b1_linearVelocity.x - (-b1_angularVelocity * r1Y);
         dvY = b2_linearVelocity.y + (b2_angularVelocity * r2X) - b1_linearVelocity.y - (b1_angularVelocity * r1X);
 
@@ -294,16 +294,16 @@ box2d.ContactSolver.prototype = {
         lambda = newImpulse - ccp.normalImpulse;
 
         // Apply contact impulse
-        //P = box2d.Math.MulFV(lambda, normal);
+        //P = box2d.Vec2.multiplyScalar(lambda, normal);
         PX = lambda * normalX;
         PY = lambda * normalY;
 
-        //b1.m_linearVelocity.subtract( box2d.Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( box2d.Vec2.multiplyScalar( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
 
-        //b2.m_linearVelocity.Add( box2d.Math.MulFV( invMass2, P ) );
+        //b2.m_linearVelocity.Add( box2d.Vec2.multiplyScalar( invMass2, P ) );
         b2_linearVelocity.x += invMass2 * PX;
         b2_linearVelocity.y += invMass2 * PY;
         b2_angularVelocity += invI2 * (r2X * PY - r2Y * PX);
@@ -313,7 +313,7 @@ box2d.ContactSolver.prototype = {
         // MOVED FROM BELOW
         // Relative velocity at contact
         //var dv = b2.m_linearVelocity + b2Cross(b2.m_angularVelocity, r2) - b1.m_linearVelocity - b2Cross(b1.m_angularVelocity, r1);
-        //dv =  box2d.Math.SubtractVV(box2d.Math.SubtractVV(box2d.Math.AddVV(b2.m_linearVelocity, box2d.Math.b2CrossFV(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Math.b2CrossFV(b1.m_angularVelocity, r1));
+        //dv =  box2d.Vec2.subtract(box2d.Vec2.subtract(box2d.Vec2.add(b2.m_linearVelocity, box2d.Vec2.crossScalar(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Vec2.crossScalar(b1.m_angularVelocity, r1));
         dvX = b2_linearVelocity.x + (-b2_angularVelocity * r2Y) - b1_linearVelocity.x - (-b1_angularVelocity * r1Y);
         dvY = b2_linearVelocity.y + (b2_angularVelocity * r2X) - b1_linearVelocity.y - (b1_angularVelocity * r1X);
 
@@ -327,16 +327,16 @@ box2d.ContactSolver.prototype = {
         lambda = newImpulse - ccp.tangentImpulse;
 
         // Apply contact impulse
-        //P = box2d.Math.MulFV(lambda, tangent);
+        //P = box2d.Vec2.multiplyScalar(lambda, tangent);
         PX = lambda * tangentX;
         PY = lambda * tangentY;
 
-        //b1.m_linearVelocity.subtract( box2d.Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( box2d.Vec2.multiplyScalar( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
 
-        //b2.m_linearVelocity.Add( box2d.Math.MulFV( invMass2, P ) );
+        //b2.m_linearVelocity.Add( box2d.Vec2.multiplyScalar( invMass2, P ) );
         b2_linearVelocity.x += invMass2 * PX;
         b2_linearVelocity.y += invMass2 * PY;
         b2_angularVelocity += invI2 * (r2X * PY - r2Y * PX);
@@ -363,7 +363,7 @@ box2d.ContactSolver.prototype = {
 
         // Relative velocity at contact
         //var dv = b2.m_linearVelocity + b2Cross(b2.m_angularVelocity, r2) - b1.m_linearVelocity - b2Cross(b1.m_angularVelocity, r1);
-        //dv =  box2d.Math.SubtractVV(box2d.Math.SubtractVV(box2d.Math.AddVV(b2.m_linearVelocity, box2d.Math.b2CrossFV(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Math.b2CrossFV(b1.m_angularVelocity, r1));
+        //dv =  box2d.Vec2.subtract(box2d.Vec2.subtract(box2d.Vec2.add(b2.m_linearVelocity, box2d.Vec2.crossScalar(b2.m_angularVelocity, r2)), b1.m_linearVelocity), box2d.Vec2.crossScalar(b1.m_angularVelocity, r1));
         dvX = b2_linearVelocity.x + (-b2_angularVelocity * r2Y) - b1_linearVelocity.x - (-b1_angularVelocity * r1Y);
         dvY = b2_linearVelocity.y + (b2_angularVelocity * r2X) - b1_linearVelocity.y - (b1_angularVelocity * r1X);
 
@@ -377,16 +377,16 @@ box2d.ContactSolver.prototype = {
         lambda = newImpulse - ccp.tangentImpulse;
 
         // Apply contact impulse
-        //P = box2d.Math.MulFV(lambda, tangent);
+        //P = box2d.Vec2.multiplyScalar(lambda, tangent);
         PX = lambda * tangentX;
         PY = lambda * tangentY;
 
-        //b1.m_linearVelocity.subtract( box2d.Math.MulFV( invMass1, P ) );
+        //b1.m_linearVelocity.subtract( box2d.Vec2.multiplyScalar( invMass1, P ) );
         b1_linearVelocity.x -= invMass1 * PX;
         b1_linearVelocity.y -= invMass1 * PY;
         b1_angularVelocity -= invI1 * (r1X * PY - r1Y * PX);
 
-        //b2.m_linearVelocity.Add( box2d.Math.MulFV( invMass2, P ) );
+        //b2.m_linearVelocity.Add( box2d.Vec2.multiplyScalar( invMass2, P ) );
         b2_linearVelocity.x += invMass2 * PX;
         b2_linearVelocity.y += invMass2 * PY;
         b2_angularVelocity += invI2 * (r2X * PY - r2Y * PX);
@@ -441,15 +441,15 @@ box2d.ContactSolver.prototype = {
         var r2X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
         var r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
 
-        //var p1 = box2d.Math.AddVV(b1.m_position, r1);
+        //var p1 = box2d.Vec2.add(b1.m_position, r1);
         var p1X = b1_position.x + r1X;
         var p1Y = b1_position.y + r1Y;
 
-        //var p2 = box2d.Math.AddVV(b2.m_position, r2);
+        //var p2 = box2d.Vec2.add(b2.m_position, r2);
         var p2X = b2_position.x + r2X;
         var p2Y = b2_position.y + r2Y;
 
-        //var dp = box2d.Math.SubtractVV(p2, p1);
+        //var dp = box2d.Vec2.subtract(p2, p1);
         var dpX = p2X - p1X;
         var dpY = p2Y - p1Y;
 
@@ -471,17 +471,17 @@ box2d.ContactSolver.prototype = {
         ccp.positionImpulse = Math.max(impulse0 + dImpulse, 0.0);
         dImpulse = ccp.positionImpulse - impulse0;
 
-        //var impulse = box2d.Math.MulFV( dImpulse, normal );
+        //var impulse = box2d.Vec2.multiplyScalar( dImpulse, normal );
         var impulseX = dImpulse * normalX;
         var impulseY = dImpulse * normalY;
 
-        //b1.m_position.subtract( box2d.Math.MulFV( invMass1, impulse ) );
+        //b1.m_position.subtract( box2d.Vec2.multiplyScalar( invMass1, impulse ) );
         b1_position.x -= invMass1 * impulseX;
         b1_position.y -= invMass1 * impulseY;
         b1_rotation -= invI1 * (r1X * impulseY - r1Y * impulseX);
         b1.m_R.Set(b1_rotation);
 
-        //b2.m_position.Add( box2d.Math.MulFV( invMass2, impulse ) );
+        //b2.m_position.Add( box2d.Vec2.multiplyScalar( invMass2, impulse ) );
         b2_position.x += invMass2 * impulseX;
         b2_position.y += invMass2 * impulseY;
         b2_rotation += invI2 * (r2X * impulseY - r2Y * impulseX);

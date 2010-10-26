@@ -35,7 +35,7 @@ box2d.AABB = function() {
 
 /** @return {boolean} */
 box2d.AABB.prototype.IsValid = function() {
-  //var d = box2d.Math.SubtractVV(this.maxVertex, this.minVertex);
+  //var d = box2d.Vec2.subtract(this.maxVertex, this.minVertex);
   var dX = this.maxVertex.x;
   var dY = this.maxVertex.y;
   dX = this.maxVertex.x;

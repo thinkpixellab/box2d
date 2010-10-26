@@ -67,13 +67,13 @@ box2d.RevoluteJoint = function(def) {
   var tX;
   var tY;
 
-  //this.m_localAnchor1 = box2d.Math.b2MulTMV(this.m_body1.m_R, box2d.Math.SubtractVV( def.anchorPoint, this.m_body1.m_position));
+  //this.m_localAnchor1 = box2d.Math.b2MulTMV(this.m_body1.m_R, box2d.Vec2.subtract( def.anchorPoint, this.m_body1.m_position));
   tMat = this.m_body1.m_R;
   tX = def.anchorPoint.x - this.m_body1.m_position.x;
   tY = def.anchorPoint.y - this.m_body1.m_position.y;
   this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
   this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
-  //this.m_localAnchor2 = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Math.SubtractVV( def.anchorPoint, this.m_body2.m_position));
+  //this.m_localAnchor2 = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Vec2.subtract( def.anchorPoint, this.m_body2.m_position));
   tMat = this.m_body2.m_R;
   tX = def.anchorPoint.x - this.m_body2.m_position.x;
   tY = def.anchorPoint.y - this.m_body2.m_position.y;
@@ -177,7 +177,6 @@ box2d.RevoluteJoint.prototype.PrepareVelocitySolver = function() {
   this.K3.col1.y = -invI2 * r2X * r2Y;
   this.K3.col2.y = invI2 * r2X * r2X;
 
-  //var this.K = box2d.Math.AddMM(box2d.Math.AddMM(this.K1, this.K2), this.K3);
   this.K.SetM(this.K1);
   this.K.AddM(this.K2);
   this.K.AddM(this.K3);
@@ -215,16 +214,16 @@ box2d.RevoluteJoint.prototype.PrepareVelocitySolver = function() {
 
   // Warm starting.
   if (box2d.World.s_enableWarmStarting) {
-    //b1.m_linearVelocity.subtract( box2d.Math.MulFV( invMass1, this.m_ptpImpulse) );
+    //b1.m_linearVelocity.subtract( box2d.Vec2.multiplyScalar( invMass1, this.m_ptpImpulse) );
     b1.m_linearVelocity.x -= invMass1 * this.m_ptpImpulse.x;
     b1.m_linearVelocity.y -= invMass1 * this.m_ptpImpulse.y;
-    //b1.m_angularVelocity -= invI1 * (box2d.Math.b2CrossVV(r1, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);
+    //b1.m_angularVelocity -= invI1 * (box2d.Vec2.cross(r1, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);
     b1.m_angularVelocity -= invI1 * ((r1X * this.m_ptpImpulse.y - r1Y * this.m_ptpImpulse.x) + this.m_motorImpulse + this.m_limitImpulse);
 
-    //b2.m_linearVelocity.Add( box2d.Math.MulFV( invMass2 , this.m_ptpImpulse ));
+    //b2.m_linearVelocity.Add( box2d.Vec2.multiplyScalar( invMass2 , this.m_ptpImpulse ));
     b2.m_linearVelocity.x += invMass2 * this.m_ptpImpulse.x;
     b2.m_linearVelocity.y += invMass2 * this.m_ptpImpulse.y;
-    //b2.m_angularVelocity += invI2 * (box2d.Math.b2CrossVV(r2, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);
+    //b2.m_angularVelocity += invI2 * (box2d.Vec2.cross(r2, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);
     b2.m_angularVelocity += invI2 * ((r2X * this.m_ptpImpulse.y - r2Y * this.m_ptpImpulse.x) + this.m_motorImpulse + this.m_limitImpulse);
   } else {
     this.m_ptpImpulse.SetZero();

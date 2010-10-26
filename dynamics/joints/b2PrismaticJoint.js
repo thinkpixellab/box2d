@@ -71,13 +71,13 @@ box2d.PrismaticJoint = function(def) {
   var tX;
   var tY;
 
-  //this.m_localAnchor1 = box2d.Math.b2MulTMV(this.m_body1.m_R, box2d.Math.SubtractVV(def.anchorPoint , this.m_body1.m_position));
+  //this.m_localAnchor1 = box2d.Math.b2MulTMV(this.m_body1.m_R, box2d.Vec2.subtract(def.anchorPoint , this.m_body1.m_position));
   tMat = this.m_body1.m_R;
   tX = (def.anchorPoint.x - this.m_body1.m_position.x);
   tY = (def.anchorPoint.y - this.m_body1.m_position.y);
   this.m_localAnchor1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
 
-  //this.m_localAnchor2 = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Math.SubtractVV(def.anchorPoint , this.m_body2.m_position));
+  //this.m_localAnchor2 = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Vec2.subtract(def.anchorPoint , this.m_body2.m_position));
   tMat = this.m_body2.m_R;
   tX = (def.anchorPoint.x - this.m_body2.m_position.x);
   tY = (def.anchorPoint.y - this.m_body2.m_position.y);
@@ -89,7 +89,7 @@ box2d.PrismaticJoint = function(def) {
   tY = def.axis.y;
   this.m_localXAxis1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
 
-  //this.m_localYAxis1 = box2d.Math.b2CrossFV(1.0, this.m_localXAxis1);
+  //this.m_localYAxis1 = box2d.Vec2.crossScalar(1.0, this.m_localXAxis1);
   this.m_localYAxis1.x = -this.m_localXAxis1.y;
   this.m_localYAxis1.y = this.m_localXAxis1.x;
 
@@ -119,7 +119,7 @@ goog.inherits(box2d.PrismaticJoint, box2d.Joint);
 
 box2d.PrismaticJoint.prototype.GetAnchor1 = function() {
   var b1 = this.m_body1;
-  //return box2d.Math.AddVV(b1.m_position, box2d.Math.b2MulMV(b1.m_R, this.m_localAnchor1));
+  //return box2d.Vec2.add(b1.m_position, box2d.Math.b2MulMV(b1.m_R, this.m_localAnchor1));
   var tVec = new box2d.Vec2();
   tVec.SetV(this.m_localAnchor1);
   tVec.MulM(b1.m_R);
@@ -128,7 +128,7 @@ box2d.PrismaticJoint.prototype.GetAnchor1 = function() {
 };
 box2d.PrismaticJoint.prototype.GetAnchor2 = function() {
   var b2 = this.m_body2;
-  //return box2d.Math.AddVV(b2.m_position, box2d.Math.b2MulMV(b2.m_R, this.m_localAnchor2));
+  //return box2d.Vec2.add(b2.m_position, box2d.Math.b2MulMV(b2.m_R, this.m_localAnchor2));
   var tVec = new box2d.Vec2();
   tVec.SetV(this.m_localAnchor2);
   tVec.MulM(b2.m_R);
@@ -149,13 +149,13 @@ box2d.PrismaticJoint.prototype.GetJointTranslation = function() {
   tMat = b2.m_R;
   var r2X = tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y;
   var r2Y = tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y;
-  //var p1 = box2d.Math.AddVV(b1.m_position , r1);
+  //var p1 = box2d.Vec2.add(b1.m_position , r1);
   var p1X = b1.m_position.x + r1X;
   var p1Y = b1.m_position.y + r1Y;
-  //var p2 = box2d.Math.AddVV(b2.m_position , r2);
+  //var p2 = box2d.Vec2.add(b2.m_position , r2);
   var p2X = b2.m_position.x + r2X;
   var p2Y = b2.m_position.y + r2Y;
-  //var d = box2d.Math.SubtractVV(p2, p1);
+  //var d = box2d.Vec2.subtract(p2, p1);
   var dX = p2X - p1X;
   var dY = p2Y - p1Y;
   //var ax1 = box2d.Math.b2MulMV(b1.m_R, this.m_localXAxis1);
@@ -181,13 +181,13 @@ box2d.PrismaticJoint.prototype.GetJointSpeed = function() {
   tMat = b2.m_R;
   var r2X = tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y;
   var r2Y = tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y;
-  //var p1 = box2d.Math.AddVV(b1.m_position , r1);
+  //var p1 = box2d.Vec2.add(b1.m_position , r1);
   var p1X = b1.m_position.x + r1X;
   var p1Y = b1.m_position.y + r1Y;
-  //var p2 = box2d.Math.AddVV(b2.m_position , r2);
+  //var p2 = box2d.Vec2.add(b2.m_position , r2);
   var p2X = b2.m_position.x + r2X;
   var p2Y = b2.m_position.y + r2Y;
-  //var d = box2d.Math.SubtractVV(p2, p1);
+  //var d = box2d.Vec2.subtract(p2, p1);
   var dX = p2X - p1X;
   var dY = p2Y - p1Y;
   //var ax1 = box2d.Math.b2MulMV(b1.m_R, this.m_localXAxis1);
@@ -200,7 +200,7 @@ box2d.PrismaticJoint.prototype.GetJointSpeed = function() {
   var w1 = b1.m_angularVelocity;
   var w2 = b2.m_angularVelocity;
 
-  //var speed = goog.math.Vec2.dot(d, box2d.Math.b2CrossFV(w1, ax1)) + goog.math.Vec2.dot(ax1, box2d.Math.SubtractVV( box2d.Math.SubtractVV( box2d.Math.AddVV( v2 , box2d.Math.b2CrossFV(w2, r2)) , v1) , box2d.Math.b2CrossFV(w1, r1)));
+  //var speed = goog.math.Vec2.dot(d, box2d.Vec2.crossScalar(w1, ax1)) + goog.math.Vec2.dot(ax1, box2d.Vec2.subtract( box2d.Vec2.subtract( box2d.Vec2.add( v2 , box2d.Vec2.crossScalar(w2, r2)) , v1) , box2d.Vec2.crossScalar(w1, r1)));
   //var b2D = (dX*(-w1 * ax1Y) + dY*(w1 * ax1X));
   //var b2D2 = (ax1X * ((( v2.x + (-w2 * r2Y)) - v1.x) - (-w1 * r1Y)) + ax1Y * ((( v2.y + (w2 * r2X)) - v1.y) - (w1 * r1X)));
   var speed = (dX * (-w1 * ax1Y) + dY * (w1 * ax1X)) + (ax1X * (((v2.x + (-w2 * r2Y)) - v1.x) - (-w1 * r1Y)) + ax1Y * (((v2.y + (w2 * r2X)) - v1.y) - (w1 * r1X)));

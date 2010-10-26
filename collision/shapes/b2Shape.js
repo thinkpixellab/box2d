@@ -139,10 +139,10 @@ box2d.Shape.PolyMass = function(massData, vs, count, rho) {
     var p2 = vs[i];
     var p3 = i + 1 < count ? vs[i + 1] : vs[0];
 
-    var e1 = box2d.Math.SubtractVV(p2, p1);
-    var e2 = box2d.Math.SubtractVV(p3, p1);
+    var e1 = box2d.Vec2.subtract(p2, p1);
+    var e2 = box2d.Vec2.subtract(p3, p1);
 
-    var D = box2d.Math.b2CrossVV(e1, e2);
+    var D = box2d.Vec2.cross(e1, e2);
 
     var triangleArea = 0.5 * D;
     area += triangleArea;

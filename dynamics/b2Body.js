@@ -123,7 +123,7 @@ box2d.Body = function(bd, world) {
     sd = bd.shapes[i];
     massData = massDatas[i];
     this.m_I += massData.I;
-    var r = box2d.Math.SubtractVV(box2d.Math.AddVV(sd.localPosition, massData.center), this.m_center);
+    var r = box2d.Vec2.subtract(box2d.Vec2.add(sd.localPosition, massData.center), this.m_center);
     this.m_I += massData.mass * goog.math.Vec2.dot(r, r);
   }
 
@@ -145,7 +145,7 @@ box2d.Body = function(bd, world) {
    @private
    @type {!box2d.Vec2}
    */
-  this.m_linearVelocity = box2d.Math.AddVV(bd.linearVelocity, box2d.Math.b2CrossFV(bd.angularVelocity, this.m_center));
+  this.m_linearVelocity = box2d.Vec2.add(bd.linearVelocity, box2d.Vec2.crossScalar(bd.angularVelocity, this.m_center));
   this.m_angularVelocity = bd.angularVelocity;
 
   /**
@@ -190,7 +190,7 @@ box2d.Body.prototype.SetOriginPosition = function(position, rotation) {
 
   this.m_rotation = rotation;
   this.m_R.Set(this.m_rotation);
-  this.m_position = box2d.Math.AddVV(position, box2d.Math.b2MulMV(this.m_R, this.m_center));
+  this.m_position = box2d.Vec2.add(position, box2d.Math.b2MulMV(this.m_R, this.m_center));
 
   this.m_position0.SetV(this.m_position);
   this.m_rotation0 = this.m_rotation;
@@ -206,7 +206,7 @@ box2d.Body.prototype.SetOriginPosition = function(position, rotation) {
 // necessarily coincide with the center of mass. It depends on how the
 // shapes are created.
 box2d.Body.prototype.GetOriginPosition = function() {
-  return box2d.Math.SubtractVV(this.m_position, box2d.Math.b2MulMV(this.m_R, this.m_center));
+  return box2d.Vec2.subtract(this.m_position, box2d.Math.b2MulMV(this.m_R, this.m_center));
 };
 
 // Set the position of the body's center of mass and rotation (radians).
@@ -258,7 +258,7 @@ box2d.Body.prototype.GetAngularVelocity = function() {
 box2d.Body.prototype.ApplyForce = function(force, point) {
   if (this.IsSleeping() == false) {
     this.m_force.add(force);
-    this.m_torque += box2d.Math.b2CrossVV(box2d.Math.SubtractVV(point, this.m_position), force);
+    this.m_torque += box2d.Vec2.cross(box2d.Vec2.subtract(point, this.m_position), force);
   }
 };
 
@@ -272,8 +272,8 @@ box2d.Body.prototype.ApplyTorque = function(torque) {
 // Apply an impulse at a point. This immediately modifies the velocity.
 box2d.Body.prototype.ApplyImpulse = function(impulse, point) {
   if (this.IsSleeping() == false) {
-    this.m_linearVelocity.add(box2d.Math.MulFV(this.m_invMass, impulse));
-    this.m_angularVelocity += (this.m_invI * box2d.Math.b2CrossVV(box2d.Math.SubtractVV(point, this.m_position), impulse));
+    this.m_linearVelocity.add(box2d.Vec2.multiplyScalar(this.m_invMass, impulse));
+    this.m_angularVelocity += (this.m_invI * box2d.Vec2.cross(box2d.Vec2.subtract(point, this.m_position), impulse));
   }
 };
 
@@ -288,7 +288,7 @@ box2d.Body.prototype.GetInertia = function() {
 // Get the world coordinates of a point give the local coordinates
 // relative to the body's center of mass.
 box2d.Body.prototype.GetWorldPoint = function(localPoint) {
-  return box2d.Math.AddVV(this.m_position, box2d.Math.b2MulMV(this.m_R, localPoint));
+  return box2d.Vec2.add(this.m_position, box2d.Math.b2MulMV(this.m_R, localPoint));
 };
 
 // Get the world coordinates of a vector given the local coordinates.
@@ -298,7 +298,7 @@ box2d.Body.prototype.GetWorldVector = function(localVector) {
 
 // Returns a local point relative to the center of mass given a world point.
 box2d.Body.prototype.GetLocalPoint = function(worldPoint) {
-  return box2d.Math.b2MulTMV(this.m_R, box2d.Math.SubtractVV(worldPoint, this.m_position));
+  return box2d.Math.b2MulTMV(this.m_R, box2d.Vec2.subtract(worldPoint, this.m_position));
 };
 
 // Returns a local vector given a world vector.

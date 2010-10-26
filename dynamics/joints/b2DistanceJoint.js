@@ -224,10 +224,10 @@ box2d.DistanceJoint.prototype.SolvePositionConstraints = function() {
 };
 
 box2d.DistanceJoint.prototype.GetAnchor1 = function() {
-  return box2d.Math.AddVV(this.m_body1.m_position, box2d.Math.b2MulMV(this.m_body1.m_R, this.m_localAnchor1));
+  return box2d.Vec2.add(this.m_body1.m_position, box2d.Math.b2MulMV(this.m_body1.m_R, this.m_localAnchor1));
 };
 box2d.DistanceJoint.prototype.GetAnchor2 = function() {
-  return box2d.Math.AddVV(this.m_body2.m_position, box2d.Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor2));
+  return box2d.Vec2.add(this.m_body2.m_position, box2d.Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor2));
 };
 
 box2d.DistanceJoint.prototype.GetReactionForce = function(invTimeStep) {

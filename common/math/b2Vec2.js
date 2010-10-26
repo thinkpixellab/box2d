@@ -137,9 +137,56 @@ box2d.Vec2.prototype.IsValid = function() {
 };
 
 /**
- @param {number} x_
- @param {number} y_
- @return {box2d.Vec2} */
-box2d.Vec2.Make = function(x_, y_) {
-  return new box2d.Vec2(x_, y_);
+ @param {!box2d.Vec2} a
+ @param {!box2d.Vec2} b
+ @return {number}
+ */
+box2d.Vec2.cross = function(a, b) {
+  return a.x * b.y - a.y * b.x;
 };
+
+/**
+ @param {number} s
+ @param {!box2d.Vec2} a
+ @return {!box2d.Vec2}
+ */
+box2d.Vec2.crossScalar = function(s, a) {
+  return new box2d.Vec2(-s * a.y, s * a.x);
+};
+
+/**
+ @param {!goog.math.Coordinate} a
+ @param {!goog.math.Coordinate} b
+ @return {!box2d.Vec2}
+ */
+box2d.Vec2.add = function(a, b) {
+  return new box2d.Vec2(a.x + b.x, a.y + b.y);
+};
+
+/**
+ @param {!goog.math.Coordinate} a
+ @param {!goog.math.Coordinate} b
+ @return {!box2d.Vec2}
+ */
+box2d.Vec2.subtract = function(a, b) {
+  return new box2d.Vec2(a.x - b.x, a.y - b.y);
+};
+
+/**
+ @param {number} s
+ @param {!box2d.Vec2} a
+ @return {!box2d.Vec2}
+ */
+box2d.Vec2.multiplyScalar = function(s, a) {
+  return new box2d.Vec2(s * a.x, s * a.y);
+};
+
+/**
+ @param {!goog.math.Coordinate} a
+ @return {!box2d.Vec2}
+ */
+box2d.Vec2.abs = function(a) {
+  return new box2d.Vec2(Math.abs(a.x), Math.abs(a.y));
+};
+
+

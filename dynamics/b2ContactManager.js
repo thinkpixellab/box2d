@@ -78,11 +78,9 @@ box2d.ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserDat
     var tempShape = shape1;
     shape1 = shape2;
     shape2 = tempShape;
-    //box2d.Math.b2Swap(shape1, shape2);
     var tempBody = body1;
     body1 = body2;
     body2 = tempBody;
-    //box2d.Math.b2Swap(body1, body2);
   }
 
   // Call the factory.

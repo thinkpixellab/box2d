@@ -29,8 +29,6 @@ goog.require('box2d.Pair');
  */
 box2d.PairManager = function() {
   var i = 0;
-  //box2d.Settings.b2Assert(box2d.Math.b2IsPowerOfTwo(box2d.Pair.b2_tableCapacity) == true);
-  //box2d.Settings.b2Assert(box2d.Pair.b2_tableCapacity >= box2d.Settings.b2_maxPairs);
   this.m_hashTable = new Array(box2d.Pair.b2_tableCapacity);
   for (i = 0; i < box2d.Pair.b2_tableCapacity; ++i) {
     this.m_hashTable[i] = box2d.Pair.b2_nullPair;
@@ -147,7 +145,6 @@ box2d.PairManager.prototype = {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
-      //box2d.Math.b2Swap(p1, p2);
     }
 
     var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;
@@ -185,7 +182,6 @@ box2d.PairManager.prototype = {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
-      //box2d.Math.b2Swap(proxyId1, proxyId2);
     }
 
     var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;
@@ -263,7 +259,6 @@ box2d.PairManager.prototype._find = function(proxyId1, proxyId2) {
     var temp = proxyId1;
     proxyId1 = proxyId2;
     proxyId2 = temp;
-    //box2d.Math.b2Swap(proxyId1, proxyId2);
   }
 
   var hash = box2d.PairManager.Hash(proxyId1, proxyId2) & box2d.Pair.b2_tableMask;

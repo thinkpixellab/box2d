@@ -139,7 +139,7 @@ box2d.Island.prototype.Solve = function(step, gravity) {
 
     if (b.m_invMass == 0.0) continue;
 
-    b.m_linearVelocity.add(box2d.Math.MulFV(step.dt, box2d.Math.AddVV(gravity, box2d.Math.MulFV(b.m_invMass, b.m_force))));
+    b.m_linearVelocity.add(box2d.Vec2.multiplyScalar(step.dt, box2d.Vec2.add(gravity, box2d.Vec2.multiplyScalar(b.m_invMass, b.m_force))));
     b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
 
     //b.m_linearVelocity *= b.m_linearDamping;
@@ -175,7 +175,7 @@ box2d.Island.prototype.Solve = function(step, gravity) {
 
     if (b.m_invMass == 0.0) continue;
 
-    //b.m_position.Add( box2d.Math.MulFV (step.dt, b.m_linearVelocity) );
+    //b.m_position.Add( box2d.Vec2.multiplyScalar (step.dt, b.m_linearVelocity) );
     b.m_position.x += step.dt * b.m_linearVelocity.x;
     b.m_position.y += step.dt * b.m_linearVelocity.y;
     b.m_rotation += step.dt * b.m_angularVelocity;

@@ -190,13 +190,13 @@ box2d.PolyShape = function(def, body, newOrigin) {
   this.m_maxRadius = 0.0;
   for (i = 0; i < this.m_vertexCount; ++i) {
     var v = this.m_vertices[i];
-    //minVertex = box2d.Math.b2MinV(minVertex, this.m_vertices[i]);
+
     minVertexX = Math.min(minVertexX, v.x);
     minVertexY = Math.min(minVertexY, v.y);
-    //maxVertex = box2d.Math.b2MaxV(maxVertex, this.m_vertices[i]);
+
     maxVertexX = Math.max(maxVertexX, v.x);
     maxVertexY = Math.max(maxVertexY, v.y);
-    //this.m_maxRadius = b2Max(this.m_maxRadius, v.Length());
+
     this.m_maxRadius = Math.max(this.m_maxRadius, v.magnitude());
   }
 
@@ -227,7 +227,7 @@ box2d.PolyShape = function(def, body, newOrigin) {
     i1 = i;
     i2 = i + 1 < this.m_vertexCount ? i + 1 : 0;
 
-    //box2d.Settings.b2Assert(box2d.Math.b2CrossVV(this.m_normals[i1], this.m_normals[i2]) > Number.MIN_VALUE);
+    //box2d.Settings.b2Assert(box2d.Vec2.cross(this.m_normals[i1], this.m_normals[i2]) > Number.MIN_VALUE);
   }
 
   this.m_R.SetM(this.m_body.m_R);
@@ -253,10 +253,10 @@ box2d.PolyShape = function(def, body, newOrigin) {
   var positionX = this.m_position.x + (this.m_R.col1.x * this.m_localOBB.center.x + this.m_R.col2.x * this.m_localOBB.center.y);
   var positionY = this.m_position.y + (this.m_R.col1.y * this.m_localOBB.center.x + this.m_R.col2.y * this.m_localOBB.center.y);
 
-  //aabb.minVertex = box2d.Math.SubtractVV(this.m_position, h);
+  //aabb.minVertex = box2d.Vec2.subtract(this.m_position, h);
   aabb.minVertex.x = positionX - hX;
   aabb.minVertex.y = positionY - hY;
-  //aabb.maxVertex = box2d.Math.AddVV(this.m_position, h);
+  //aabb.maxVertex = box2d.Vec2.add(this.m_position, h);
   aabb.maxVertex.x = positionX + hX;
   aabb.maxVertex.y = positionY + hY;
 
@@ -275,14 +275,14 @@ goog.inherits(box2d.PolyShape, box2d.Shape);
 
 box2d.PolyShape.prototype.TestPoint = function(p) {
 
-  //var pLocal = box2d.Math.b2MulTMV(this.m_R, box2d.Math.SubtractVV(p, this.m_position));
+  //var pLocal = box2d.Math.b2MulTMV(this.m_R, box2d.Vec2.subtract(p, this.m_position));
   var pLocal = new box2d.Vec2();
   pLocal.SetV(p);
   pLocal.subtract(this.m_position);
   pLocal.MulTM(this.m_R);
 
   for (var i = 0; i < this.m_vertexCount; ++i) {
-    //var dot = goog.math.Vec2.dot(this.m_normals[i], box2d.Math.SubtractVV(pLocal, this.m_vertices[i]));
+    //var dot = goog.math.Vec2.dot(this.m_normals[i], box2d.Vec2.subtract(pLocal, this.m_vertices[i]));
     var tVec = new box2d.Vec2();
     tVec.SetV(pLocal);
     tVec.subtract(this.m_vertices[i]);

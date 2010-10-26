@@ -90,7 +90,7 @@ box2d.CircleShape = function(def, body, localCenter) {
 goog.inherits(box2d.CircleShape, box2d.Shape);
 
 box2d.CircleShape.prototype.TestPoint = function(p) {
-  //var d = box2d.Math.SubtractVV(p, this.m_position);
+  //var d = box2d.Vec2.subtract(p, this.m_position);
   var d = new box2d.Vec2();
   d.SetV(p);
   d.subtract(this.m_position);

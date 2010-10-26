@@ -59,7 +59,7 @@ box2d.MouseJoint = function(def) {
   //
   //super(def);
   this.m_target.SetV(def.target);
-  //this.m_localAnchor = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
+  //this.m_localAnchor = box2d.Math.b2MulTMV(this.m_body2.m_R, box2d.Vec2.subtract( this.m_target, this.m_body2.m_position ) );
   var tX = this.m_target.x - this.m_body2.m_position.x;
   var tY = this.m_target.y - this.m_body2.m_position.y;
   this.m_localAnchor.x = (tX * this.m_body2.m_R.col1.x + tY * this.m_body2.m_R.col1.y);
