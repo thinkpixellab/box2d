@@ -24,15 +24,6 @@ goog.provide('box2d.Math');
  @param {box2d.Vec2} b
  @return {number}
  */
-box2d.Math.b2Dot = function(a, b) {
-  return a.x * b.x + a.y * b.y;
-};
-/**
- @const
- @param {box2d.Vec2} a
- @param {box2d.Vec2} b
- @return {number}
- */
 box2d.Math.b2CrossVV = function(a, b) {
   return a.x * b.y - a.y * b.x;
 };
@@ -69,7 +60,7 @@ box2d.Math.b2MulMV = function(A, v) {
  @return {box2d.Vec2}
  */
 box2d.Math.b2MulTMV = function(A, v) {
-  var u = new box2d.Vec2(box2d.Math.b2Dot(v, A.col1), box2d.Math.b2Dot(v, A.col2));
+  var u = new box2d.Vec2(goog.math.Vec2.dot(v, A.col1), goog.math.Vec2.dot(v, A.col2));
   return u;
 };
 /**
@@ -96,8 +87,8 @@ box2d.Math.b2MulMM = function(A, B) {
   return C;
 };
 box2d.Math.b2MulTMM = function(A, B) {
-  var c1 = new box2d.Vec2(box2d.Math.b2Dot(A.col1, B.col1), box2d.Math.b2Dot(A.col2, B.col1));
-  var c2 = new box2d.Vec2(box2d.Math.b2Dot(A.col1, B.col2), box2d.Math.b2Dot(A.col2, B.col2));
+  var c1 = new box2d.Vec2(goog.math.Vec2.dot(A.col1, B.col1), goog.math.Vec2.dot(A.col2, B.col1));
+  var c2 = new box2d.Vec2(goog.math.Vec2.dot(A.col1, B.col2), goog.math.Vec2.dot(A.col2, B.col2));
   var C = new box2d.Mat22(0, c1, c2);
   return C;
 };

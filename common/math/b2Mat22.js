@@ -26,10 +26,10 @@ box2d.Mat22 = function(angle, c1, c2) {
   if (angle == null) angle = 0;
   // initialize instance variables for references
 
-  /** @type {box2d.Vec2} */
+  /** @type {!box2d.Vec2} */
   this.col1 = new box2d.Vec2();
 
-  /** @type {box2d.Vec2} */
+  /** @type {!box2d.Vec2} */
   this.col2 = new box2d.Vec2();
   //
   if (c1 != null && c2 != null) {

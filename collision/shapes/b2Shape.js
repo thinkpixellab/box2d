@@ -178,7 +178,7 @@ box2d.Shape.PolyMass = function(massData, vs, count, rho) {
   massData.center = center;
 
   // Inertia tensor relative to the center.
-  I = rho * (I - area * box2d.Math.b2Dot(center, center));
+  I = rho * (I - area * goog.math.Vec2.dot(center, center));
   massData.I = I;
 };
 box2d.Shape.PolyCentroid = function(vs, count, out) {

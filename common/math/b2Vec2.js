@@ -80,10 +80,10 @@ box2d.Vec2.prototype.MulM = function(A) {
   this.y = A.col1.y * tX + A.col2.y * this.y;
 };
 
-/** @param {box2d.Mat22} A */
+/** @param {!box2d.Mat22} A */
 box2d.Vec2.prototype.MulTM = function(A) {
-  var tX = box2d.Math.b2Dot(this, A.col1);
-  this.y = box2d.Math.b2Dot(this, A.col2);
+  var tX = goog.math.Vec2.dot(this, A.col1);
+  this.y = goog.math.Vec2.dot(this, A.col2);
   this.x = tX;
 };
 

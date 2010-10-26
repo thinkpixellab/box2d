@@ -94,7 +94,7 @@ box2d.CircleShape.prototype.TestPoint = function(p) {
   var d = new box2d.Vec2();
   d.SetV(p);
   d.subtract(this.m_position);
-  return box2d.Math.b2Dot(d, d) <= this.m_radius * this.m_radius;
+  return goog.math.Vec2.dot(d, d) <= this.m_radius * this.m_radius;
 };
 
 box2d.CircleShape.prototype.Synchronize = function(position1, R1, position2, R2) {

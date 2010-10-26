@@ -245,7 +245,7 @@ box2d.Island.prototype.UpdateSleep = function(dt) {
       minSleepTime = 0.0;
     }
 
-    if ((b.m_flags & box2d.Body.e_allowSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || box2d.Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
+    if ((b.m_flags & box2d.Body.e_allowSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || goog.math.Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
       b.m_sleepTime = 0.0;
       minSleepTime = 0.0;
     } else {

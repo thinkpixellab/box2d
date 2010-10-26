@@ -48,7 +48,7 @@ box2d.Jacobian.prototype = {
   },
   Compute: function(x1, a1, x2, a2) {
 
-    //return box2d.Math.b2Dot(this.linear1, x1) + this.angular1 * a1 + box2d.Math.b2Dot(this.linear2, x2) + this.angular2 * a2;
+    //return goog.math.Vec2.dot(this.linear1, x1) + this.angular1 * a1 + goog.math.Vec2.dot(this.linear2, x2) + this.angular2 * a2;
     return (this.linear1.x * x1.x + this.linear1.y * x1.y) + this.angular1 * a1 + (this.linear2.x * x2.x + this.linear2.y * x2.y) + this.angular2 * a2;
   }
 };

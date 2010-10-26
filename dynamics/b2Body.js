@@ -124,7 +124,7 @@ box2d.Body = function(bd, world) {
     massData = massDatas[i];
     this.m_I += massData.I;
     var r = box2d.Math.SubtractVV(box2d.Math.AddVV(sd.localPosition, massData.center), this.m_center);
-    this.m_I += massData.mass * box2d.Math.b2Dot(r, r);
+    this.m_I += massData.mass * goog.math.Vec2.dot(r, r);
   }
 
   if (this.m_mass > 0.0) {

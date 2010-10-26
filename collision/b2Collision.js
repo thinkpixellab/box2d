@@ -29,8 +29,8 @@ box2d.Collision.ClipSegmentToLine = function(vOut, vIn, normal, offset) {
   var vIn1 = vIn[1].v;
 
   // Calculate the distance of end points to the line
-  var distance0 = box2d.Math.b2Dot(normal, vIn[0].v) - offset;
-  var distance1 = box2d.Math.b2Dot(normal, vIn[1].v) - offset;
+  var distance0 = goog.math.Vec2.dot(normal, vIn[0].v) - offset;
+  var distance1 = goog.math.Vec2.dot(normal, vIn[1].v) - offset;
 
   // If the points are behind the plane
   if (distance0 <= 0.0) vOut[numOut++] = vIn[0];
@@ -80,7 +80,7 @@ box2d.Collision.EdgeSeparation = function(poly1, edge1, poly2) {
   var vertexIndex2 = 0;
   var minDot = Number.MAX_VALUE;
   for (var i = 0; i < count2; ++i) {
-    //var dot = box2d.Math.b2Dot(vert2s[i], normalLocal2);
+    //var dot = goog.math.Vec2.dot(vert2s[i], normalLocal2);
     var tVec = vert2s[i];
     var dot = tVec.x * normalLocal2X + tVec.y * normalLocal2Y;
     if (dot < minDot) {
@@ -99,10 +99,10 @@ box2d.Collision.EdgeSeparation = function(poly1, edge1, poly2) {
   var v2X = poly2.m_position.x + (tMat.col1.x * vert2s[vertexIndex2].x + tMat.col2.x * vert2s[vertexIndex2].y);
   var v2Y = poly2.m_position.y + (tMat.col1.y * vert2s[vertexIndex2].x + tMat.col2.y * vert2s[vertexIndex2].y);
 
-  //var separation = box2d.Math.b2Dot( box2d.Math.SubtractVV( v2, v1 ) , normal);
+  //var separation = goog.math.Vec2.dot( box2d.Math.SubtractVV( v2, v1 ) , normal);
   v2X -= v1X;
   v2Y -= v1Y;
-  //var separation = box2d.Math.b2Dot( v2 , normal);
+  //var separation = goog.math.Vec2.dot( v2 , normal);
   var separation = v2X * normalX + v2Y * normalY;
   return separation;
 };
@@ -124,7 +124,7 @@ box2d.Collision.FindMaxSeparation = function(edgeIndex
   var edge = 0;
   var maxDot = -Number.MAX_VALUE;
   for (var i = 0; i < count1; ++i) {
-    //var dot = box2d.Math.b2Dot(poly.m_normals[i], dLocal1);
+    //var dot = goog.math.Vec2.dot(poly.m_normals[i], dLocal1);
     var dot = (poly1.m_normals[i].x * dLocal1X + poly1.m_normals[i].y * dLocal1Y);
     if (dot > maxDot) {
       maxDot = dot;
@@ -257,7 +257,7 @@ box2d.Collision.FindIncidentEdge = function(c, poly1, edge1, poly2) {
     normal2Local2X *= invLength;
     normal2Local2Y *= invLength;
     // ^^^^ normal2Local2.Normalize();
-    //var dot = box2d.Math.b2Dot(normal2Local2, normal1Local2);
+    //var dot = goog.math.Vec2.dot(normal2Local2, normal1Local2);
     var dot = normal2Local2X * normal1Local2X + normal2Local2Y * normal1Local2Y;
     if (dot < minDot) {
       minDot = dot;
@@ -380,11 +380,11 @@ box2d.Collision.b2CollidePoly = function(manifold, polyA, polyB, conservative) {
   v12X += poly1.m_position.x;
   v12Y += poly1.m_position.y;
 
-  //var frontOffset = box2d.Math.b2Dot(frontNormal, v11);
+  //var frontOffset = goog.math.Vec2.dot(frontNormal, v11);
   var frontOffset = frontNormalX * v11X + frontNormalY * v11Y;
-  //var sideOffset1 = -box2d.Math.b2Dot(sideNormal, v11);
+  //var sideOffset1 = -goog.math.Vec2.dot(sideNormal, v11);
   var sideOffset1 = -(sideNormalX * v11X + sideNormalY * v11Y);
-  //var sideOffset2 = box2d.Math.b2Dot(sideNormal, v12);
+  //var sideOffset2 = goog.math.Vec2.dot(sideNormal, v12);
   var sideOffset2 = sideNormalX * v12X + sideNormalY * v12Y;
 
   // Clip incident edge against extruded edge1 side edges.
@@ -414,7 +414,7 @@ box2d.Collision.b2CollidePoly = function(manifold, polyA, polyB, conservative) {
   // ^^^^ manifold.normal = flip ? frontNormal.Negative() : frontNormal;
   var pointCount = 0;
   for (var i = 0; i < box2d.Settings.b2_maxManifoldPoints; ++i) {
-    //var separation = box2d.Math.b2Dot(frontNormal, clipPoints2[i].v) - frontOffset;
+    //var separation = goog.math.Vec2.dot(frontNormal, clipPoints2[i].v) - frontOffset;
     var tVec = clipPoints2[i].v;
     var separation = (frontNormalX * tVec.x + frontNormalY * tVec.y) - frontOffset;
 
@@ -436,7 +436,7 @@ box2d.Collision.b2CollideCircle = function(manifold, circle1, circle2, conservat
   //var d = box2d.Math.SubtractVV(circle2.m_position, circle1.m_position);
   var dX = circle2.m_position.x - circle1.m_position.x;
   var dY = circle2.m_position.y - circle1.m_position.y;
-  //var distSqr = box2d.Math.b2Dot(d, d);
+  //var distSqr = goog.math.Vec2.dot(d, d);
   var distSqr = dX * dX + dY * dY;
   var radiusSum = circle1.m_radius + circle2.m_radius;
   if (distSqr > radiusSum * radiusSum && conservative == false) {
@@ -486,7 +486,7 @@ box2d.Collision.b2CollidePolyAndCircle = function(manifold, poly, circle, conser
   var separation = -Number.MAX_VALUE;
   var radius = circle.m_radius;
   for (var i = 0; i < poly.m_vertexCount; ++i) {
-    //var s = box2d.Math.b2Dot(poly.m_normals[i], box2d.Math.SubtractVV(xLocal, poly.m_vertices[i]));
+    //var s = goog.math.Vec2.dot(poly.m_normals[i], box2d.Math.SubtractVV(xLocal, poly.m_vertices[i]));
     var s = poly.m_normals[i].x * (xLocalX - poly.m_vertices[i].x) + poly.m_normals[i].y * (xLocalY - poly.m_vertices[i].y);
     if (s > radius) {
       // Early out.
@@ -559,7 +559,7 @@ box2d.Collision.b2CollidePolyAndCircle = function(manifold, poly, circle, conser
   }
 
   // Project the center onto the edge.
-  //var u = box2d.Math.b2Dot(box2d.Math.SubtractVV(xLocal , poly.m_vertices[vertIndex1]) , e);
+  //var u = goog.math.Vec2.dot(box2d.Math.SubtractVV(xLocal , poly.m_vertices[vertIndex1]) , e);
   var u = (xLocalX - poly.m_vertices[vertIndex1].x) * eX + (xLocalY - poly.m_vertices[vertIndex1].y) * eY;
 
   tPoint = manifold.points[0];

@@ -110,9 +110,9 @@ box2d.ContactSolver = function(contacts, contactCount) {
         var r1Sqr = r1X * r1X + r1Y * r1Y;
         var r2Sqr = r2X * r2X + r2Y * r2Y;
 
-        //var rn1 = box2d.Math.b2Dot(r1, normal);
+        //var rn1 = goog.math.Vec2.dot(r1, normal);
         var rn1 = r1X * normalX + r1Y * normalY;
-        //var rn2 = box2d.Math.b2Dot(r2, normal);
+        //var rn2 = goog.math.Vec2.dot(r2, normal);
         var rn2 = r2X * normalX + r2Y * normalY;
         var kNormal = b1.m_invMass + b2.m_invMass;
         kNormal += b1.m_invI * (r1Sqr - rn1 * rn1) + b2.m_invI * (r2Sqr - rn2 * rn2);
@@ -123,9 +123,9 @@ box2d.ContactSolver = function(contacts, contactCount) {
         var tangentX = normalY;
         var tangentY = -normalX;
 
-        //var rt1 = box2d.Math.b2Dot(r1, tangent);
+        //var rt1 = goog.math.Vec2.dot(r1, tangent);
         var rt1 = r1X * tangentX + r1Y * tangentY;
-        //var rt2 = box2d.Math.b2Dot(r2, tangent);
+        //var rt2 = goog.math.Vec2.dot(r2, tangent);
         var rt2 = r2X * tangentX + r2Y * tangentY;
         var kTangent = b1.m_invMass + b2.m_invMass;
         kTangent += b1.m_invI * (r1Sqr - rt1 * rt1) + b2.m_invI * (r2Sqr - rt2 * rt2);
@@ -137,7 +137,7 @@ box2d.ContactSolver = function(contacts, contactCount) {
         if (ccp.separation > 0.0) {
           ccp.velocityBias = -60.0 * ccp.separation;
         }
-        //var vRel = box2d.Math.b2Dot(c.normal, box2d.Math.SubtractVV( box2d.Math.SubtractVV( box2d.Math.AddVV( v2, box2d.Math.b2CrossFV(w2, r2)), v1 ), box2d.Math.b2CrossFV(w1, r1)));
+        //var vRel = goog.math.Vec2.dot(c.normal, box2d.Math.SubtractVV( box2d.Math.SubtractVV( box2d.Math.AddVV( v2, box2d.Math.b2CrossFV(w2, r2)), v1 ), box2d.Math.b2CrossFV(w1, r1)));
         var tX = v2X + (-w2 * r2Y) - v1X - (-w1 * r1Y);
         var tY = v2Y + (w2 * r2X) - v1Y - (w1 * r1X);
         //var vRel = b2Dot(c.normal, tX/Y);
@@ -285,7 +285,7 @@ box2d.ContactSolver.prototype = {
         dvY = b2_linearVelocity.y + (b2_angularVelocity * r2X) - b1_linearVelocity.y - (b1_angularVelocity * r1X);
 
         // Compute normal impulse
-        //var vn = box2d.Math.b2Dot(dv, normal);
+        //var vn = goog.math.Vec2.dot(dv, normal);
         var vn = dvX * normalX + dvY * normalY;
         lambda = -ccp.normalMass * (vn - ccp.velocityBias);
 
@@ -454,7 +454,7 @@ box2d.ContactSolver.prototype = {
         var dpY = p2Y - p1Y;
 
         // Approximate the current separation.
-        //var separation = box2d.Math.b2Dot(dp, normal) + ccp.separation;
+        //var separation = goog.math.Vec2.dot(dp, normal) + ccp.separation;
         var separation = (dpX * normalX + dpY * normalY) + ccp.separation;
 
         // Track max constraint error.

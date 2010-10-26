@@ -282,12 +282,12 @@ box2d.PolyShape.prototype.TestPoint = function(p) {
   pLocal.MulTM(this.m_R);
 
   for (var i = 0; i < this.m_vertexCount; ++i) {
-    //var dot = box2d.Math.b2Dot(this.m_normals[i], box2d.Math.SubtractVV(pLocal, this.m_vertices[i]));
+    //var dot = goog.math.Vec2.dot(this.m_normals[i], box2d.Math.SubtractVV(pLocal, this.m_vertices[i]));
     var tVec = new box2d.Vec2();
     tVec.SetV(pLocal);
     tVec.subtract(this.m_vertices[i]);
 
-    var dot = box2d.Math.b2Dot(this.m_normals[i], tVec);
+    var dot = goog.math.Vec2.dot(this.m_normals[i], tVec);
     if (dot > 0.0) {
       return false;
     }
