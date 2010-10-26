@@ -63,7 +63,7 @@ box2d.Vec2.prototype.SetV = function(v) {
   this.y = v.y;
 };
 
-/** @return {box2d.Vec2} */
+/** @return {!box2d.Vec2} */
 box2d.Vec2.prototype.Negative = function() {
   return new box2d.Vec2(-this.x, -this.y);
 };
@@ -133,7 +133,7 @@ box2d.Vec2.prototype.Normalize = function() {
 
 /** @return {boolean} */
 box2d.Vec2.prototype.IsValid = function() {
-  return box2d.Math.b2IsValid(this.x) && box2d.Math.b2IsValid(this.y);
+  return isFinite(this.x) && isFinite(this.y);
 };
 
 /**

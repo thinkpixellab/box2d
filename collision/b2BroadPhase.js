@@ -134,10 +134,10 @@ box2d.BroadPhase.prototype.InRange = function(aabb) {
   d2X -= aabb.maxVertex.x;
   d2Y -= aabb.maxVertex.y;
 
-  dX = box2d.Math.b2Max(dX, d2X);
-  dY = box2d.Math.b2Max(dY, d2Y);
+  dX = Math.max(dX, d2X);
+  dY = Math.max(dY, d2Y);
 
-  return box2d.Math.b2Max(dX, dY) < 0.0;
+  return Math.max(dX, dY) < 0.0;
 };
 
 // Get a single proxy. Returns NULL if the id is invalid.
@@ -330,18 +330,18 @@ box2d.BroadPhase.prototype.ComputeBounds = function(lowerValues, upperValues, aa
   //var minVertex = box2d.Math.b2ClampV(aabb.minVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
   var minVertexX = aabb.minVertex.x;
   var minVertexY = aabb.minVertex.y;
-  minVertexX = box2d.Math.b2Min(minVertexX, this.m_worldAABB.maxVertex.x);
-  minVertexY = box2d.Math.b2Min(minVertexY, this.m_worldAABB.maxVertex.y);
-  minVertexX = box2d.Math.b2Max(minVertexX, this.m_worldAABB.minVertex.x);
-  minVertexY = box2d.Math.b2Max(minVertexY, this.m_worldAABB.minVertex.y);
+  minVertexX = Math.min(minVertexX, this.m_worldAABB.maxVertex.x);
+  minVertexY = Math.min(minVertexY, this.m_worldAABB.maxVertex.y);
+  minVertexX = Math.max(minVertexX, this.m_worldAABB.minVertex.x);
+  minVertexY = Math.max(minVertexY, this.m_worldAABB.minVertex.y);
 
   //var maxVertex = box2d.Math.b2ClampV(aabb.maxVertex, this.m_worldAABB.minVertex, this.m_worldAABB.maxVertex);
   var maxVertexX = aabb.maxVertex.x;
   var maxVertexY = aabb.maxVertex.y;
-  maxVertexX = box2d.Math.b2Min(maxVertexX, this.m_worldAABB.maxVertex.x);
-  maxVertexY = box2d.Math.b2Min(maxVertexY, this.m_worldAABB.maxVertex.y);
-  maxVertexX = box2d.Math.b2Max(maxVertexX, this.m_worldAABB.minVertex.x);
-  maxVertexY = box2d.Math.b2Max(maxVertexY, this.m_worldAABB.minVertex.y);
+  maxVertexX = Math.min(maxVertexX, this.m_worldAABB.maxVertex.x);
+  maxVertexY = Math.min(maxVertexY, this.m_worldAABB.maxVertex.y);
+  maxVertexX = Math.max(maxVertexX, this.m_worldAABB.minVertex.x);
+  maxVertexY = Math.max(maxVertexY, this.m_worldAABB.minVertex.y);
 
   // Bump lower bounds downs and upper bounds up. This ensures correct sorting of
   // lower/upper bounds that would have equal values.

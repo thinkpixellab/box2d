@@ -46,7 +46,7 @@ box2d.PolyAndCircleContact = function(s1, s2) {
   this.m_manifoldCount = 0;
 
   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-  this.m_restitution = box2d.Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_restitution = Math.max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
   this.m_prev = null;
   this.m_next = null;

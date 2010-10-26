@@ -290,7 +290,7 @@ box2d.ContactSolver.prototype = {
         lambda = -ccp.normalMass * (vn - ccp.velocityBias);
 
         // b2Clamp the accumulated impulse
-        newImpulse = box2d.Math.b2Max(ccp.normalImpulse + lambda, 0.0);
+        newImpulse = Math.max(ccp.normalImpulse + lambda, 0.0);
         lambda = newImpulse - ccp.normalImpulse;
 
         // Apply contact impulse
@@ -458,7 +458,7 @@ box2d.ContactSolver.prototype = {
         var separation = (dpX * normalX + dpY * normalY) + ccp.separation;
 
         // Track max constraint error.
-        minSeparation = box2d.Math.b2Min(minSeparation, separation);
+        minSeparation = Math.min(minSeparation, separation);
 
         // Prevent large corrections and allow slop.
         var C = beta * box2d.Math.b2Clamp(separation + box2d.Settings.b2_linearSlop, -box2d.Settings.b2_maxLinearCorrection, 0.0);
@@ -468,7 +468,7 @@ box2d.ContactSolver.prototype = {
 
         // b2Clamp the accumulated impulse
         var impulse0 = ccp.positionImpulse;
-        ccp.positionImpulse = box2d.Math.b2Max(impulse0 + dImpulse, 0.0);
+        ccp.positionImpulse = Math.max(impulse0 + dImpulse, 0.0);
         dImpulse = ccp.positionImpulse - impulse0;
 
         //var impulse = box2d.Math.MulFV( dImpulse, normal );

@@ -278,8 +278,8 @@ box2d.Distance.Distance = function(p1Out, p2Out, shape1, shape2) {
     //float32 maxSqr = -FLT_MAX;
     var maxSqr = -Number.MAX_VALUE;
     for (var i = 0; i < pointCount; ++i) {
-      //maxSqr = box2d.Math.b2Max(maxSqr, b2Dot(points[i], points[i]));
-      maxSqr = box2d.Math.b2Max(maxSqr, (points[i].x * points[i].x + points[i].y * points[i].y));
+      //maxSqr = Math.max(maxSqr, b2Dot(points[i], points[i]));
+      maxSqr = Math.max(maxSqr, (points[i].x * points[i].x + points[i].y * points[i].y));
     }
 
     if (pointCount == 3 || vSqr <= 100.0 * Number.MIN_VALUE * maxSqr) {

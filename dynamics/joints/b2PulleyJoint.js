@@ -86,8 +86,8 @@ box2d.PulleyJoint = function(def) {
   tY = def.groundPoint2.y - def.anchorPoint2.y;
   var d2Len = Math.sqrt(tX * tX + tY * tY);
 
-  var length1 = box2d.Math.b2Max(0.5 * box2d.PulleyJoint.b2_minPulleyLength, d1Len);
-  var length2 = box2d.Math.b2Max(0.5 * box2d.PulleyJoint.b2_minPulleyLength, d2Len);
+  var length1 = Math.max(0.5 * box2d.PulleyJoint.b2_minPulleyLength, d1Len);
+  var length2 = Math.max(0.5 * box2d.PulleyJoint.b2_minPulleyLength, d2Len);
 
   this.m_constant = length1 + this.m_ratio * length2;
 
@@ -323,7 +323,7 @@ box2d.PulleyJoint.prototype.SolveVelocityConstraints = function(step) {
     Cdot = -(this.m_u1.x * v1X + this.m_u1.y * v1Y);
     impulse = -this.m_limitMass1 * Cdot;
     oldLimitImpulse = this.m_limitImpulse1;
-    this.m_limitImpulse1 = box2d.Math.b2Max(0.0, this.m_limitImpulse1 + impulse);
+    this.m_limitImpulse1 = Math.max(0.0, this.m_limitImpulse1 + impulse);
     impulse = this.m_limitImpulse1 - oldLimitImpulse;
     //box2d.Vec2 P1 = -impulse * this.m_u1;
     P1X = -impulse * this.m_u1.x;
@@ -344,7 +344,7 @@ box2d.PulleyJoint.prototype.SolveVelocityConstraints = function(step) {
     Cdot = -(this.m_u2.x * v2X + this.m_u2.y * v2Y);
     impulse = -this.m_limitMass2 * Cdot;
     oldLimitImpulse = this.m_limitImpulse2;
-    this.m_limitImpulse2 = box2d.Math.b2Max(0.0, this.m_limitImpulse2 + impulse);
+    this.m_limitImpulse2 = Math.max(0.0, this.m_limitImpulse2 + impulse);
     impulse = this.m_limitImpulse2 - oldLimitImpulse;
     //box2d.Vec2 P2 = -impulse * this.m_u2;
     P2X = -impulse * this.m_u2.x;
@@ -426,7 +426,7 @@ box2d.PulleyJoint.prototype.SolvePositionConstraints = function() {
   }
 
   C = this.m_constant - length1 - this.m_ratio * length2;
-  linearError = box2d.Math.b2Max(linearError, Math.abs(C));
+  linearError = Math.max(linearError, Math.abs(C));
   C = box2d.Math.b2Clamp(C, -box2d.Settings.b2_maxLinearCorrection, box2d.Settings.b2_maxLinearCorrection);
   impulse = -this.m_pulleyMass * C;
 
@@ -468,11 +468,11 @@ box2d.PulleyJoint.prototype.SolvePositionConstraints = function() {
     }
 
     C = this.m_maxLength1 - length1;
-    linearError = box2d.Math.b2Max(linearError, -C);
+    linearError = Math.max(linearError, -C);
     C = box2d.Math.b2Clamp(C + box2d.Settings.b2_linearSlop, -box2d.Settings.b2_maxLinearCorrection, 0.0);
     impulse = -this.m_limitMass1 * C;
     oldLimitPositionImpulse = this.m_limitPositionImpulse1;
-    this.m_limitPositionImpulse1 = box2d.Math.b2Max(0.0, this.m_limitPositionImpulse1 + impulse);
+    this.m_limitPositionImpulse1 = Math.max(0.0, this.m_limitPositionImpulse1 + impulse);
     impulse = this.m_limitPositionImpulse1 - oldLimitPositionImpulse;
 
     //P1 = -impulse * this.m_u1;
@@ -509,11 +509,11 @@ box2d.PulleyJoint.prototype.SolvePositionConstraints = function() {
     }
 
     C = this.m_maxLength2 - length2;
-    linearError = box2d.Math.b2Max(linearError, -C);
+    linearError = Math.max(linearError, -C);
     C = box2d.Math.b2Clamp(C + box2d.Settings.b2_linearSlop, -box2d.Settings.b2_maxLinearCorrection, 0.0);
     impulse = -this.m_limitMass2 * C;
     oldLimitPositionImpulse = this.m_limitPositionImpulse2;
-    this.m_limitPositionImpulse2 = box2d.Math.b2Max(0.0, this.m_limitPositionImpulse2 + impulse);
+    this.m_limitPositionImpulse2 = Math.max(0.0, this.m_limitPositionImpulse2 + impulse);
     impulse = this.m_limitPositionImpulse2 - oldLimitPositionImpulse;
 
     //P2 = -impulse * this.m_u2;

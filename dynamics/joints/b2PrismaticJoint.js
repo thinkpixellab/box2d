@@ -309,7 +309,7 @@ box2d.PrismaticJoint.prototype.PrepareVelocitySolver = function() {
       var dY = eY - r1Y;
       //float32 jointTranslation = b2Dot(ax1, d);
       var jointTranslation = ax1X * dX + ax1Y * dY;
-      if (box2d.Math.b2Abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * box2d.Settings.b2_linearSlop) {
+      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * box2d.Settings.b2_linearSlop) {
         this.m_limitState = box2d.Joint.e_equalLimits;
       } else if (jointTranslation <= this.m_lowerTranslation) {
         if (this.m_limitState != box2d.Joint.e_atLowerLimit) {
@@ -435,11 +435,11 @@ box2d.PrismaticJoint.prototype.SolveVelocityConstraints = function(step) {
       this.m_limitImpulse += limitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atLowerLimit) {
       oldLimitImpulse = this.m_limitImpulse;
-      this.m_limitImpulse = box2d.Math.b2Max(this.m_limitImpulse + limitImpulse, 0.0);
+      this.m_limitImpulse = Math.max(this.m_limitImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitImpulse - oldLimitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atUpperLimit) {
       oldLimitImpulse = this.m_limitImpulse;
-      this.m_limitImpulse = box2d.Math.b2Min(this.m_limitImpulse + limitImpulse, 0.0);
+      this.m_limitImpulse = Math.min(this.m_limitImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitImpulse - oldLimitImpulse;
     }
 
@@ -511,7 +511,7 @@ box2d.PrismaticJoint.prototype.SolvePositionConstraints = function() {
   b2.m_position.y += (invMass2 * linearImpulse) * this.m_linearJacobian.linear2.y;
   b2.m_rotation += invI2 * linearImpulse * this.m_linearJacobian.angular2;
   //b2->m_R.Set(b2->m_rotation);
-  var positionError = box2d.Math.b2Abs(linearC);
+  var positionError = Math.abs(linearC);
 
   // Solve angular constraint.
   var angularC = b2.m_rotation - b1.m_rotation - this.m_initialAngle;
@@ -524,7 +524,7 @@ box2d.PrismaticJoint.prototype.SolvePositionConstraints = function() {
   b2.m_rotation += b2.m_invI * angularImpulse;
   b2.m_R.Set(b2.m_rotation);
 
-  var angularError = box2d.Math.b2Abs(angularC);
+  var angularError = Math.abs(angularC);
 
   // Solve linear limit constraint.
   if (this.m_enableLimit && this.m_limitState != box2d.Joint.e_inactiveLimit) {
@@ -559,26 +559,26 @@ box2d.PrismaticJoint.prototype.SolvePositionConstraints = function() {
       // Prevent large angular corrections
       limitC = box2d.Math.b2Clamp(translation, -box2d.Settings.b2_maxLinearCorrection, box2d.Settings.b2_maxLinearCorrection);
       limitImpulse = -this.m_motorMass * limitC;
-      positionError = box2d.Math.b2Max(positionError, box2d.Math.b2Abs(angularC));
+      positionError = Math.max(positionError, Math.abs(angularC));
     } else if (this.m_limitState == box2d.Joint.e_atLowerLimit) {
       limitC = translation - this.m_lowerTranslation;
-      positionError = box2d.Math.b2Max(positionError, -limitC);
+      positionError = Math.max(positionError, -limitC);
 
       // Prevent large linear corrections and allow some slop.
       limitC = box2d.Math.b2Clamp(limitC + box2d.Settings.b2_linearSlop, -box2d.Settings.b2_maxLinearCorrection, 0.0);
       limitImpulse = -this.m_motorMass * limitC;
       oldLimitImpulse = this.m_limitPositionImpulse;
-      this.m_limitPositionImpulse = box2d.Math.b2Max(this.m_limitPositionImpulse + limitImpulse, 0.0);
+      this.m_limitPositionImpulse = Math.max(this.m_limitPositionImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atUpperLimit) {
       limitC = translation - this.m_upperTranslation;
-      positionError = box2d.Math.b2Max(positionError, limitC);
+      positionError = Math.max(positionError, limitC);
 
       // Prevent large linear corrections and allow some slop.
       limitC = box2d.Math.b2Clamp(limitC - box2d.Settings.b2_linearSlop, 0.0, box2d.Settings.b2_maxLinearCorrection);
       limitImpulse = -this.m_motorMass * limitC;
       oldLimitImpulse = this.m_limitPositionImpulse;
-      this.m_limitPositionImpulse = box2d.Math.b2Min(this.m_limitPositionImpulse + limitImpulse, 0.0);
+      this.m_limitPositionImpulse = Math.min(this.m_limitPositionImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
     }
 

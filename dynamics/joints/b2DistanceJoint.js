@@ -219,7 +219,7 @@ box2d.DistanceJoint.prototype.SolvePositionConstraints = function() {
   this.m_body1.m_R.Set(this.m_body1.m_rotation);
   this.m_body2.m_R.Set(this.m_body2.m_rotation);
 
-  return box2d.Math.b2Abs(C) < box2d.Settings.b2_linearSlop;
+  return Math.abs(C) < box2d.Settings.b2_linearSlop;
 
 };
 

@@ -20,14 +20,6 @@ goog.provide('box2d.Math');
 
 /**
  @const
- @param {number} x
- @return {boolean}
- */
-box2d.Math.b2IsValid = function(x) {
-  return isFinite(x);
-};
-/**
- @const
  @param {box2d.Vec2} a
  @param {box2d.Vec2} b
  @return {number}
@@ -109,33 +101,24 @@ box2d.Math.b2MulTMM = function(A, B) {
   var C = new box2d.Mat22(0, c1, c2);
   return C;
 };
-box2d.Math.b2Abs = function(a) {
-  return a > 0.0 ? a : -a;
-};
 box2d.Math.b2AbsV = function(a) {
-  var b = new box2d.Vec2(box2d.Math.b2Abs(a.x), box2d.Math.b2Abs(a.y));
+  var b = new box2d.Vec2(Math.abs(a.x), Math.abs(a.y));
   return b;
 };
 box2d.Math.b2AbsM = function(A) {
   var B = new box2d.Mat22(0, box2d.Math.b2AbsV(A.col1), box2d.Math.b2AbsV(A.col2));
   return B;
 };
-box2d.Math.b2Min = function(a, b) {
-  return a < b ? a : b;
-};
 box2d.Math.b2MinV = function(a, b) {
-  var c = new box2d.Vec2(box2d.Math.b2Min(a.x, b.x), box2d.Math.b2Min(a.y, b.y));
+  var c = new box2d.Vec2(Math.min(a.x, b.x), Math.min(a.y, b.y));
   return c;
 };
-box2d.Math.b2Max = function(a, b) {
-  return a > b ? a : b;
-};
 box2d.Math.b2MaxV = function(a, b) {
-  var c = new box2d.Vec2(box2d.Math.b2Max(a.x, b.x), box2d.Math.b2Max(a.y, b.y));
+  var c = new box2d.Vec2(Math.max(a.x, b.x), Math.max(a.y, b.y));
   return c;
 };
 box2d.Math.b2Clamp = function(a, low, high) {
-  return box2d.Math.b2Max(low, box2d.Math.b2Min(a, high));
+  return Math.max(low, Math.min(a, high));
 };
 box2d.Math.b2ClampV = function(a, low, high) {
   return box2d.Math.b2MaxV(low, box2d.Math.b2MinV(a, high));

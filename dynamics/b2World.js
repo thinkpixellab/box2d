@@ -416,7 +416,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
 
     island.Solve(this.m_step, this.m_gravity);
 
-    this.m_positionIterationCount = box2d.Math.b2Max(this.m_positionIterationCount, box2d.Island.m_positionIterationCount);
+    this.m_positionIterationCount = Math.max(this.m_positionIterationCount, box2d.Island.m_positionIterationCount);
 
     if (this.m_allowSleep) {
       this.sleeping = island.UpdateSleep(dt);

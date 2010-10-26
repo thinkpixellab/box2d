@@ -250,7 +250,7 @@ box2d.Island.prototype.UpdateSleep = function(dt) {
       minSleepTime = 0.0;
     } else {
       b.m_sleepTime += dt;
-      minSleepTime = box2d.Math.b2Min(minSleepTime, b.m_sleepTime);
+      minSleepTime = Math.min(minSleepTime, b.m_sleepTime);
     }
   }
 

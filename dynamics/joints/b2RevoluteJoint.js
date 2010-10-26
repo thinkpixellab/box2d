@@ -193,7 +193,7 @@ box2d.RevoluteJoint.prototype.PrepareVelocitySolver = function() {
 
   if (this.m_enableLimit) {
     var jointAngle = b2.m_rotation - b1.m_rotation - this.m_intialAngle;
-    if (box2d.Math.b2Abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * box2d.Settings.b2_angularSlop) {
+    if (Math.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * box2d.Settings.b2_angularSlop) {
       this.m_limitState = box2d.Joint.e_equalLimits;
     } else if (jointAngle <= this.m_lowerAngle) {
       if (this.m_limitState != box2d.Joint.e_atLowerLimit) {
@@ -292,11 +292,11 @@ box2d.RevoluteJoint.prototype.SolveVelocityConstraints = function(step) {
       this.m_limitImpulse += limitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atLowerLimit) {
       oldLimitImpulse = this.m_limitImpulse;
-      this.m_limitImpulse = box2d.Math.b2Max(this.m_limitImpulse + limitImpulse, 0.0);
+      this.m_limitImpulse = Math.max(this.m_limitImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitImpulse - oldLimitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atUpperLimit) {
       oldLimitImpulse = this.m_limitImpulse;
-      this.m_limitImpulse = box2d.Math.b2Min(this.m_limitImpulse + limitImpulse, 0.0);
+      this.m_limitImpulse = Math.min(this.m_limitImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitImpulse - oldLimitImpulse;
     }
 
@@ -402,26 +402,26 @@ box2d.RevoluteJoint.prototype.SolvePositionConstraints = function() {
       // Prevent large angular corrections
       limitC = box2d.Math.b2Clamp(angle, -box2d.Settings.b2_maxAngularCorrection, box2d.Settings.b2_maxAngularCorrection);
       limitImpulse = -this.m_motorMass * limitC;
-      angularError = box2d.Math.b2Abs(limitC);
+      angularError = Math.abs(limitC);
     } else if (this.m_limitState == box2d.Joint.e_atLowerLimit) {
       limitC = angle - this.m_lowerAngle;
-      angularError = box2d.Math.b2Max(0.0, -limitC);
+      angularError = Math.max(0.0, -limitC);
 
       // Prevent large angular corrections and allow some slop.
       limitC = box2d.Math.b2Clamp(limitC + box2d.Settings.b2_angularSlop, -box2d.Settings.b2_maxAngularCorrection, 0.0);
       limitImpulse = -this.m_motorMass * limitC;
       oldLimitImpulse = this.m_limitPositionImpulse;
-      this.m_limitPositionImpulse = box2d.Math.b2Max(this.m_limitPositionImpulse + limitImpulse, 0.0);
+      this.m_limitPositionImpulse = Math.max(this.m_limitPositionImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
     } else if (this.m_limitState == box2d.Joint.e_atUpperLimit) {
       limitC = angle - this.m_upperAngle;
-      angularError = box2d.Math.b2Max(0.0, limitC);
+      angularError = Math.max(0.0, limitC);
 
       // Prevent large angular corrections and allow some slop.
       limitC = box2d.Math.b2Clamp(limitC - box2d.Settings.b2_angularSlop, 0.0, box2d.Settings.b2_maxAngularCorrection);
       limitImpulse = -this.m_motorMass * limitC;
       oldLimitImpulse = this.m_limitPositionImpulse;
-      this.m_limitPositionImpulse = box2d.Math.b2Min(this.m_limitPositionImpulse + limitImpulse, 0.0);
+      this.m_limitPositionImpulse = Math.min(this.m_limitPositionImpulse + limitImpulse, 0.0);
       limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
     }
 
