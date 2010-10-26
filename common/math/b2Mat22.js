@@ -56,8 +56,8 @@ box2d.Mat22.prototype.Set = function(angle) {
 };
 
 /**
- @param {box2d.Vec2} c1
- @param {box2d.Vec2} c2 */
+ @param {!goog.math.Coordinate} c1
+ @param {!goog.math.Coordinate} c2 */
 box2d.Mat22.prototype.SetVV = function(c1, c2) {
   this.col1.SetV(c1);
   this.col2.SetV(c2);

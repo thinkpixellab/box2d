@@ -25,22 +25,22 @@ goog.require('goog.math.Vec2');
 /**
  @constructor
  @extends {goog.math.Vec2}
- @param {number=} x_
- @param {number=} y_
+ @param {number=} opt_x
+ @param {number=} opt_y
 */
-box2d.Vec2 = function(x_, y_) {
+box2d.Vec2 = function(opt_x, opt_y) {
 
-  if (x_ === undefined) {
-    x_ = 0;
+  if (opt_x === undefined) {
+    opt_x = 0;
   }
   /** @type {number} */
-  this.x = x_;
+  this.x = opt_x;
 
-  if (y_ === undefined) {
-    y_ = 0;
+  if (opt_y === undefined) {
+    opt_y = 0;
   }
   /** @type {number} */
-  this.y = y_;
+  this.y = opt_y;
 };
 goog.inherits(box2d.Vec2, goog.math.Vec2);
 
@@ -49,14 +49,16 @@ box2d.Vec2.prototype.SetZero = function() {
   this.y = 0.0;
 };
 
-/** @param {number} x_
- @param {number} y_ */
-box2d.Vec2.prototype.Set = function(x_, y_) {
-  this.x = x_;
-  this.y = y_;
+/**
+ @param {number} x
+ @param {number} y
+ */
+box2d.Vec2.prototype.Set = function(x, y) {
+  this.x = x;
+  this.y = y;
 };
 
-/** @param {box2d.Vec2} v */
+/** @param {!goog.math.Coordinate} v */
 box2d.Vec2.prototype.SetV = function(v) {
   this.x = v.x;
   this.y = v.y;
