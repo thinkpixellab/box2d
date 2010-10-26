@@ -18,7 +18,10 @@
 
 goog.provide('box2d.Math');
 
-goog.require('goog.math.Vec2');
+goog.require('box2d.Mat22');
+goog.require('box2d.Vec2');
+
+goog.require('goog.math');
 
 /**
  @param {!box2d.Mat22} A
