@@ -18,7 +18,6 @@
 
 goog.provide('box2d.Vec2');
 
-goog.require('box2d.Math');
 goog.require('goog.math.Vec2');
 
 // box2d.Vec2 has no constructor so that it
