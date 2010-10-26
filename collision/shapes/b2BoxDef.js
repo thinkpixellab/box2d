@@ -39,7 +39,7 @@ box2d.BoxDef = function() {
   this.groupIndex = 0;
   //
   this.type = box2d.Shape.e_boxShape;
-  /** @type {box2d.Vec2} */
+  /** @type {!box2d.Vec2} */
   this.extents = new box2d.Vec2(1.0, 1.0);
 };
 goog.inherits(box2d.BoxDef, box2d.ShapeDef);
