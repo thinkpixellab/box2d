@@ -3,6 +3,7 @@ goog.provide('box2d.ContactFactory');
 goog.require('box2d.CircleContact');
 goog.require('box2d.PolyAndCircleContact');
 goog.require('box2d.PolyContact');
+goog.require('box2d.Shape.Type');
 
 /**
  @return {box2d.Contact}

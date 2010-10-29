@@ -21,6 +21,7 @@ goog.provide('box2d.CircleShape');
 goog.require('box2d.AABB');
 goog.require('box2d.Mat22');
 goog.require('box2d.Shape');
+goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 /**

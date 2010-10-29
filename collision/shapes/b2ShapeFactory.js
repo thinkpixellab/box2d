@@ -3,7 +3,7 @@ goog.provide('box2d.ShapeFactory');
 
 goog.require('box2d.CircleShape');
 goog.require('box2d.PolyShape');
-goog.require('box2d.Shape');
+goog.require('box2d.Shape.Type');
 
 /**
  @param {box2d.ShapeDef} def

@@ -18,7 +18,7 @@
 
 goog.provide('box2d.PolyDef');
 
-goog.require('box2d.Shape');
+goog.require('box2d.Shape.Type');
 goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
@@ -27,17 +27,8 @@ goog.require('box2d.Vec2');
  @extends {box2d.ShapeDef}
  */
 box2d.PolyDef = function() {
-  // The constructor for box2d.ShapeDef
-  this.type = box2d.Shape.Type.unknownShape;
-  this.userData = null;
-  this.localPosition = new box2d.Vec2(0.0, 0.0);
-  this.localRotation = 0.0;
-  this.friction = 0.2;
-  this.restitution = 0.0;
-  this.density = 0.0;
-  this.categoryBits = 0x0001;
-  this.maskBits = 0xFFFF;
-  this.groupIndex = 0;
+  box2d.ShapeDef.call(this);
+
   //
   // initialize instance variables for references
   this.vertices = new Array(box2d.Settings.b2_maxPolyVertices);

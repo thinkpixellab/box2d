@@ -21,6 +21,7 @@ goog.provide('box2d.PolyAndCircleContact');
 goog.require('box2d.Contact');
 goog.require('box2d.ContactNode');
 goog.require('box2d.Manifold');
+goog.require('box2d.Shape.Type');
 
 /**
  @constructor

@@ -18,6 +18,7 @@
 
 goog.provide('box2d.ShapeDef');
 
+goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 /** @constructor */

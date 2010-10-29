@@ -17,10 +17,12 @@
 */
 
 goog.provide('box2d.PolyShape');
+
 goog.require('box2d.Mat22');
 goog.require('box2d.OBB');
 goog.require('box2d.Settings');
 goog.require('box2d.Shape');
+goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 // A convex polygon. The position of the polygon (m_position) is the

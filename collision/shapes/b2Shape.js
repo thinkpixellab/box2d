@@ -17,6 +17,7 @@
 */
 
 goog.provide('box2d.Shape');
+goog.provide('box2d.Shape.Type');
 
 goog.require('box2d.Mat22');
 goog.require('box2d.Vec2');
