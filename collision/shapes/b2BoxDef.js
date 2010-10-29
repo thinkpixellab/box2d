@@ -26,7 +26,7 @@ goog.require('box2d.Vec2');
  @extends {box2d.ShapeDef}
  */
 box2d.BoxDef = function() {
-  this.type = box2d.Shape.e_unknownShape;
+  this.type = box2d.Shape.Type.unknownShape;
   this.userData = null;
   /** @type {box2d.Vec2} */
   this.localPosition = new box2d.Vec2(0.0, 0.0);
@@ -38,7 +38,7 @@ box2d.BoxDef = function() {
   this.maskBits = 0xFFFF;
   this.groupIndex = 0;
   //
-  this.type = box2d.Shape.e_boxShape;
+  this.type = box2d.Shape.Type.boxShape;
   /** @type {!box2d.Vec2} */
   this.extents = new box2d.Vec2(1.0, 1.0);
 };

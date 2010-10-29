@@ -103,21 +103,19 @@ box2d.Shape.Destroy = function(shape) {
     shape.m_body.m_world.m_broadPhase.DestroyProxy(shape.m_proxyId);
   }
 };
+
 /**
- @const
- @type {number}
+ @enum {number}
  */
-box2d.Shape.e_unknownShape = -1;
-/** @const @type {number} */
-box2d.Shape.e_circleShape = 0;
-/** @const @type {number} */
-box2d.Shape.e_boxShape = 1;
-/** @const @type {number} */
-box2d.Shape.e_polyShape = 2;
-/** @const @type {number} */
-box2d.Shape.e_meshShape = 3;
-/** @const @type {number} */
-box2d.Shape.e_shapeTypeCount = 4;
+box2d.Shape.Type = {
+  unknownShape: -1,
+  circleShape: 0,
+  boxShape: 1,
+  polyShape: 2,
+  meshShape: 3,
+  shapeTypeCount: 4
+};
+
 box2d.Shape.PolyMass = function(massData, vs, count, rho) {
   //box2d.Settings.b2Assert(count >= 3);
   //var center = new box2d.Vec2(0.0, 0.0);

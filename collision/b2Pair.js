@@ -30,30 +30,30 @@ box2d.Pair = function() {};
 box2d.Pair.prototype = {
 
   SetBuffered: function() {
-    this.status |= box2d.Pair.e_pairBuffered;
+    this.status |= box2d.Pair.Flags.pairBuffered;
   },
   ClearBuffered: function() {
-    this.status &= ~box2d.Pair.e_pairBuffered;
+    this.status &= ~box2d.Pair.Flags.pairBuffered;
   },
   IsBuffered: function() {
-    return (this.status & box2d.Pair.e_pairBuffered) == box2d.Pair.e_pairBuffered;
+    return (this.status & box2d.Pair.Flags.pairBuffered) == box2d.Pair.Flags.pairBuffered;
   },
 
   SetRemoved: function() {
-    this.status |= box2d.Pair.e_pairRemoved;
+    this.status |= box2d.Pair.Flags.pairRemoved;
   },
   ClearRemoved: function() {
-    this.status &= ~box2d.Pair.e_pairRemoved;
+    this.status &= ~box2d.Pair.Flags.pairRemoved;
   },
   IsRemoved: function() {
-    return (this.status & box2d.Pair.e_pairRemoved) == box2d.Pair.e_pairRemoved;
+    return (this.status & box2d.Pair.Flags.pairRemoved) == box2d.Pair.Flags.pairRemoved;
   },
 
   SetFinal: function() {
-    this.status |= box2d.Pair.e_pairFinal;
+    this.status |= box2d.Pair.Flags.pairFinal;
   },
   IsFinal: function() {
-    return (this.status & box2d.Pair.e_pairFinal) == box2d.Pair.e_pairFinal;
+    return (this.status & box2d.Pair.Flags.pairFinal) == box2d.Pair.Flags.pairFinal;
   },
 
   proxyId1: 0,
@@ -75,9 +75,12 @@ box2d.Pair.b2_nullProxy = box2d.Settings.USHRT_MAX;
 box2d.Pair.b2_tableCapacity = box2d.Settings.b2_maxPairs;
 /** @const @type {number} */
 box2d.Pair.b2_tableMask = box2d.Pair.b2_tableCapacity - 1;
-/** @const @type {number} */
-box2d.Pair.e_pairBuffered = 0x0001;
-/** @const @type {number} */
-box2d.Pair.e_pairRemoved = 0x0002;
-/** @const @type {number} */
-box2d.Pair.e_pairFinal = 0x0004;
+
+/**
+ @enum {number}
+ */
+box2d.Pair.Flags = {
+  pairBuffered: 0x0001,
+  pairRemoved: 0x0002,
+  pairFinal: 0x0004
+};

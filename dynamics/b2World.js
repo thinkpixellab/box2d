@@ -126,7 +126,7 @@ box2d.World.prototype.CreateBody = function(def) {
  */
 box2d.World.prototype.DestroyBody = function(b) {
 
-  if (b.m_flags & box2d.Body.e_destroyFlag) {
+  if (b.m_flags & box2d.Body.Flags.destroyFlag) {
     return;
   }
 
@@ -143,7 +143,7 @@ box2d.World.prototype.DestroyBody = function(b) {
     this.m_bodyList = b.m_next;
   }
 
-  b.m_flags |= box2d.Body.e_destroyFlag;
+  b.m_flags |= box2d.Body.Flags.destroyFlag;
   //box2d.Settings.b2Assert(this.m_bodyCount > 0);
   --this.m_bodyCount;
 
@@ -157,7 +157,7 @@ box2d.World.prototype.CleanBodyList = function() {
 
   var b = this.m_bodyDestroyList;
   while (b) {
-    //box2d.Settings.b2Assert((b.m_flags & box2d.Body.e_destroyFlag) != 0);
+    //box2d.Settings.b2Assert((b.m_flags & box2d.Body.Flags.destroyFlag) != 0);
     // Preserve the next pointer.
     var b0 = b;
     b = b.m_next;
@@ -334,7 +334,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
 
   // Clear all the island flags.
   for (b = this.m_bodyList; b != null; b = b.m_next) {
-    b.m_flags &= ~box2d.Body.e_islandFlag;
+    b.m_flags &= ~box2d.Body.Flags.islandFlag;
   }
   for (var c = this.m_contactList; c != null; c = c.m_next) {
     c.m_flags &= ~box2d.Contact.e_islandFlag;
@@ -350,7 +350,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
   stack[k] = null;
 
   for (var seed = this.m_bodyList; seed != null; seed = seed.m_next) {
-    if (seed.m_flags & (box2d.Body.e_staticFlag | box2d.Body.e_islandFlag | box2d.Body.e_sleepFlag | box2d.Body.e_frozenFlag)) {
+    if (seed.m_flags & (box2d.Body.Flags.staticFlag | box2d.Body.Flags.islandFlag | box2d.Body.Flags.sleepFlag | box2d.Body.Flags.frozenFlag)) {
       continue;
     }
 
@@ -358,7 +358,7 @@ box2d.World.prototype.Step = function(dt, iterations) {
     island.Clear();
     var stackCount = 0;
     stack[stackCount++] = seed;
-    seed.m_flags |= box2d.Body.e_islandFlag;
+    seed.m_flags |= box2d.Body.Flags.islandFlag;
 
     // Perform a depth first search (DFS) on the constraint graph.
     while (stackCount > 0) {
@@ -367,11 +367,11 @@ box2d.World.prototype.Step = function(dt, iterations) {
       island.AddBody(b);
 
       // Make sure the body is awake.
-      b.m_flags &= ~box2d.Body.e_sleepFlag;
+      b.m_flags &= ~box2d.Body.Flags.sleepFlag;
 
       // To keep islands, we don't
       // propagate islands across static bodies.
-      if (b.m_flags & box2d.Body.e_staticFlag) {
+      if (b.m_flags & box2d.Body.Flags.staticFlag) {
         continue;
       }
 
@@ -385,13 +385,13 @@ box2d.World.prototype.Step = function(dt, iterations) {
         cn.contact.m_flags |= box2d.Contact.e_islandFlag;
 
         other = cn.other;
-        if (other.m_flags & box2d.Body.e_islandFlag) {
+        if (other.m_flags & box2d.Body.Flags.islandFlag) {
           continue;
         }
 
         //box2d.Settings.b2Assert(stackCount < stackSize);
         stack[stackCount++] = other;
-        other.m_flags |= box2d.Body.e_islandFlag;
+        other.m_flags |= box2d.Body.Flags.islandFlag;
       }
 
       // Search all joints connect to this body.
@@ -404,13 +404,13 @@ box2d.World.prototype.Step = function(dt, iterations) {
         jn.joint.m_islandFlag = true;
 
         other = jn.other;
-        if (other.m_flags & box2d.Body.e_islandFlag) {
+        if (other.m_flags & box2d.Body.Flags.islandFlag) {
           continue;
         }
 
         //box2d.Settings.b2Assert(stackCount < stackSize);
         stack[stackCount++] = other;
-        other.m_flags |= box2d.Body.e_islandFlag;
+        other.m_flags |= box2d.Body.Flags.islandFlag;
       }
     }
 
@@ -426,8 +426,8 @@ box2d.World.prototype.Step = function(dt, iterations) {
     for (var i = 0; i < island.m_bodyCount; ++i) {
       // Allow static bodies to participate in other islands.
       b = island.m_bodies[i];
-      if (b.m_flags & box2d.Body.e_staticFlag) {
-        b.m_flags &= ~box2d.Body.e_islandFlag;
+      if (b.m_flags & box2d.Body.Flags.staticFlag) {
+        b.m_flags &= ~box2d.Body.Flags.islandFlag;
       }
 
       // Handle newly frozen bodies.

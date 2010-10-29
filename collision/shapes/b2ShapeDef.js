@@ -22,7 +22,7 @@ goog.require('box2d.Vec2');
 
 /** @constructor */
 box2d.ShapeDef = function() {
-  this.type = box2d.Shape.e_unknownShape;
+  this.type = box2d.Shape.Type.unknownShape;
   this.userData = null;
   this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
@@ -45,7 +45,7 @@ box2d.ShapeDef.prototype.ComputeMass = function(massData) {
   }
 
   switch (this.type) {
-  case box2d.Shape.e_circleShape:
+  case box2d.Shape.Type.circleShape:
     {
       var circle = this;
       massData.mass = this.density * box2d.Settings.b2_pi * circle.radius * circle.radius;
@@ -54,7 +54,7 @@ box2d.ShapeDef.prototype.ComputeMass = function(massData) {
     }
     break;
 
-  case box2d.Shape.e_polyShape:
+  case box2d.Shape.Type.polyShape:
     {
       var poly = this;
       box2d.Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);

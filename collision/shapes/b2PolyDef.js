@@ -28,7 +28,7 @@ goog.require('box2d.Vec2');
  */
 box2d.PolyDef = function() {
   // The constructor for box2d.ShapeDef
-  this.type = box2d.Shape.e_unknownShape;
+  this.type = box2d.Shape.Type.unknownShape;
   this.userData = null;
   this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
@@ -42,7 +42,7 @@ box2d.PolyDef = function() {
   // initialize instance variables for references
   this.vertices = new Array(box2d.Settings.b2_maxPolyVertices);
   //
-  this.type = box2d.Shape.e_polyShape;
+  this.type = box2d.Shape.Type.polyShape;
   this.vertexCount = 0;
 
   for (var i = 0; i < box2d.Settings.b2_maxPolyVertices; i++) {

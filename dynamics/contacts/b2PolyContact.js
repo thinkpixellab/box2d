@@ -66,8 +66,8 @@ box2d.PolyContact = function(s1, s2) {
   this.m_manifold = [new box2d.Manifold()];
   //
   //super(shape1, shape2);
-  //box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.e_polyShape);
-  //box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.e_polyShape);
+  //box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.Type.polyShape);
+  //box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.Type.polyShape);
   this.m_manifold[0].pointCount = 0;
 };
 goog.inherits(box2d.PolyContact, box2d.Contact);

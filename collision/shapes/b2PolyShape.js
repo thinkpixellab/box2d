@@ -88,12 +88,12 @@ box2d.PolyShape = function(def, body, newOrigin) {
   */
   this.m_normals = new Array(box2d.Settings.b2_maxPolyVertices);
 
-  this.m_type = box2d.Shape.e_polyShape;
+  this.m_type = box2d.Shape.Type.polyShape;
 
   var localR = new box2d.Mat22(def.localRotation);
 
   // Get the vertices transformed into the body frame.
-  if (def.type == box2d.Shape.e_boxShape) {
+  if (def.type == box2d.Shape.Type.boxShape) {
     //this.m_localCentroid = def.localPosition - newOrigin;
     this.m_localCentroid.x = def.localPosition.x - newOrigin.x;
     this.m_localCentroid.y = def.localPosition.y - newOrigin.y;

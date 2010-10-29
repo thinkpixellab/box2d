@@ -65,8 +65,8 @@ box2d.PolyAndCircleContact = function(s1, s2) {
   this.m_manifold = [new box2d.Manifold()];
   //
   //super(shape1, shape2);
-  box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.e_polyShape);
-  box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.e_circleShape);
+  box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.Type.polyShape);
+  box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.Type.circleShape);
   this.m_manifold[0].pointCount = 0;
   this.m_manifold[0].points[0].normalImpulse = 0.0;
   this.m_manifold[0].points[0].tangentImpulse = 0.0;

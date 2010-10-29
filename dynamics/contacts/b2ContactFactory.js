@@ -16,8 +16,8 @@ box2d.ContactFactory.Create = function(shape1, shape2) {
   var type1 = shape1.m_type;
   var type2 = shape2.m_type;
 
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type1 && type1 < box2d.Shape.e_shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type2 && type2 < box2d.Shape.e_shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
   var createFcn = box2d.ContactFactory.s_registers[type1][type2].createFcn;
   if (createFcn) {
     if (box2d.ContactFactory.s_registers[type1][type2].primary) {
@@ -44,8 +44,8 @@ box2d.ContactFactory.Destroy = function(contact, allocator) {
   var type1 = contact.m_shape1.m_type;
   var type2 = contact.m_shape2.m_type;
 
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type1 && type1 < box2d.Shape.e_shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type2 && type2 < box2d.Shape.e_shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
   var destroyFcn = box2d.ContactFactory.s_registers[type1][type2].destroyFcn;
   destroyFcn(contact, allocator);
 };
@@ -54,17 +54,17 @@ box2d.ContactFactory.Destroy = function(contact, allocator) {
  @private
  */
 box2d.ContactFactory._InitializeRegisters = function() {
-  box2d.ContactFactory.s_registers = new Array(box2d.Shape.e_shapeTypeCount);
-  for (var i = 0; i < box2d.Shape.e_shapeTypeCount; i++) {
-    box2d.ContactFactory.s_registers[i] = new Array(box2d.Shape.e_shapeTypeCount);
-    for (var j = 0; j < box2d.Shape.e_shapeTypeCount; j++) {
+  box2d.ContactFactory.s_registers = new Array(box2d.Shape.Type.shapeTypeCount);
+  for (var i = 0; i < box2d.Shape.Type.shapeTypeCount; i++) {
+    box2d.ContactFactory.s_registers[i] = new Array(box2d.Shape.Type.shapeTypeCount);
+    for (var j = 0; j < box2d.Shape.Type.shapeTypeCount; j++) {
       box2d.ContactFactory.s_registers[i][j] = new box2d.ContactRegister();
     }
   }
 
-  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.CircleContact.Destroy, box2d.Shape.e_circleShape, box2d.Shape.e_circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.PolyAndCircleContact.Destroy, box2d.Shape.e_polyShape, box2d.Shape.e_circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.PolyContact.Destroy, box2d.Shape.e_polyShape, box2d.Shape.e_polyShape);
+  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.CircleContact.Destroy, box2d.Shape.Type.circleShape, box2d.Shape.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.PolyAndCircleContact.Destroy, box2d.Shape.Type.polyShape, box2d.Shape.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.PolyContact.Destroy, box2d.Shape.Type.polyShape, box2d.Shape.Type.polyShape);
 
 };
 
@@ -72,8 +72,8 @@ box2d.ContactFactory._InitializeRegisters = function() {
  @private
  */
 box2d.ContactFactory._AddType = function(createFcn, destroyFcn, type1, type2) {
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type1 && type1 < box2d.Shape.e_shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.e_unknownShape < type2 && type2 < box2d.Shape.e_shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
+  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
   box2d.ContactFactory.s_registers[type1][type2].createFcn = createFcn;
   box2d.ContactFactory.s_registers[type1][type2].destroyFcn = destroyFcn;
   box2d.ContactFactory.s_registers[type1][type2].primary = true;

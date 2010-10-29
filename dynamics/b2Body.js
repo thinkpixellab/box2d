@@ -114,7 +114,7 @@ box2d.Body = function(bd, world) {
     this.m_center.scale(1.0 / this.m_mass);
     this.m_position.add(box2d.Math.b2MulMV(this.m_R, this.m_center));
   } else {
-    this.m_flags |= box2d.Body.e_staticFlag;
+    this.m_flags |= box2d.Body.Flags.staticFlag;
   }
 
   // Compute the moment of inertia.
@@ -167,13 +167,13 @@ box2d.Body = function(bd, world) {
 
   this.m_sleepTime = 0.0;
   if (bd.allowSleep) {
-    this.m_flags |= box2d.Body.e_allowSleepFlag;
+    this.m_flags |= box2d.Body.Flags.allowSleepFlag;
   }
   if (bd.isSleeping) {
-    this.m_flags |= box2d.Body.e_sleepFlag;
+    this.m_flags |= box2d.Body.Flags.sleepFlag;
   }
 
-  if ((this.m_flags & box2d.Body.e_sleepFlag) || this.m_invMass == 0.0) {
+  if ((this.m_flags & box2d.Body.Flags.sleepFlag) || this.m_invMass == 0.0) {
     this.m_linearVelocity.Set(0.0, 0.0);
     this.m_angularVelocity = 0.0;
   }
@@ -308,31 +308,31 @@ box2d.Body.prototype.GetLocalVector = function(worldVector) {
 
 // Is this body static (immovable)?
 box2d.Body.prototype.IsStatic = function() {
-  return (this.m_flags & box2d.Body.e_staticFlag) == box2d.Body.e_staticFlag;
+  return (this.m_flags & box2d.Body.Flags.staticFlag) == box2d.Body.Flags.staticFlag;
 };
 
 box2d.Body.prototype.IsFrozen = function() {
-  return (this.m_flags & box2d.Body.e_frozenFlag) == box2d.Body.e_frozenFlag;
+  return (this.m_flags & box2d.Body.Flags.frozenFlag) == box2d.Body.Flags.frozenFlag;
 };
 
 // Is this body sleeping (not simulating).
 box2d.Body.prototype.IsSleeping = function() {
-  return (this.m_flags & box2d.Body.e_sleepFlag) == box2d.Body.e_sleepFlag;
+  return (this.m_flags & box2d.Body.Flags.sleepFlag) == box2d.Body.Flags.sleepFlag;
 };
 
 // You can disable sleeping on this particular body.
 box2d.Body.prototype.AllowSleeping = function(flag) {
   if (flag) {
-    this.m_flags |= box2d.Body.e_allowSleepFlag;
+    this.m_flags |= box2d.Body.Flags.allowSleepFlag;
   } else {
-    this.m_flags &= ~box2d.Body.e_allowSleepFlag;
+    this.m_flags &= ~box2d.Body.Flags.allowSleepFlag;
     this.WakeUp();
   }
 };
 
 // Wake up this body so it will begin simulating.
 box2d.Body.prototype.WakeUp = function() {
-  this.m_flags &= ~box2d.Body.e_sleepFlag;
+  this.m_flags &= ~box2d.Body.Flags.sleepFlag;
   this.m_sleepTime = 0.0;
 };
 
@@ -405,7 +405,7 @@ box2d.Body.prototype.IsConnected = function(other) {
 };
 
 box2d.Body.prototype.Freeze = function() {
-  this.m_flags |= box2d.Body.e_frozenFlag;
+  this.m_flags |= box2d.Body.Flags.frozenFlag;
   this.m_linearVelocity.SetZero();
   this.m_angularVelocity = 0.0;
 
@@ -428,32 +428,13 @@ box2d.Body.prototype.GetLinearVelocity = function() {
 };
 
 /**
- @const
- @type {number}
+ @enum {number}
  */
-box2d.Body.e_staticFlag = 0x0001;
-/**
- @const
- @type {number}
- */
-box2d.Body.e_frozenFlag = 0x0002;
-/**
- @const
- @type {number}
- */
-box2d.Body.e_islandFlag = 0x0004;
-/**
- @const
- @type {number}
- */
-box2d.Body.e_sleepFlag = 0x0008;
-/**
- @const
- @type {number}
- */
-box2d.Body.e_allowSleepFlag = 0x0010;
-/**
- @const
- @type {number}
- */
-box2d.Body.e_destroyFlag = 0x0020;
+box2d.Body.Flags = {
+  staticFlag: 0x0001,
+  frozenFlag: 0x0002,
+  islandFlag: 0x0004,
+  sleepFlag: 0x0008,
+  allowSleepFlag: 0x0010,
+  destroyFlag: 0x0020
+};

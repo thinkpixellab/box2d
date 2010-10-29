@@ -54,12 +54,12 @@ box2d.CircleShape = function(def, body, localCenter) {
   this.m_localPosition = new box2d.Vec2();
   //
   //super(def, body);
-  //box2d.Settings.b2Assert(def.type == box2d.Shape.e_circleShape);
+  //box2d.Settings.b2Assert(def.type == box2d.Shape.Type.circleShape);
   var circle = def;
 
   //this.m_localPosition = def.localPosition - localCenter;
   this.m_localPosition.Set(def.localPosition.x - localCenter.x, def.localPosition.y - localCenter.y);
-  this.m_type = box2d.Shape.e_circleShape;
+  this.m_type = box2d.Shape.Type.circleShape;
   this.m_radius = circle.radius;
 
   this.m_R.SetM(this.m_body.m_R);

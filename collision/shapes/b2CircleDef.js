@@ -27,7 +27,7 @@ goog.require('box2d.Vec2');
 */
 box2d.CircleDef = function() {
     // The constructor for box2d.ShapeDef
-    this.type = box2d.Shape.e_unknownShape;
+    this.type = box2d.Shape.Type.unknownShape;
     this.userData = null;
     this.localPosition = new box2d.Vec2(0.0, 0.0);
     this.localRotation = 0.0;
@@ -38,7 +38,7 @@ box2d.CircleDef = function() {
     this.maskBits = 0xFFFF;
     this.groupIndex = 0;
     //
-    this.type = box2d.Shape.e_circleShape;
+    this.type = box2d.Shape.Type.circleShape;
     this.radius = 1.0;
 };
 goog.inherits(box2d.CircleDef, box2d.ShapeDef);
