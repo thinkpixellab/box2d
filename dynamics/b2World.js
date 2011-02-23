@@ -19,6 +19,7 @@
 goog.provide('box2d.World');
 
 goog.require('box2d.Body');
+goog.require('box2d.BodyDef');
 goog.require('box2d.BroadPhase');
 goog.require('box2d.CollisionFilter');
 goog.require('box2d.ContactManager');

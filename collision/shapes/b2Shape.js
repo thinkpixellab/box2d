@@ -17,9 +17,9 @@
 */
 
 goog.provide('box2d.Shape');
-goog.provide('box2d.Shape.Type');
 
 goog.require('box2d.Mat22');
+goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
 // Shapes are created automatically when a body is created.
@@ -103,18 +103,6 @@ box2d.Shape.Destroy = function(shape) {
   if (shape.m_proxyId != box2d.Pair.b2_nullProxy) {
     shape.m_body.m_world.m_broadPhase.DestroyProxy(shape.m_proxyId);
   }
-};
-
-/**
- @enum {number}
- */
-box2d.Shape.Type = {
-  unknownShape: -1,
-  circleShape: 0,
-  boxShape: 1,
-  polyShape: 2,
-  meshShape: 3,
-  shapeTypeCount: 4
 };
 
 box2d.Shape.PolyMass = function(massData, vs, count, rho) {

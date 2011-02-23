@@ -19,6 +19,7 @@
 goog.provide('box2d.BodyDef');
 
 goog.require('box2d.Settings');
+goog.require('box2d.ShapeDef');
 
 /**
  @constructor
