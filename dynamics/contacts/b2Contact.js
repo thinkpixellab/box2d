@@ -59,32 +59,28 @@ box2d.Contact = function(s1, s2) {
   this.m_node2.other = null;
 };
 
-box2d.Contact.prototype = {
-  GetManifolds: function() {
-    return null;
-  },
-  GetManifoldCount: function() {
-    return this.m_manifoldCount;
-  },
-
-  GetNext: function() {
-    return this.m_next;
-  },
-
-  GetShape1: function() {
-    return this.m_shape1;
-  },
-
-  GetShape2: function() {
-    return this.m_shape2;
-  },
-
-  //--------------- Internals Below -------------------
-  // this.m_flags
-  // enum
-  //virtual ~box2d.Contact() {}
-  Evaluate: function() {}
+box2d.Contact.prototype.GetManifolds = function() {
+  return null;
 };
+
+box2d.Contact.prototype.GetManifoldCount = function() {
+  return this.m_manifoldCount;
+};
+
+box2d.Contact.prototype.GetNext = function() {
+  return this.m_next;
+};
+
+box2d.Contact.prototype.GetShape1 = function() {
+  return this.m_shape1;
+};
+
+box2d.Contact.prototype.GetShape2 = function() {
+  return this.m_shape2;
+};
+
+box2d.Contact.prototype.Evaluate = function() {};
+
 /*
   @const
   @type {number}
