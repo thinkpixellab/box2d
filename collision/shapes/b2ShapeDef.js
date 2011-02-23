@@ -36,38 +36,9 @@ box2d.ShapeDef = function() {
 };
 
 box2d.ShapeDef.prototype.ComputeMass = function(massData) {
-
   massData.center = new box2d.Vec2(0.0, 0.0);
-
-  if (this.density == 0.0) {
-    massData.mass = 0.0;
-    massData.center.Set(0.0, 0.0);
-    massData.I = 0.0;
-  }
-
-  switch (this.type) {
-  case box2d.Shape.Type.circleShape:
-    {
-      var circle = this;
-      massData.mass = this.density * box2d.Settings.b2_pi * circle.radius * circle.radius;
-      massData.center.Set(0.0, 0.0);
-      massData.I = 0.5 * (massData.mass) * circle.radius * circle.radius;
-    }
-    break;
-
-  case box2d.Shape.Type.polyShape:
-    {
-      var poly = this;
-      box2d.Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
-    }
-    break;
-
-  default:
-    massData.mass = 0.0;
-    massData.center.Set(0.0, 0.0);
-    massData.I = 0.0;
-    break;
-  }
+  massData.mass = 0.0;
+  massData.I = 0.0;
 };
 
 // The collision category bits. Normally you would just set one bit.

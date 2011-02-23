@@ -48,3 +48,16 @@ box2d.PolyDef.prototype.SetVertices = function(vertexArray) {
     this.vertices[i].Set(vertexArray[i][0], vertexArray[i][1]);
   }
 };
+
+box2d.PolyDef.prototype.ComputeMass = function(massData) {
+
+  massData.center = new box2d.Vec2(0.0, 0.0);
+
+  if (this.density == 0.0) {
+    massData.mass = 0.0;
+    massData.center.Set(0.0, 0.0);
+    massData.I = 0.0;
+  }
+
+  box2d.Shape.PolyMass(massData, this.vertices, this.vertexCount, this.density);
+};

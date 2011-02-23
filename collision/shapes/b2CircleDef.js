@@ -22,12 +22,17 @@ goog.require('box2d.Shape.Type');
 goog.require('box2d.ShapeDef');
 
 /**
-  @constructor
-  @extends {box2d.ShapeDef}
-*/
+ * @constructor
+ * @extends {box2d.ShapeDef}
+ */
 box2d.CircleDef = function() {
   box2d.ShapeDef.call(this);
   this.type = box2d.Shape.Type.circleShape;
   this.radius = 1.0;
 };
 goog.inherits(box2d.CircleDef, box2d.ShapeDef);
+
+box2d.CircleDef.prototype.ComputeMass = function(massData) {
+  massData.mass = this.density * box2d.Settings.b2_pi * this.radius * this.radius;
+  massData.I = 0.5 * (massData.mass) * this.radius * this.radius;
+};
