@@ -255,6 +255,10 @@ box2d.Body.prototype.GetAngularVelocity = function() {
 };
 
 // Apply a force at a world point. Additive.
+/**
+ * @param {!box2d.Vec2} force
+ * @param {!box2d.Vec2} point
+ */
 box2d.Body.prototype.ApplyForce = function(force, point) {
   if (this.IsSleeping() == false) {
     this.m_force.add(force);
