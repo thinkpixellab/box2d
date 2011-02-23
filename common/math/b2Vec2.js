@@ -138,8 +138,8 @@ box2d.Vec2.prototype.IsValid = function() {
 };
 
 /**
- @param {!box2d.Vec2} a
- @param {!box2d.Vec2} b
+ @param {!goog.math.Coordinate} a
+ @param {!goog.math.Coordinate} b
  @return {number}
  */
 box2d.Vec2.cross = function(a, b) {
@@ -148,7 +148,7 @@ box2d.Vec2.cross = function(a, b) {
 
 /**
  @param {number} s
- @param {!box2d.Vec2} a
+ @param {!goog.math.Coordinate} a
  @return {!box2d.Vec2}
  */
 box2d.Vec2.crossScalar = function(s, a) {
