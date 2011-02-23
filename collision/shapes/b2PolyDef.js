@@ -18,7 +18,7 @@
 
 goog.provide('box2d.PolyDef');
 
-goog.require('box2d.Shape.Type');
+goog.require('box2d.Shape');
 goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
@@ -33,7 +33,7 @@ box2d.PolyDef = function() {
   // initialize instance variables for references
   this.vertices = new Array(box2d.Settings.b2_maxPolyVertices);
   //
-  this.type = box2d.Shape.Type.polyShape;
+  this.type = box2d.ShapeDef.Type.polyShape;
   this.vertexCount = 0;
 
   for (var i = 0; i < box2d.Settings.b2_maxPolyVertices; i++) {

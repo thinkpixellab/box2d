@@ -24,7 +24,6 @@ goog.require('box2d.OBB');
 goog.require('box2d.PolyDef');
 goog.require('box2d.Settings');
 goog.require('box2d.Shape');
-goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 // A convex polygon. The position of the polygon (m_position) is the
@@ -95,7 +94,7 @@ box2d.PolyShape = function(def, body, newOrigin) {
    */
   this.m_normals = new Array(box2d.Settings.b2_maxPolyVertices);
 
-  this.m_type = box2d.Shape.Type.polyShape;
+  this.m_type = box2d.ShapeDef.Type.polyShape;
 
   var localR = new box2d.Mat22(def.localRotation);
 

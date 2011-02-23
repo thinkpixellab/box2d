@@ -18,12 +18,11 @@
 
 goog.provide('box2d.ShapeDef');
 
-goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 /** @constructor */
 box2d.ShapeDef = function() {
-  this.type = box2d.Shape.Type.unknownShape;
+  this.type = box2d.ShapeDef.Type.unknownShape;
   this.userData = null;
   this.localPosition = new box2d.Vec2(0.0, 0.0);
   this.localRotation = 0.0;
@@ -52,3 +51,15 @@ box2d.ShapeDef.prototype.maskBits = 0;
 // or always collide (positive). Zero means no collision group. Non-zero group
 // filtering always wins against the mask bits.
 box2d.ShapeDef.prototype.groupIndex = 0;
+
+/**
+ @enum {number}
+ */
+box2d.ShapeDef.Type = {
+  unknownShape: -1,
+  circleShape: 0,
+  boxShape: 1,
+  polyShape: 2,
+  meshShape: 3,
+  shapeTypeCount: 4
+};

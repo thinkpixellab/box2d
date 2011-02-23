@@ -3,7 +3,7 @@ goog.provide('box2d.ContactFactory');
 goog.require('box2d.CircleContact');
 goog.require('box2d.PolyAndCircleContact');
 goog.require('box2d.PolyContact');
-goog.require('box2d.Shape.Type');
+goog.require('box2d.Shape');
 
 /**
  @return {box2d.Contact}
@@ -45,17 +45,17 @@ box2d.ContactFactory.Destroy = function(contact, allocator) {
  @private
  */
 box2d.ContactFactory._InitializeRegisters = function() {
-  box2d.ContactFactory.s_registers = new Array(box2d.Shape.Type.shapeTypeCount);
-  for (var i = 0; i < box2d.Shape.Type.shapeTypeCount; i++) {
-    box2d.ContactFactory.s_registers[i] = new Array(box2d.Shape.Type.shapeTypeCount);
-    for (var j = 0; j < box2d.Shape.Type.shapeTypeCount; j++) {
+  box2d.ContactFactory.s_registers = new Array(box2d.ShapeDef.Type.shapeTypeCount);
+  for (var i = 0; i < box2d.ShapeDef.Type.shapeTypeCount; i++) {
+    box2d.ContactFactory.s_registers[i] = new Array(box2d.ShapeDef.Type.shapeTypeCount);
+    for (var j = 0; j < box2d.ShapeDef.Type.shapeTypeCount; j++) {
       box2d.ContactFactory.s_registers[i][j] = new box2d.ContactRegister();
     }
   }
 
-  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.Shape.Type.circleShape, box2d.Shape.Type.circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.Shape.Type.polyShape, box2d.Shape.Type.circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.Shape.Type.polyShape, box2d.Shape.Type.polyShape);
+  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.ShapeDef.Type.circleShape, box2d.ShapeDef.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.ShapeDef.Type.polyShape, box2d.ShapeDef.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.ShapeDef.Type.polyShape, box2d.ShapeDef.Type.polyShape);
 
 };
 

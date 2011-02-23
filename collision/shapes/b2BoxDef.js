@@ -18,7 +18,7 @@
 
 goog.provide('box2d.BoxDef');
 
-goog.require('box2d.Shape.Type');
+goog.require('box2d.Shape');
 goog.require('box2d.ShapeDef');
 goog.require('box2d.Vec2');
 
@@ -29,7 +29,7 @@ goog.require('box2d.Vec2');
 box2d.BoxDef = function() {
   box2d.ShapeDef.call(this);
 
-  this.type = box2d.Shape.Type.boxShape;
+  this.type = box2d.ShapeDef.Type.boxShape;
   /** @type {!box2d.Vec2} */
   this.extents = new box2d.Vec2(1.0, 1.0);
 };
