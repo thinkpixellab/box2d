@@ -18,14 +18,17 @@
 
 goog.provide('box2d.PolyAndCircleContact');
 
+goog.require('box2d.CircleShape');
 goog.require('box2d.Contact');
 goog.require('box2d.ContactNode');
 goog.require('box2d.Manifold');
-goog.require('box2d.Shape.Type');
+goog.require('box2d.PolyShape');
 
 /**
  @constructor
  @extends {box2d.Contact}
+ @param {!box2d.PolyShape} s1
+ @param {!box2d.CircleShape} s2
  */
 box2d.PolyAndCircleContact = function(s1, s2) {
   // The constructor for box2d.Contact
@@ -64,10 +67,7 @@ box2d.PolyAndCircleContact = function(s1, s2) {
   //
   // initialize instance variables for references
   this.m_manifold = [new box2d.Manifold()];
-  //
-  //super(shape1, shape2);
-  box2d.Settings.b2Assert(this.m_shape1.m_type == box2d.Shape.Type.polyShape);
-  box2d.Settings.b2Assert(this.m_shape2.m_type == box2d.Shape.Type.circleShape);
+
   this.m_manifold[0].pointCount = 0;
   this.m_manifold[0].points[0].normalImpulse = 0.0;
   this.m_manifold[0].points[0].tangentImpulse = 0.0;

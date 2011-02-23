@@ -18,8 +18,10 @@
 
 goog.provide('box2d.PolyShape');
 
+goog.require('box2d.BoxDef');
 goog.require('box2d.Mat22');
 goog.require('box2d.OBB');
+goog.require('box2d.PolyDef');
 goog.require('box2d.Settings');
 goog.require('box2d.Shape');
 goog.require('box2d.Shape.Type');
@@ -35,6 +37,9 @@ goog.require('box2d.Vec2');
 /**
  @constructor
  @extends {box2d.Shape}
+ @param {!box2d.ShapeDef|!box2d.PolyDef} def
+ @param {!box2d.Body} body
+ @param {!box2d.Vec2} newOrigin
  */
 box2d.PolyShape = function(def, body, newOrigin) {
   // initialize instance variables for references
@@ -76,18 +81,18 @@ box2d.PolyShape = function(def, body, newOrigin) {
   /**
    @private
    @type {!Array.<!box2d.Vec2>}
-  */
+   */
   this.m_vertices = new Array(box2d.Settings.b2_maxPolyVertices);
   /**
    @private
    @type {!Array.<box2d.Vec2>}
-  */
+   */
   this.m_coreVertices = new Array(box2d.Settings.b2_maxPolyVertices);
   // Normals
   /**
    @private
-   @type {!Array.<box2d.Vec2>}
-  */
+   @type {!Array.<!box2d.Vec2>}
+   */
   this.m_normals = new Array(box2d.Settings.b2_maxPolyVertices);
 
   this.m_type = box2d.Shape.Type.polyShape;
@@ -95,7 +100,7 @@ box2d.PolyShape = function(def, body, newOrigin) {
   var localR = new box2d.Mat22(def.localRotation);
 
   // Get the vertices transformed into the body frame.
-  if (def.type == box2d.Shape.Type.boxShape) {
+  if (def instanceof box2d.BoxDef) {
     //this.m_localCentroid = def.localPosition - newOrigin;
     this.m_localCentroid.x = def.localPosition.x - newOrigin.x;
     this.m_localCentroid.y = def.localPosition.y - newOrigin.y;

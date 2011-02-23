@@ -26,7 +26,7 @@ goog.require('box2d.ShapeDef');
  */
 box2d.BodyDef = function() {
   /**
-   @type {!Array.<box2d.ShapeDef>}
+   @type {!Array.<!box2d.ShapeDef>}
    */
   this.shapes = new Array();
   /**

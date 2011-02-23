@@ -17,8 +17,6 @@ box2d.ContactFactory.Create = function(shape1, shape2) {
   var type1 = shape1.m_type;
   var type2 = shape2.m_type;
 
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
   var createFcn = box2d.ContactFactory.s_registers[type1][type2].createFcn;
   if (createFcn) {
     if (box2d.ContactFactory.s_registers[type1][type2].primary) {

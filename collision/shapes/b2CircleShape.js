@@ -19,17 +19,16 @@
 goog.provide('box2d.CircleShape');
 
 goog.require('box2d.AABB');
+goog.require('box2d.CircleDef');
 goog.require('box2d.Mat22');
-goog.require('box2d.Shape');
-goog.require('box2d.Shape.Type');
 goog.require('box2d.Vec2');
 
 /**
  @constructor
  @extends {box2d.Shape}
- @param {box2d.ShapeDef} def
- @param {box2d.Body} body
- @param {box2d.Vec2} localCenter
+ @param {!box2d.CircleDef} def
+ @param {!box2d.Body} body
+ @param {!box2d.Vec2} localCenter
  */
 box2d.CircleShape = function(def, body, localCenter) {
   // initialize instance variables for references
@@ -53,14 +52,12 @@ box2d.CircleShape = function(def, body, localCenter) {
   //
   // initialize instance variables for references
   this.m_localPosition = new box2d.Vec2();
-  //
-  //super(def, body);
-  //box2d.Settings.b2Assert(def.type == box2d.Shape.Type.circleShape);
+
   var circle = def;
 
   //this.m_localPosition = def.localPosition - localCenter;
   this.m_localPosition.Set(def.localPosition.x - localCenter.x, def.localPosition.y - localCenter.y);
-  this.m_type = box2d.Shape.Type.circleShape;
+  this.m_type = def.type;
   this.m_radius = circle.radius;
 
   this.m_R.SetM(this.m_body.m_R);
