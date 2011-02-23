@@ -41,14 +41,6 @@ box2d.ContactFactory.Destroy = function(contact, allocator) {
     contact.m_shape1.m_body.WakeUp();
     contact.m_shape2.m_body.WakeUp();
   }
-
-  var type1 = contact.m_shape1.m_type;
-  var type2 = contact.m_shape2.m_type;
-
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
-  var destroyFcn = box2d.ContactFactory.s_registers[type1][type2].destroyFcn;
-  destroyFcn(contact, allocator);
 };
 
 /**
@@ -63,25 +55,21 @@ box2d.ContactFactory._InitializeRegisters = function() {
     }
   }
 
-  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.CircleContact.Destroy, box2d.Shape.Type.circleShape, box2d.Shape.Type.circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.PolyAndCircleContact.Destroy, box2d.Shape.Type.polyShape, box2d.Shape.Type.circleShape);
-  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.PolyContact.Destroy, box2d.Shape.Type.polyShape, box2d.Shape.Type.polyShape);
+  box2d.ContactFactory._AddType(box2d.CircleContact.Create, box2d.Shape.Type.circleShape, box2d.Shape.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyAndCircleContact.Create, box2d.Shape.Type.polyShape, box2d.Shape.Type.circleShape);
+  box2d.ContactFactory._AddType(box2d.PolyContact.Create, box2d.Shape.Type.polyShape, box2d.Shape.Type.polyShape);
 
 };
 
 /**
  @private
  */
-box2d.ContactFactory._AddType = function(createFcn, destroyFcn, type1, type2) {
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type1 && type1 < box2d.Shape.Type.shapeTypeCount);
-  //box2d.Settings.b2Assert(box2d.Shape.Type.unknownShape < type2 && type2 < box2d.Shape.Type.shapeTypeCount);
+box2d.ContactFactory._AddType = function(createFcn, type1, type2) {
   box2d.ContactFactory.s_registers[type1][type2].createFcn = createFcn;
-  box2d.ContactFactory.s_registers[type1][type2].destroyFcn = destroyFcn;
   box2d.ContactFactory.s_registers[type1][type2].primary = true;
 
   if (type1 != type2) {
     box2d.ContactFactory.s_registers[type2][type1].createFcn = createFcn;
-    box2d.ContactFactory.s_registers[type2][type1].destroyFcn = destroyFcn;
     box2d.ContactFactory.s_registers[type2][type1].primary = false;
   }
 };
