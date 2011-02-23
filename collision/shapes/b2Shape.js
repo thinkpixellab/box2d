@@ -26,8 +26,8 @@ goog.require('box2d.Vec2');
 // Client code does not normally interact with shapes.
 /**
  @constructor
- @param {box2d.ShapeDef} def
- @param {box2d.Body} body
+ @param {!box2d.ShapeDef} def
+ @param {!box2d.Body} body
  */
 box2d.Shape = function(def, body) {
   // initialize instance variables for references
