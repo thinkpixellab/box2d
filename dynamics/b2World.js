@@ -32,7 +32,7 @@ goog.require('box2d.WorldListener');
 /**
  @constructor
  @param {!box2d.AABB} worldAABB
- @param {!box2d.Vec2} gravity
+ @param {!goog.math.Vec2} gravity
  @param {boolean} doSleep
  */
 box2d.World = function(worldAABB, gravity, doSleep) {
