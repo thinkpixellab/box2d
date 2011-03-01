@@ -41,24 +41,7 @@ goog.require('box2d.Vec2');
  @param {!box2d.Vec2} newOrigin
  */
 box2d.PolyShape = function(def, body, newOrigin) {
-  // initialize instance variables for references
-  this.m_R = new box2d.Mat22();
-  this.m_position = new box2d.Vec2();
-  //
-  // The constructor for box2d.Shape
-  this.m_userData = def.userData;
-
-  this.m_friction = def.friction;
-  this.m_restitution = def.restitution;
-  this.m_body = body;
-
-  this.m_proxyId = box2d.Pair.b2_nullProxy;
-
-  this.m_maxRadius = 0.0;
-
-  this.categoryBits = def.categoryBits;
-  this.maskBits = def.maskBits;
-  this.m_groupIndex = def.groupIndex;
+  box2d.Shape.call(this, def, body);
   //
   // initialize instance variables for references
   this.syncAABB = new box2d.AABB();
