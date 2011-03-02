@@ -73,6 +73,10 @@ box2d.CircleContact = function(s1, s2) {
 };
 goog.inherits(box2d.CircleContact, box2d.Contact);
 
+box2d.CircleContact.prototype.getBodies = function() {
+  return [this.m_shape1.m_body, this.m_shape2.m_body];
+};
+
 box2d.CircleContact.prototype.Evaluate = function() {
   box2d.Collision.b2CollideCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
 
