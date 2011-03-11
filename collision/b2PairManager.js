@@ -251,7 +251,7 @@ box2d.PairManager.prototype = {
  @private
  @param {number} proxyId1
  @param {number} proxyId2
- @return box2d.Pair.
+ @return {box2d.Pair}
  */
 box2d.PairManager.prototype._find = function(proxyId1, proxyId2) {
 
@@ -271,7 +271,7 @@ box2d.PairManager.prototype._find = function(proxyId1, proxyId2) {
  @param {number} proxyId1
  @param {number} proxyId2
  @param {number} hash
- @return box2d.Pair.
+ @return {box2d.Pair}
  */
 box2d.PairManager.prototype._findHash = function(proxyId1, proxyId2, hash) {
   var index = this.m_hashTable[hash];
