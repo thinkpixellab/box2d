@@ -72,5 +72,8 @@ box2d.ContactFactory._AddType = function(createFcn, type1, type2) {
   }
 };
 
+/**
+ @type {Array.<Array.<box2d.ContactRegister>>}
+ */
 box2d.ContactFactory.s_registers = null;
 box2d.ContactFactory.s_initialized = false;
